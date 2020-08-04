@@ -1,9 +1,11 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using ProjectMasters.Data;
 
 namespace ProjectMasters
 {
@@ -25,6 +27,9 @@ namespace ProjectMasters
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            services.AddDbContext<ProjectMastersContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("ProjectMastersContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

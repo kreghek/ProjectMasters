@@ -1,0 +1,6 @@
+<ul>
+  <li *ngFor="let feature of featureList; index as i; first as isFirst">
+    <div>{{feature.name}}</div>
+    <app-task-list-child feature="feature"></app-task-list-child>
+  </li>
+</ul>
