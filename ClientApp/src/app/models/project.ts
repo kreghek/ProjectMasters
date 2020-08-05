@@ -12,7 +12,12 @@
     }  
 
     export class FeatureTask {  
-        constructor(public id: number, public name: string, public requiredSkills: SkillScheme[], public blockers: FeatureTask[], public progress: number, public realValue: number, public estimate: number, public logged: number, public assignees: Employee[]) {  
+        constructor(public id: number, public name: string, public requiredSkills: RequiredSkill[], public blockers: FeatureTask[], public progress: number, public realValue: number, public estimate: number, public logged: number, public assignees: Employee[]) {  
+        }  
+    }  
+
+    export class RequiredSkill {  
+        constructor(public id: number, public skillScheme: SkillScheme, public value: number) {  
         }  
     }  
 

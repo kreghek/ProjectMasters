@@ -38,7 +38,7 @@ namespace ProjectMasters.Controllers
                         Name = "Task " + Guid.NewGuid().ToString(),
                         RealValue = random.Next(5, 20) * 0.1f,
                         Estimate = 8,
-                        RequiredSkills = skills.OrderBy(x => random.Next()).Take(random.Next(1, 3)).ToList()
+                        RequiredSkills = skills.OrderBy(x => random.Next()).Take(random.Next(1, 3)).Select(x => new RequiredSkill { SkillScheme = x, Value = 1 }).ToList()
                     }).ToList()
                 }).ToList()
             };

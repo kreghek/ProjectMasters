@@ -25,7 +25,7 @@ namespace ProjectMasters.Models
 
         public string Name { get; set; }
 
-        public List<SkillScheme> RequiredSkills { get; set; }
+        public List<RequiredSkill> RequiredSkills { get; set; }
 
         /// <summary>
         /// Задачи, которые нужно сделать перед началом/продолжением этой задачи.
@@ -58,6 +58,13 @@ namespace ProjectMasters.Models
         /// Исполнители, назначенные на задачу.
         /// </summary>
         public List<Employee> Assignees { get; set; }
+    }
+
+    public class RequiredSkill
+    {
+        public long Id { get; set; }
+        public SkillScheme SkillScheme { get; set; }
+        public int Value { get; set; }
     }
 
     public class Employee

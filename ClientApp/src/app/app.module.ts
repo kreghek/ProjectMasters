@@ -21,7 +21,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { FeatureListComponent } from './feature-list/feature-list.component';
-import { TaskListComponent } from './task-list/task-list.component';
 import { TaskListChildComponent } from './feature-list/task-list-child/task-list-child.component';
 
 @NgModule({
@@ -34,7 +33,6 @@ import { TaskListChildComponent } from './feature-list/task-list-child/task-list
     ProjectListComponent,
     CreateProjectComponent,
     FeatureListComponent,
-    TaskListComponent,
     TaskListChildComponent
   ],
   imports: [
