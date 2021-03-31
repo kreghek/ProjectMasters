@@ -19,6 +19,7 @@ public class TeamFactory : MonoBehaviour
             foreach (var person in persons)
             {
                 var personViewModel = Instantiate(PersonViewModelPrefab);
+                personViewModel.Person = person;
                 personIndex++;
                 personViewModel.gameObject.transform.localPosition = new Vector3(0, personIndex * 1, 0);
             }

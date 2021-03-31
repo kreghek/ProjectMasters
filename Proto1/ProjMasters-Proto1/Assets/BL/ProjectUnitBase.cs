@@ -8,5 +8,7 @@
         public SkillScheme[] RequiredSkills { get; set; }
 
         public abstract void ProcessCommit();
+
+        public bool IsDead { get; set; }
     }
 }

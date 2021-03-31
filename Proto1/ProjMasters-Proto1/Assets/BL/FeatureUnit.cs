@@ -18,7 +18,7 @@ namespace Assets.BL
                 TimeLog += 0.25f;
                 CostToDecompose -= 0.25f;
 
-                if (CostToDecompose < 0)
+                if (CostToDecompose <= 0)
                 {
                     CostToDecompose = Random.Range(4, 12);
 
@@ -50,6 +50,7 @@ namespace Assets.BL
                 {
                     var formation = ProjectUnitFormation.Instance;
                     formation.DeleteUnit(this);
+                    IsDead = true;
                 }
             }
         }

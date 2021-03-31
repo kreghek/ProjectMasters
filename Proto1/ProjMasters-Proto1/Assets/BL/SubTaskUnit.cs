@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.BL
 {
@@ -12,6 +11,13 @@ namespace Assets.BL
             if (Random.Range(1, 100) >= 50)
             {
                 TimeLog += 0.25f;
+            }
+
+            if (TimeLog >= Cost)
+            {
+                var formation = ProjectUnitFormation.Instance;
+                formation.DeleteUnit(this);
+                IsDead = true;
             }
         }
     }

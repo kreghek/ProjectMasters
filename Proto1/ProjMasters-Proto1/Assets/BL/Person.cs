@@ -37,6 +37,11 @@ namespace Assets.BL
                     CommitCounter = 0;
 
                     Assigned.ProcessCommit();
+
+                    if (Assigned.IsDead)
+                    {
+                        Assigned = null;
+                    }
                 }
             }
         }

@@ -6,8 +6,8 @@ namespace Assets.BL
     {
         public ProjectUnitBase[,] Matrix = new ProjectUnitBase[10, 10];
 
-        public event EventHandler<EventArgs> Added;
-        public event EventHandler<EventArgs> Removed;
+        public event EventHandler<UnitEventArgs> Added;
+        public event EventHandler<UnitEventArgs> Removed;
 
         public static ProjectUnitFormation Instance = new ProjectUnitFormation();
 
@@ -39,16 +39,14 @@ namespace Assets.BL
 
         public void DeleteUnit(ProjectUnitBase unit)
         {
-            var featureX = 0;
-            var featureY = 0;
             for (int x = 0; x < Matrix.GetLength(0); x++)
             {
                 for (int y = 0; y < Matrix.GetLength(1); y++)
                 {
                     if (Matrix[x, y] == unit)
                     {
-                        featureX = x;
-                        featureY = y;
+                        var featureX = x;
+                        var featureY = y;
                         DeleteUnit(featureX, featureY);
                     }
                 }
@@ -59,9 +57,9 @@ namespace Assets.BL
         {
             for (var i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int xoff = -matrix.GetLength(0); xoff < matrix.GetLength(0); xoff++)
+                for (var xoff = -i; xoff <= i; xoff++)
                 {
-                    for (int yoff = -matrix.GetLength(1); yoff < matrix.GetLength(1); yoff++)
+                    for (var yoff = -i; yoff <= i; yoff++)
                     {
                         var testX = x + xoff;
                         var testY = y + yoff;
