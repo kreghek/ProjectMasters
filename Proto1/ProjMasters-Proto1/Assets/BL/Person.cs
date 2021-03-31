@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 
-using UnityEngine;
-
 namespace Assets.BL
 {
     public class Person

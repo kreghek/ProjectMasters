@@ -25,8 +25,6 @@ public class PersonViewModel : MonoBehaviour
 
     public void Update()
     {
-        Person.Update(Time.deltaTime);
-
         if (Person.Assigned != null)
         {
             gameObject.transform.position = new Vector3(Person.Assigned.X - 1, Person.Assigned.Y);

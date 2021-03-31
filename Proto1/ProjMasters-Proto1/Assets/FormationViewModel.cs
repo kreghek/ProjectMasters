@@ -45,5 +45,10 @@ public class FormationViewModel : MonoBehaviour
         var unitViewModel = Instantiate(ProjectUnitViewModelPrefab);
         unitViewModel.ProjectUnit = e.ProjectUnit;
         unitViewModel.gameObject.transform.position = new Vector3(e.X, e.Y);
+
+        foreach (var person in Team.Persons)
+        {
+            person.Assigned = null;
+        }
     }
 }

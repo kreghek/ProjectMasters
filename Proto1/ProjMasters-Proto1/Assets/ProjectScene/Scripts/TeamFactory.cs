@@ -28,6 +28,14 @@ public class TeamFactory : MonoBehaviour
         }
     }
 
+    public void Update()
+    {
+        foreach (var person in Team.Persons)
+        {
+            person.Update(Time.deltaTime);
+        }
+    }
+
     private IEnumerable<Person> CreateStartTeam()
     {
         return new[] {
