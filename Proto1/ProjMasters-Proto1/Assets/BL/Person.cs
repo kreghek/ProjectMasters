@@ -29,7 +29,7 @@ namespace Assets.BL
         {
             _commitCounter += commitDeltaTime;
 
-            const float baseCommitTimeSeconds = 4;
+            const float baseCommitTimeSeconds = 2;
             var targetCommitCounter = baseCommitTimeSeconds * CommitSpeed;
 
             if (_commitCounter >= targetCommitCounter)

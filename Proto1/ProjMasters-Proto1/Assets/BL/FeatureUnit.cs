@@ -45,7 +45,14 @@ namespace Assets.BL
 
                     foreach (var subTask in subTasks)
                     {
-                        formation.AddUnitIntoLine(LineIndex, 0, subTask);
+                        if (Random.Range(1, 100) > 50)
+                        {
+                            formation.AddUnitIntoLine(LineIndex, 0, subTask);
+                        }
+                        else
+                        {
+                            formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, subTask);
+                        }
                     }
                 }
 

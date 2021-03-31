@@ -20,7 +20,14 @@ namespace Assets.BL
 
                 var errorUnit = CreateErrorUnit();
 
-                formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
+                if (Random.Range(1, 100) > 50)
+                {
+                    formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
+                }
+                else
+                {
+                    formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
+                }
             }
 
             if (TimeLog >= Cost)
