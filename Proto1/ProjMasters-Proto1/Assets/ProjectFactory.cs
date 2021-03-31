@@ -19,9 +19,8 @@ public class ProjectFactory : MonoBehaviour
             var x = Random.Range(3, 7);
             var y = Random.Range(3, 7);
 
-            var feature = new ProjectUnitBase
+            var feature = new FeatureUnit
             {
-                Type = ProjectUnitType.Feature,
                 Cost = Random.Range(40, 60),
                 CostToDecompose = Random.Range(1, 8),
             };

@@ -16,13 +16,40 @@ namespace Assets.BL
             if (Random.Range(1, 100) >= 50)
             {
                 TimeLog += 0.25f;
+                CostToDecompose -= 0.25f;
 
-                if (CostToDecompose < TimeLog)
+                if (CostToDecompose < 0)
                 {
-                    CostToDecompose = 0;
+                    CostToDecompose = Random.Range(4, 12);
 
                     var subTaskCount = Random.Range(1, 3);
                     var subTasks = CreateSubTasks(this, subTaskCount);
+
+                    var featureX = 0;
+                    var featureY = 0;
+                    var formation = ProjectUnitFormation.Instance;
+                    for (int x = 0; x < formation.Matrix.GetLength(0); x++)
+                    {
+                        for (int y = 0; y < formation.Matrix.GetLength(1); y++)
+                        {
+                            if (formation.Matrix[x, y] == this)
+                            {
+                                featureX = x;
+                                featureY = y;
+                            }
+                        }
+                    }
+
+                    foreach (var subTask in subTasks)
+                    {
+                        formation.AddUnitInClosestPosition(subTask, featureX, featureY);
+                    }
+                }
+
+                if (TimeLog >= Cost)
+                {
+                    var formation = ProjectUnitFormation.Instance;
+                    formation.DeleteUnit(this);
                 }
             }
         }
@@ -42,19 +69,6 @@ namespace Assets.BL
                 subTask.RequiredSkills = requiredSkills.ToArray();
 
                 yield return subTask;
-            }
-        }
-    }
-
-    public sealed class SubTaskUnit : ProjectUnitBase
-    {
-        public override ProjectUnitType Type => ProjectUnitType.SubTask;
-
-        public override void ProcessCommit()
-        {
-            if (Random.Range(1, 100) >= 50)
-            {
-                TimeLog += 0.25f;
             }
         }
     }
