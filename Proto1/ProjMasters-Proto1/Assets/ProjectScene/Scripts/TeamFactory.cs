@@ -34,7 +34,7 @@ public class TeamFactory : MonoBehaviour
                 if (assignedPersons.Count() == 0)
                 {
                     var freePersons = Team.Persons.Except(ProjectUnitFormation.Instance.Lines.SelectMany(x => x.AssignedPersons).Distinct()).ToArray();
-                    var firstFreePerson = freePersons.SingleOrDefault();
+                    var firstFreePerson = freePersons.FirstOrDefault();
 
                     if (firstFreePerson != null)
                     {

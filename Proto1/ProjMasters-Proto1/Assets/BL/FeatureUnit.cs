@@ -9,7 +9,7 @@ namespace Assets.BL
     {
         private const float _minDecomposeCost = 1;
         private const float _maxDecomposeCost = 2;
-        private const int _maxSubTask = 3;
+        private const int _maxSubTask = 5;
 
         public FeatureUnit()
         {
@@ -40,7 +40,7 @@ namespace Assets.BL
                 {
                     RefreshCostToDecompose();
 
-                    var subTaskCount = Random.Range(1, _maxSubTask);
+                    var subTaskCount = Random.Range(1, _maxSubTask + 1);
                     var subTasks = CreateSubTasks(this, subTaskCount);
 
                     foreach (var subTask in subTasks)
