@@ -16,70 +16,45 @@ namespace Assets.BL
 
         public event EventHandler<EventArgs> Commited;
 
+        public int X { get; set; }
+
+        public int Y { get; set; }
+
         public void Update(float commitDeltaTime)
         {
             if (Assigned is null)
             {
-                var foundUnit = FindFreeUnit();
-                Assigned = foundUnit;
+                return;
             }
+
+            X = Assigned.X - 1;
+            Y = Assigned.Y;
 
             if (Assigned != null)
             {
-                CommitCounter += commitDeltaTime;
+                SolveAssignedUnit(Assigned, commitDeltaTime);
 
-                const float baseCommitTimeSeconds = 4;
-                var targetCommitCounter = baseCommitTimeSeconds * Speed;
-
-                if (CommitCounter >= targetCommitCounter)
+                if (Assigned != null && Assigned.IsDead)
                 {
-                    CommitCounter = 0;
-                    Commited?.Invoke(this, EventArgs.Empty);
-
-                    Assigned.ProcessCommit();
-
-                    if (Assigned != null && Assigned.IsDead)
-                    {
-                        Assigned = null;
-                    }
+                    Assigned = null;
                 }
             }
         }
 
-        private ProjectUnitBase FindFreeUnit()
+        private void SolveAssignedUnit(ProjectUnitBase unit, float commitDeltaTime)
         {
-            var matrix = ProjectUnitFormation.Instance.Matrix;
+            CommitCounter += commitDeltaTime;
 
-            for (var j = 0; j < matrix.GetLength(1); j++)
+            const float baseCommitTimeSeconds = 4;
+            var targetCommitCounter = baseCommitTimeSeconds * Speed;
+
+            if (CommitCounter >= targetCommitCounter)
             {
-                for (var i = 0; i < matrix.GetLength(0); i++)
-                {
-                    var unit = matrix[i, j];
+                CommitCounter = 0;
+                Commited?.Invoke(this, EventArgs.Empty);
 
-                    if (unit != null)
-                    {
-                        var assignedPersons = Team.Persons.Where(x => x.Assigned == unit);
-                        if (!assignedPersons.Any())
-                        {
-                            var leftX = i - 1;
-                            if (leftX < 0)
-                            {
-                                return unit;
-                            }
-                            else
-                            {
-                                var blockerUnit = matrix[leftX, j];
-                                if (blockerUnit is null)
-                                {
-                                    return unit;
-                                }
-                            }
-                        }
-                    }
-                }
+                unit.ProcessCommit();
             }
-
-            return null;
         }
     }
 }

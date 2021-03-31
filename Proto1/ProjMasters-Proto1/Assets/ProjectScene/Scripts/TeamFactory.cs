@@ -30,10 +30,65 @@ public class TeamFactory : MonoBehaviour
 
     public void Update()
     {
+        PlanPersonsToUnits(Team.Persons);
+
         foreach (var person in Team.Persons)
         {
             person.Update(Time.deltaTime);
         }
+    }
+
+    private static void PlanPersonsToUnits(Person[] persons)
+    {
+        foreach (var person in persons)
+        {
+            if (person.Assigned != null)
+            {
+                continue;
+            }
+
+            var unit = FindFreeUnit();
+            if (unit != null)
+            {
+                person.Assigned = unit;
+            }
+        }
+    }
+
+    private static ProjectUnitBase FindFreeUnit()
+    {
+        var matrix = ProjectUnitFormation.Instance.Matrix;
+
+        for (var j = 0; j < matrix.GetLength(1); j++)
+        {
+            for (var i = 0; i < matrix.GetLength(0); i++)
+            {
+                var unit = matrix[i, j];
+
+                if (unit != null)
+                {
+                    var assignedPersons = Team.Persons.Where(x => x.Assigned == unit);
+                    if (!assignedPersons.Any())
+                    {
+                        var leftX = i - 1;
+                        if (leftX < 0)
+                        {
+                            return unit;
+                        }
+                        else
+                        {
+                            var blockerUnit = matrix[leftX, j];
+                            if (blockerUnit is null)
+                            {
+                                return unit;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     private IEnumerable<Person> CreateStartTeam()
