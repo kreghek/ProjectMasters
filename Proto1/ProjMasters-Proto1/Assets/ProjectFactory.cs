@@ -30,7 +30,7 @@ public class ProjectFactory : MonoBehaviour
             var requiredSkills = randomizedSkills.Take(requiredSkillCount);
             feature.RequiredSkills = requiredSkills.ToArray();
 
-            formation.Matrix[x, y] = feature;
+            formation.AddUnitInClosestPosition(feature, x, y);
         }
 
         var viewModel = Instantiate(FormationViewModelPrefab);

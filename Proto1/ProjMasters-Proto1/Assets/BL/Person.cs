@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using UnityEngine;
 
@@ -13,9 +14,9 @@ namespace Assets.BL
 
         public ProjectUnitBase Assigned { get; set; }
 
-
-
         public float CommitCounter { get; set; }
+
+        public event EventHandler<EventArgs> Commited;
 
         public void Update(float commitDeltaTime)
         {
@@ -35,6 +36,7 @@ namespace Assets.BL
                 if (CommitCounter >= targetCommitCounter)
                 {
                     CommitCounter = 0;
+                    Commited?.Invoke(this, EventArgs.Empty);
 
                     Assigned.ProcessCommit();
 
@@ -55,12 +57,25 @@ namespace Assets.BL
                 for (int i = 0; i < matrix.GetLength(0); i++)
                 {
                     var unit = matrix[i, j];
+
                     if (unit != null)
                     {
                         var assignedPersons = Team.Persons.Where(x => x.Assigned == unit);
                         if (!assignedPersons.Any())
                         {
-                            return unit;
+                            var leftX = i - 1;
+                            if (leftX < 0)
+                            {
+                                return unit;
+                            }
+                            else
+                            {
+                                var blockerUnit = matrix[leftX, j];
+                                if (blockerUnit is null)
+                                {
+                                    return unit;
+                                }
+                            }
                         }
                     }
                 }

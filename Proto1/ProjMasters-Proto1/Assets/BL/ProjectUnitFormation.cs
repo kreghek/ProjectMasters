@@ -16,6 +16,8 @@ namespace Assets.BL
             if (Matrix[x, y] is null)
             {
                 Matrix[x, y] = projectUnit;
+                projectUnit.X = x;
+                projectUnit.Y = y;
                 Added?.Invoke(this, new UnitEventArgs { ProjectUnit = projectUnit, X = x, Y = y });
             }
             else
@@ -23,6 +25,8 @@ namespace Assets.BL
                 if (TryGetClosestFree(Matrix, x, y, out var targetX, out var targetY))
                 {
                     Matrix[targetX, targetY] = projectUnit;
+                    projectUnit.X = x;
+                    projectUnit.Y = y;
                     Added?.Invoke(this, new UnitEventArgs { ProjectUnit = projectUnit, X = targetX, Y = targetY });
                 }
             }
