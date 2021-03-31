@@ -16,31 +16,17 @@ namespace Assets.BL
 
             if (Random.Range(1, 100) >= 95)
             {
-                var featureX = 0;
-                var featureY = 0;
                 var formation = ProjectUnitFormation.Instance;
-                for (int x = 0; x < formation.Matrix.GetLength(0); x++)
-                {
-                    for (int y = 0; y < formation.Matrix.GetLength(1); y++)
-                    {
-                        if (formation.Matrix[x, y] == this)
-                        {
-                            featureX = x;
-                            featureY = y;
-                        }
-                    }
-                }
 
                 var errorUnit = CreateErrorUnit();
 
-
-                formation.AddUnitInClosestPosition(errorUnit, featureX, featureY);
+                formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
             }
 
             if (TimeLog >= Cost)
             {
                 var formation = ProjectUnitFormation.Instance;
-                formation.DeleteUnit(this);
+                formation.DeleteUnit(LineIndex, this);
                 IsDead = true;
             }
         }

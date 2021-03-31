@@ -1,121 +1,106 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.BL
 {
     public class ProjectUnitFormation
     {
-        public ProjectUnitBase[,] Matrix = new ProjectUnitBase[10, 10];
+        public List<ProjectLine> Lines { get; }
 
         public event EventHandler<UnitEventArgs> Added;
         public event EventHandler<UnitEventArgs> Removed;
 
         public static ProjectUnitFormation Instance = new ProjectUnitFormation();
 
-        public void AddUnitInClosestPosition(ProjectUnitBase projectUnit, int x, int y)
+        public ProjectUnitFormation()
         {
-            if (Matrix[x, y] is null)
-            {
-                Matrix[x, y] = projectUnit;
-                projectUnit.X = x;
-                projectUnit.Y = y;
-                Added?.Invoke(this, new UnitEventArgs { ProjectUnit = projectUnit, X = x, Y = y });
-            }
-            else
-            {
-                if (TryGetClosestFree(Matrix, x, y, out var targetX, out var targetY))
-                {
-                    Matrix[targetX, targetY] = projectUnit;
-                    projectUnit.X = x;
-                    projectUnit.Y = y;
-                    Added?.Invoke(this, new UnitEventArgs { ProjectUnit = projectUnit, X = targetX, Y = targetY });
-                }
-            }
+            Lines = new List<ProjectLine>();
+
+            FillLines();
         }
 
-        public void DeleteUnit(int x, int y)
+        private void FillLines()
         {
-            if (Matrix[x, y] != null)
+            Lines.Add(new ProjectLine
             {
-                var unit = Matrix[x, y];
-                Removed?.Invoke(this, new UnitEventArgs() { ProjectUnit = unit, X = x, Y = y });
-            }
-        }
-
-        public void DeleteUnit(ProjectUnitBase unit)
-        {
-            for (int x = 0; x < Matrix.GetLength(0); x++)
-            {
-                for (int y = 0; y < Matrix.GetLength(1); y++)
-                {
-                    if (Matrix[x, y] == unit)
-                    {
-                        var featureX = x;
-                        var featureY = y;
-                        DeleteUnit(featureX, featureY);
+                Units = new List<ProjectUnitBase> {
+                    new FeatureUnit{
+                        Cost = 20,
+                        LineIndex = 0,
+                        QueueIndex = 0,
+                        RequiredSkills = new[]{
+                            SkillSchemeCatalog.SkillSchemes[0]
+                        }
                     }
                 }
-            }
-        }
+            });
 
-        private static bool TryGetClosestFree(ProjectUnitBase[,] matrix, int x, int y, out int targetX, out int targetY)
-        {
-            for (var i = 0; i < matrix.GetLength(0); i++)
+            Lines.Add(new ProjectLine
             {
-                for (var xoff = -i; xoff <= i; xoff++)
-                {
-                    for (var yoff = -i; yoff <= i; yoff++)
-                    {
-                        var testX = x + xoff;
-                        var testY = y + yoff;
-
-                        if (!CheckBoundaries(testX, matrix.GetLength(0)))
-                        {
-                            continue;
+                Units = new List<ProjectUnitBase> {
+                    new FeatureUnit{
+                        Cost = 60,
+                        LineIndex = 1,
+                        QueueIndex = 0,
+                        RequiredSkills = new[]{
+                            SkillSchemeCatalog.SkillSchemes[0],
+                            SkillSchemeCatalog.SkillSchemes[1]
                         }
-
-                        if (!CheckBoundaries(testY, matrix.GetLength(1)))
-                        {
-                            continue;
+                    },
+                    new FeatureUnit{
+                        Cost = 10,
+                        LineIndex = 1,
+                        QueueIndex = 1,
+                        RequiredSkills = new[]{
+                            SkillSchemeCatalog.SkillSchemes[1]
                         }
-
-                        if (matrix[testX, testY] != null)
-                        {
-                            continue;
-                        }
-
-                        targetX = testX;
-                        targetY = testY;
-
-                        return true;
                     }
                 }
-            }
+            });
 
-            targetX = 0;
-            targetY = 0;
-            return false;
+            Lines.Add(new ProjectLine
+            {
+                Units = new List<ProjectUnitBase> {
+                    new FeatureUnit{
+                        Cost = 8,
+                        LineIndex = 2,
+                        QueueIndex = 0,
+                        RequiredSkills = new[]{
+                            SkillSchemeCatalog.SkillSchemes[0]
+                        }
+                    }
+                }
+            });
         }
 
-        private static bool CheckBoundaries(int test, int boundary)
+        public void AddUnitIntoLine(int lineIndex, int positionIndex, ProjectUnitBase unit)
         {
-            if (test < 0)
+            unit.LineIndex = lineIndex;
+
+            Lines[lineIndex].Units.Insert(positionIndex, unit);
+
+            // reindex
+            for (int i = 0; i < Lines[lineIndex].Units.Count; i++)
             {
-                return false;
+                ProjectUnitBase unit1 = Lines[lineIndex].Units[i];
+                unit1.QueueIndex = i;
             }
 
-            if (test >= boundary)
-            {
-                return false;
-            }
-
-            return true;
+            Added?.Invoke(this, new UnitEventArgs { ProjectUnit = unit });
         }
-    }
 
-    public class UnitEventArgs : EventArgs
-    {
-        public ProjectUnitBase ProjectUnit { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public void DeleteUnit(int lineIndex, ProjectUnitBase unit)
+        {
+            Lines[lineIndex].Units.Remove(unit);
+
+            // reindex
+            for (int i = 0; i < Lines[lineIndex].Units.Count; i++)
+            {
+                ProjectUnitBase unit1 = Lines[lineIndex].Units[i];
+                unit1.QueueIndex = i;
+            }
+
+            Removed?.Invoke(this, new UnitEventArgs { ProjectUnit = unit });
+        }
     }
 }

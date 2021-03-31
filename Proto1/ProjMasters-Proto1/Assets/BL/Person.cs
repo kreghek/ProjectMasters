@@ -1,56 +1,40 @@
 ﻿using System;
-using System.Linq;
 
 namespace Assets.BL
 {
     public class Person
     {
+        private float _commitCounter;
+
         public string Name { get; set; }
-        public float Speed { get; set; }
+        public float CommitSpeed { get; set; }
 
         public Skill[] Skills { get; set; }
 
-        public ProjectUnitBase Assigned { get; set; }
-
-        public float CommitCounter { get; set; }
-
         public event EventHandler<EventArgs> Commited;
 
-        public int X { get; set; }
+        public int? LineIndex { get; set; }
 
-        public int Y { get; set; }
-
-        public void Update(float commitDeltaTime)
+        public void Update(ProjectUnitBase assignedUnit, float commitDeltaTime)
         {
-            if (Assigned is null)
+            if (assignedUnit is null)
             {
                 return;
             }
 
-            X = Assigned.X - 1;
-            Y = Assigned.Y;
-
-            if (Assigned != null)
-            {
-                SolveAssignedUnit(Assigned, commitDeltaTime);
-
-                if (Assigned != null && Assigned.IsDead)
-                {
-                    Assigned = null;
-                }
-            }
+            SolveAssignedUnit(assignedUnit, commitDeltaTime);
         }
 
         private void SolveAssignedUnit(ProjectUnitBase unit, float commitDeltaTime)
         {
-            CommitCounter += commitDeltaTime;
+            _commitCounter += commitDeltaTime;
 
             const float baseCommitTimeSeconds = 4;
-            var targetCommitCounter = baseCommitTimeSeconds * Speed;
+            var targetCommitCounter = baseCommitTimeSeconds * CommitSpeed;
 
-            if (CommitCounter >= targetCommitCounter)
+            if (_commitCounter >= targetCommitCounter)
             {
-                CommitCounter = 0;
+                _commitCounter = 0;
                 Commited?.Invoke(this, EventArgs.Empty);
 
                 unit.ProcessCommit();

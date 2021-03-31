@@ -10,17 +10,13 @@ public class FormationViewModel : MonoBehaviour
 
     void Start()
     {
-        for (var i = 0; i < Formation.Matrix.GetLength(0); i++)
+        for (var lineIndex = 0; lineIndex < Formation.Lines.Count; lineIndex++)
         {
-            for (var j = 0; j < Formation.Matrix.GetLength(1); j++)
+            for (var unitIndex = 0; unitIndex < Formation.Lines[lineIndex].Units.Count; unitIndex++)
             {
-                var unit = Formation.Matrix[i, j];
-                if (unit != null)
-                {
-                    var unitViewModel = Instantiate(ProjectUnitViewModelPrefab, transform);
-                    unitViewModel.ProjectUnit = unit;
-                    unitViewModel.gameObject.transform.position = new Vector3(i, j);
-                }
+                var unit = Formation.Lines[lineIndex].Units[unitIndex];
+                var unitViewModel = Instantiate(ProjectUnitViewModelPrefab, transform);
+                unitViewModel.ProjectUnit = unit;
             }
         }
 
@@ -44,25 +40,11 @@ public class FormationViewModel : MonoBehaviour
                 Destroy(unitViewModel.gameObject);
             }
         }
-
-        foreach (var person in Team.Persons)
-        {
-            if (person.Assigned == e.ProjectUnit)
-            {
-                person.Assigned = null;
-            }
-        }
     }
 
     private void Formation_Added(object sender, UnitEventArgs e)
     {
         var unitViewModel = Instantiate(ProjectUnitViewModelPrefab, transform);
         unitViewModel.ProjectUnit = e.ProjectUnit;
-        unitViewModel.gameObject.transform.position = new Vector3(e.X, e.Y);
-
-        foreach (var person in Team.Persons)
-        {
-            person.Assigned = null;
-        }
     }
 }

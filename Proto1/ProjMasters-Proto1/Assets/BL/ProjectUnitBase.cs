@@ -13,8 +13,9 @@ namespace Assets.BL
 
         public bool IsDead { get; set; }
 
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int LineIndex { get; set; }
+
+        public int QueueIndex { get; set; }
 
         public event EventHandler<EventArgs> TakeDamage;
 

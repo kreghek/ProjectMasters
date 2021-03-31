@@ -1,4 +1,6 @@
-﻿using Assets.BL;
+﻿using System.Linq;
+
+using Assets.BL;
 
 using UnityEngine;
 
@@ -17,34 +19,42 @@ public class PersonViewModel : MonoBehaviour
 
     private void Person_Commited(object sender, System.EventArgs e)
     {
-        if (Person.Assigned != null)
-        {
-            _commitCounter = 0.5f;
-        }
+        _commitCounter = 0.5f;
     }
 
     public void Update()
     {
-        if (Person.Assigned != null)
+        var personLine = ProjectUnitFormation.Instance.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(Person));
+        if (personLine == null)
         {
-            gameObject.transform.position = new Vector3(Person.Assigned.X - 1, Person.Assigned.Y);
+            var formation = ProjectUnitFormation.Instance;
 
-            if (_commitCounter != null)
-            {
-                _commitCounter -= Time.deltaTime;
-
-                Graphics.transform.localPosition = new Vector3(Mathf.Sin(_commitCounter.Value / 0.5f) * 0.5f, 0);
-
-                if (_commitCounter <= 0)
-                {
-                    _commitCounter = 0;
-                    Graphics.transform.localPosition = new Vector3(0, 0);
-                }
-            }
+            gameObject.transform.position = Vector3.zero;
         }
         else
         {
-            gameObject.transform.position = new Vector3(0, 0);
+            var firstUnit = personLine.Units.FirstOrDefault();
+            if (firstUnit != null)
+            {
+                gameObject.transform.position = new Vector3(firstUnit.QueueIndex - 1, firstUnit.LineIndex);
+
+                if (_commitCounter != null)
+                {
+                    _commitCounter -= Time.deltaTime;
+
+                    Graphics.transform.localPosition = new Vector3(Mathf.Sin(_commitCounter.Value / 0.5f) * 0.5f, 0);
+
+                    if (_commitCounter <= 0)
+                    {
+                        _commitCounter = 0;
+                        Graphics.transform.localPosition = new Vector3(0, 0);
+                    }
+                }
+            }
+            else
+            {
+                gameObject.transform.position = Vector3.zero;
+            }
         }
     }
 }
