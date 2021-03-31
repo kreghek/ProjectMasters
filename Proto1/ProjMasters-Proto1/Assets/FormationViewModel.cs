@@ -10,9 +10,9 @@ public class FormationViewModel : MonoBehaviour
 
     void Start()
     {
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < Formation.Matrix.GetLength(0); i++)
         {
-            for (var j = 0; j < 10; j++)
+            for (var j = 0; j < Formation.Matrix.GetLength(1); j++)
             {
                 var unit = Formation.Matrix[i, j];
                 if (unit != null)
@@ -42,7 +42,7 @@ public class FormationViewModel : MonoBehaviour
 
     private void Formation_Added(object sender, UnitEventArgs e)
     {
-        var unitViewModel = Instantiate(ProjectUnitViewModelPrefab);
+        var unitViewModel = Instantiate(ProjectUnitViewModelPrefab, transform);
         unitViewModel.ProjectUnit = e.ProjectUnit;
         unitViewModel.gameObject.transform.position = new Vector3(e.X, e.Y);
 

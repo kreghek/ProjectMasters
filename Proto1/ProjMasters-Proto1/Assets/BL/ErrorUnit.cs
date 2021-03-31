@@ -2,9 +2,9 @@
 
 namespace Assets.BL
 {
-    public sealed class SubTaskUnit : ProjectUnitBase
+    public sealed class ErrorUnit : ProjectUnitBase
     {
-        public override ProjectUnitType Type => ProjectUnitType.SubTask;
+        public override ProjectUnitType Type => ProjectUnitType.Error;
 
         public override void ProcessCommit()
         {
@@ -13,7 +13,7 @@ namespace Assets.BL
                 TimeLog += 0.25f;
             }
 
-            if (Random.Range(1, 100) >= 75)
+            if (Random.Range(1, 100) >= 95)
             {
                 var featureX = 0;
                 var featureY = 0;
@@ -32,9 +32,8 @@ namespace Assets.BL
 
                 var errorUnit = CreateErrorUnit();
 
-                
+
                 formation.AddUnitInClosestPosition(errorUnit, featureX, featureY);
-                
             }
 
             if (TimeLog >= Cost)
