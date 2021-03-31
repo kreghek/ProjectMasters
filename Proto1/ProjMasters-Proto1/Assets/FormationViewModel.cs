@@ -28,6 +28,12 @@ public class FormationViewModel : MonoBehaviour
         Formation.Removed += Formation_Removed;
     }
 
+    private void OnDestroy()
+    {
+        Formation.Added -= Formation_Added;
+        Formation.Removed -= Formation_Removed;
+    }
+
     private void Formation_Removed(object sender, UnitEventArgs e)
     {
         var unitViewModels = GetComponentsInChildren<ProjectUnitViewModel>();
@@ -36,6 +42,14 @@ public class FormationViewModel : MonoBehaviour
             if (unitViewModel.ProjectUnit == e.ProjectUnit)
             {
                 Destroy(unitViewModel.gameObject);
+            }
+        }
+
+        foreach (var person in Team.Persons)
+        {
+            if (person.Assigned == e.ProjectUnit)
+            {
+                person.Assigned = null;
             }
         }
     }

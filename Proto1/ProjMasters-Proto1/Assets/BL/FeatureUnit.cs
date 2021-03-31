@@ -7,9 +7,9 @@ namespace Assets.BL
 {
     public sealed class FeatureUnit : ProjectUnitBase
     {
-        private float _minDecomposeCost = 1;
-        private float _maxDecomposeCost = 2;
-        private int _maxSubTask = 3;
+        private const float _minDecomposeCost = 1;
+        private const float _maxDecomposeCost = 2;
+        private const int _maxSubTask = 3;
 
         public FeatureUnit()
         {
