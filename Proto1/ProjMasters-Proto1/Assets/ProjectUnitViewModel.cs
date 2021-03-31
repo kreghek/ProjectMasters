@@ -8,6 +8,10 @@ public class ProjectUnitViewModel : MonoBehaviour
 
     private float _targetVerticalScale = 1;
     private float _targetHorizontalScale = 1;
+    private Vector3 _lastScaleVector = new Vector3(1, 1);
+    private float? _aliveCounter;
+    private float _aliveCounterCoef = 1;
+
     private Color _color;
 
     public ProjectUnitBase ProjectUnit;
@@ -63,6 +67,26 @@ public class ProjectUnitViewModel : MonoBehaviour
         {
             SpriteRenderer.color = _color;
         }
+
+        if (_aliveCounter == null)
+        {
+            _aliveCounter = 1;
+            _aliveCounterCoef = Random.Range(0.5f, 1.25f);
+            _targetVerticalScale = Random.Range(0.80f, 1.15f);
+            _targetHorizontalScale = Random.Range(0.80f, 1.15f);
+        }
+        else
+        {
+            _aliveCounter -= Time.deltaTime * _aliveCounterCoef;
+            Graphics.transform.localScale = Vector3.Lerp(_lastScaleVector, new Vector3(_targetHorizontalScale, _targetVerticalScale), 1 - _aliveCounter.Value);
+
+            if (_aliveCounter <= 0)
+            {
+                _aliveCounter = null;
+                _lastScaleVector = Graphics.transform.localScale;
+            }
+        }
+
     }
 
     public void OnDestroy()
