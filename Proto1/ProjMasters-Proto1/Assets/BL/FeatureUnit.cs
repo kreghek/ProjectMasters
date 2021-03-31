@@ -7,9 +7,23 @@ namespace Assets.BL
 {
     public sealed class FeatureUnit : ProjectUnitBase
     {
+        private float _minDecomposeCost = 1;
+        private float _maxDecomposeCost = 2;
+        private int _maxSubTask = 3;
+
+        public FeatureUnit()
+        {
+            RefreshCostToDecompose();
+        }
+
+        private void RefreshCostToDecompose()
+        {
+            CostToDecompose = Random.Range(_minDecomposeCost, _maxDecomposeCost);
+        }
+
         public override ProjectUnitType Type => ProjectUnitType.Feature;
 
-        public float CostToDecompose { get; set; }
+        public float CostToDecompose { get; private set; }
 
         public override void ProcessCommit()
         {
@@ -18,11 +32,13 @@ namespace Assets.BL
                 TimeLog += 0.25f;
                 CostToDecompose -= 0.25f;
 
+                DoTakeDamage();
+
                 if (CostToDecompose <= 0)
                 {
-                    CostToDecompose = Random.Range(4, 12);
+                    RefreshCostToDecompose();
 
-                    var subTaskCount = Random.Range(1, 3);
+                    var subTaskCount = Random.Range(1, _maxSubTask);
                     var subTasks = CreateSubTasks(this, subTaskCount);
 
                     var featureX = 0;

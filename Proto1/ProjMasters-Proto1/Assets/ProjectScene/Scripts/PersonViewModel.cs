@@ -33,7 +33,7 @@ public class PersonViewModel : MonoBehaviour
             {
                 _commitCounter -= Time.deltaTime;
 
-                Graphics.transform.localPosition = new Vector3(Mathf.Sin(_commitCounter.Value / 0.5f), 0);
+                Graphics.transform.localPosition = new Vector3(Mathf.Sin(_commitCounter.Value / 0.5f) * 0.5f, 0);
 
                 if (_commitCounter <= 0)
                 {

@@ -11,6 +11,7 @@ namespace Assets.BL
             if (Random.Range(1, 100) >= 50)
             {
                 TimeLog += 0.25f;
+                DoTakeDamage();
             }
 
             if (Random.Range(1, 100) >= 95)

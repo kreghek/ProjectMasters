@@ -1,4 +1,6 @@
-﻿namespace Assets.BL
+﻿using System;
+
+namespace Assets.BL
 {
     public abstract class ProjectUnitBase
     {
@@ -13,5 +15,12 @@
 
         public int X { get; set; }
         public int Y { get; set; }
+
+        public event EventHandler<EventArgs> TakeDamage;
+
+        protected void DoTakeDamage()
+        {
+            TakeDamage?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

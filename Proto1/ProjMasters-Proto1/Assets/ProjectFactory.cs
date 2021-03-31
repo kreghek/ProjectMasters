@@ -21,8 +21,7 @@ public class ProjectFactory : MonoBehaviour
 
             var feature = new FeatureUnit
             {
-                Cost = Random.Range(40, 60),
-                CostToDecompose = Random.Range(1, 8),
+                Cost = Random.Range(40, 60)
             };
 
             var randomizedSkills = SkillSchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
