@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.BL
 {
@@ -9,7 +11,7 @@ namespace Assets.BL
         public float TimeLog { get; set; }
         public SkillScheme[] RequiredSkills { get; set; }
 
-        public abstract void ProcessCommit();
+        public abstract void ProcessCommit(Person person);
 
         public bool IsDead { get; set; }
 
@@ -22,6 +24,28 @@ namespace Assets.BL
         protected void DoTakeDamage()
         {
             TakeDamage?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected float GetSuccessCommitRoll(IEnumerable<Skill> personSkills)
+        {
+            var usedSkills = personSkills.Where(x => RequiredSkills.Contains(x.Scheme)).ToArray();
+            if (usedSkills.Any())
+            {
+                return usedSkills.Average(x => x.Level);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        protected bool RollCommitSuccess(IEnumerable<Skill> skills)
+        {
+            var effectiveCommitRoll = UnityEngine.Random.Range(1, Person.MAX_SKILL_LEVEL);
+            var successCommitRoll = GetSuccessCommitRoll(skills);
+
+            var successfullCommit = effectiveCommitRoll <= successCommitRoll;
+            return successfullCommit;
         }
     }
 }

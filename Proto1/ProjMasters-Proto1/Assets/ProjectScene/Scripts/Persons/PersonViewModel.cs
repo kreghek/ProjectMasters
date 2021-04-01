@@ -24,6 +24,13 @@ public class PersonViewModel : MonoBehaviour
 
     public void Update()
     {
+        if (Person.RecoveryCounter != null)
+        {
+            // The person is relaxing at home.
+            gameObject.transform.position = Vector3.zero;
+            return;
+        }
+
         var personLine = ProjectUnitFormation.Instance.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(Person));
         if (personLine == null)
         {

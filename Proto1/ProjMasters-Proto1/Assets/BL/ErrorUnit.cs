@@ -6,15 +6,16 @@ namespace Assets.BL
     {
         public override ProjectUnitType Type => ProjectUnitType.Error;
 
-        public override void ProcessCommit()
+        public override void ProcessCommit(Person person)
         {
-            if (Random.Range(1, 100) >= 50)
+            var isSuccessfullCommit = RollCommitSuccess(person.Skills);
+            if (isSuccessfullCommit)
             {
-                TimeLog += 0.25f;
+                TimeLog += person.CommitPower;
                 DoTakeDamage();
             }
 
-            if (Random.Range(1, 100) >= 95)
+            if (Random.Range(1, 100) < person.ErrorChance)
             {
                 var formation = ProjectUnitFormation.Instance;
 
@@ -35,7 +36,8 @@ namespace Assets.BL
         {
             var subTask = new ErrorUnit
             {
-                Cost = Random.Range(4, 16)
+                Cost = Random.Range(4, 16),
+                RequiredSkills = RequiredSkills
             };
 
             return subTask;
