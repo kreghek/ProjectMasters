@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Assets.BL
 {
@@ -8,16 +6,16 @@ namespace Assets.BL
     {
         public override ProjectUnitType Type => ProjectUnitType.SubTask;
 
-        public override void ProcessCommit(IEnumerable<Skill> skills)
+        public override void ProcessCommit(Person person)
         {
-            var isSuccessfullCommit = RollCommitSuccess(skills);
+            var isSuccessfullCommit = RollCommitSuccess(person.Skills);
             if (isSuccessfullCommit)
             {
                 TimeLog += 0.25f;
                 DoTakeDamage();
             }
 
-            if (Random.Range(1, 100) >= 75)
+            if (Random.Range(1, 100) < person.ErrorChanceBase)
             {
                 var formation = ProjectUnitFormation.Instance;
 

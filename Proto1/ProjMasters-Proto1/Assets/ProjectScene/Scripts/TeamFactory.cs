@@ -58,16 +58,18 @@ public class TeamFactory : MonoBehaviour
     private static IEnumerable<Person> CreateStartTeam()
     {
         return new[] {
-            new Person{Name = "Ivan Ivanov", CommitSpeed = 1, Skills = new[]{
+            new Person{Name = "Ivan Ivanov", Skills = new[]{
                 new Skill{ Level = 8, Scheme = SkillSchemeCatalog.SkillSchemes[0] }
             } },
-            new Person{Name = "Sidre Patre", CommitSpeed = 2, Skills = new[]{
+            new Person{Name = "Sidre Patron", Skills = new[]{
                 new Skill{ Level = 4, Scheme = SkillSchemeCatalog.SkillSchemes[0] },
                 new Skill{ Level = 4, Scheme = SkillSchemeCatalog.SkillSchemes[1] }
-            } },
-            new Person{Name = "John Smith", CommitSpeed = 0.75f, Skills = new[]{
+            },
+            Traits = new[]{ TraitType.CarefullDevelopment } },
+            new Person{Name = "John Smith", Skills = new[]{
                 new Skill{ Level = 9, Scheme = SkillSchemeCatalog.SkillSchemes[1] }
-            } },
+            },
+            Traits = new[]{ TraitType.RapidDevelopment }},
         };
     }
 }
