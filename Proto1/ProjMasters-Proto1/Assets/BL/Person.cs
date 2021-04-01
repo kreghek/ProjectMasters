@@ -4,34 +4,6 @@ using System.Linq;
 
 namespace Assets.BL
 {
-    public enum EffectType
-    { 
-        /// <summary>
-        /// Decrease commit speed twice.
-        /// </summary>
-        Procrastination,
-
-        /// <summary>
-        /// Increase commit speed twice.
-        /// </summary>
-        Stream,
-
-        /// <summary>
-        /// Increase chance of error.
-        /// </summary>
-        Scattered,
-
-        /// <summary>
-        /// Speed up learning twice.
-        /// </summary>
-        Evrika
-    }
-
-    public class Effect
-    { 
-        public EffectType EffectType { get; set; }
-        public float Lifetime { get; set; }
-    }
 
     public class Person
     {
@@ -45,7 +17,7 @@ namespace Assets.BL
         private const float RECOVERY_TIME_BASE = 8;
         private const int ENERGY_DOWN_SPEED_BASE = 1;
         private const int RECOVERY_SPEED_BASE = 1;
-
+        private const int DAYLY_PAYMENT_BASE = 1;
         private float _commitCounter;
 
         public string Name { get; set; }
@@ -70,6 +42,8 @@ namespace Assets.BL
         public int? LineIndex { get; set; }
         public float EnergyDownSpeed { get; private set; } = ENERGY_DOWN_SPEED_BASE;
         public float RecoverySpeed { get; private set; } = RECOVERY_SPEED_BASE;
+
+        public int DaylyPayment { get; set; } = DAYLY_PAYMENT_BASE;
 
         public void Update(ProjectUnitBase assignedUnit, float commitDeltaTime)
         {

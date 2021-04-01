@@ -26,6 +26,48 @@ public class TeamFactory : MonoBehaviour
 
     public void Update()
     {
+        var deltaTime = Time.deltaTime;
+
+        UpdateProjectLineSolving(deltaTime);
+
+        UpdateDayly(deltaTime);
+
+        ProcessGameOver();
+    }
+
+    private static void ProcessGameOver()
+    {
+        if (Player.FailureCount > 3)
+        {
+            // Game over
+        }
+    }
+
+    private static void UpdateDayly(float deltaTime)
+    {
+        Player.DayCounter -= deltaTime;
+        if (Player.DayCounter <= 0)
+        {
+            Player.DayCounter = Player.DAY_COUNTER_BASE;
+            Player.DayNumber++;
+
+            // payment
+            if (Player.Money > 0)
+            {
+                foreach (var person in Team.Persons)
+                {
+                    Player.Money -= person.DaylyPayment;
+                }
+            }
+            else
+            {
+                Player.FailureCount++;
+            }
+        }
+    }
+
+    private static void UpdateProjectLineSolving(float deltaTime)
+    {
         foreach (var line in ProjectUnitFormation.Instance.Lines.ToArray())
         {
             if (line.Units.Any())
@@ -45,7 +87,7 @@ public class TeamFactory : MonoBehaviour
 
                 foreach (var assignedPerson in assignedPersons)
                 {
-                    assignedPerson.Update(line.Units.First(), Time.deltaTime);
+                    assignedPerson.Update(line.Units.First(), deltaTime);
                 }
             }
             else
