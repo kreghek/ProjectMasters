@@ -131,7 +131,8 @@ public class TeamFactory : MonoBehaviour
                 Name = "Ivan Ivanov",
                 Skills = new[] { new Skill{ Level = 8, Scheme = SkillSchemeCatalog.SkillSchemes[0] } },
                 Traits = new []{ TraitType.FastLearning },
-                EyeIndex = 0
+                EyeIndex = 0,
+                FaceDecorIndex = 1,
             },
 
             new Person
@@ -143,7 +144,8 @@ public class TeamFactory : MonoBehaviour
                     new Skill{ Level = 4, Scheme = SkillSchemeCatalog.SkillSchemes[1] }
                 },
                 Traits = new[]{ TraitType.CarefullDevelopment, TraitType.Apologet },
-                EyeIndex = 1
+                EyeIndex = 1,
+                FaceDecorIndex = 2
             },
 
             new Person
@@ -154,7 +156,8 @@ public class TeamFactory : MonoBehaviour
                     new Skill{ Level = 9, Scheme = SkillSchemeCatalog.SkillSchemes[1] }
                 },
                 Traits = new[]{ TraitType.RapidDevelopment },
-                EyeIndex = 2
+                EyeIndex = 2,
+                FaceDecorIndex = 0
             },
         };
     }
