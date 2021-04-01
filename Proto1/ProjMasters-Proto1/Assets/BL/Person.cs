@@ -35,11 +35,17 @@ namespace Assets.BL
 
     public class Person
     {
+        public const int MAX_SKILL_LEVEL = 16;
+
         private const int COMMIT_SPEED_BASE = 1;
         private const int ERROR_CHANCE_BASE = 50;
         private const float SKILLUP_SPEED_BASE = 0.01f;
-        public const int MAX_SKILL_LEVEL = 16;
         private const int EFFECT_CHANCE_BASE = 5;
+        private const int ENERGY_BASE = 100;
+        private const float RECOVERY_TIME_BASE = 8;
+        private const int ENERGY_DOWN_SPEED_BASE = 1;
+        private const int RECOVERY_SPEED_BASE = 1;
+
         private float _commitCounter;
 
         public string Name { get; set; }
@@ -53,9 +59,17 @@ namespace Assets.BL
 
         public List<Effect> Effects { get; } = new List<Effect>();
 
+        public float EnergyCurrent { get; set; } = ENERGY_BASE;
+
+        public float Energy { get; set; } = ENERGY_BASE;
+
+        public float? RecoveryCounter { get; set; }
+
         public event EventHandler<EventArgs> Commited;
 
         public int? LineIndex { get; set; }
+        public float EnergyDownSpeed { get; private set; } = ENERGY_DOWN_SPEED_BASE;
+        public float RecoverySpeed { get; private set; } = RECOVERY_SPEED_BASE;
 
         public void Update(ProjectUnitBase assignedUnit, float commitDeltaTime)
         {
@@ -63,6 +77,13 @@ namespace Assets.BL
             HandleTraits();
 
             HandleCurrentEffects(commitDeltaTime);
+            CheckForNewEffect();
+
+            HandleEnergy(commitDeltaTime);
+            if (RecoveryCounter != null)
+            {
+                return;
+            }
 
             if (assignedUnit is null)
             {
@@ -70,8 +91,30 @@ namespace Assets.BL
             }
 
             ProgressUnitSolving(assignedUnit, commitDeltaTime);
+        }
 
-            CheckForNewEffect();
+        private void HandleEnergy(float commitDeltaTime)
+        {
+            if (EnergyCurrent > 0)
+            {
+                EnergyCurrent -= commitDeltaTime * EnergyDownSpeed;
+            }
+            else
+            {
+                if (RecoveryCounter == null)
+                {
+                    RecoveryCounter = RECOVERY_TIME_BASE;
+                }
+                else
+                {
+                    RecoveryCounter -= commitDeltaTime * RecoverySpeed;
+                    if (RecoveryCounter <= 0)
+                    {
+                        RecoveryCounter = null;
+                        EnergyCurrent = Energy;
+                    }
+                }
+            }
         }
 
         private void CheckForNewEffect()
