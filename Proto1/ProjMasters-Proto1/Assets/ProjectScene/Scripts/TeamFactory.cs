@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Assets.BL;
@@ -60,7 +61,8 @@ public class TeamFactory : MonoBehaviour
         return new[] {
             new Person{Name = "Ivan Ivanov", Skills = new[]{
                 new Skill{ Level = 8, Scheme = SkillSchemeCatalog.SkillSchemes[0] }
-            } },
+            },
+            Traits = new TraitType[0]},
             new Person{Name = "Sidre Patron", Skills = new[]{
                 new Skill{ Level = 4, Scheme = SkillSchemeCatalog.SkillSchemes[0] },
                 new Skill{ Level = 4, Scheme = SkillSchemeCatalog.SkillSchemes[1] }

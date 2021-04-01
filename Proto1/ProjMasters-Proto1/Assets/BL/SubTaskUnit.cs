@@ -43,7 +43,8 @@ namespace Assets.BL
         {
             var subTask = new ErrorUnit
             {
-                Cost = Random.Range(4, 16)
+                Cost = Random.Range(4, 16),
+                RequiredSkills = RequiredSkills
             };
 
             return subTask;

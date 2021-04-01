@@ -25,10 +25,10 @@ namespace Assets.BL
 
         public float CostToDecompose { get; private set; }
 
-        public override void ProcessCommit(IEnumerable<Skill> skills)
+        public override void ProcessCommit(Person person)
         {
             var formation = ProjectUnitFormation.Instance;
-            var successfullCommit = RollCommitSuccess(skills);
+            var successfullCommit = RollCommitSuccess(person.Skills);
             if (successfullCommit)
             {
                 TimeLog += 0.25f;
