@@ -1,7 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Assets.BL
 {
+    public enum EffectType
+    { 
+        /// <summary>
+        /// Decrease commit speed twice.
+        /// </summary>
+        Procrastination,
+
+        /// <summary>
+        /// Increase commit speed twice.
+        /// </summary>
+        Stream,
+
+        /// <summary>
+        /// Increase chance of error.
+        /// </summary>
+        Scattered
+    }
+
+    public class Effect
+    { 
+        public EffectType EffectType { get; set; }
+        public float Lifetime { get; set; }
+    }
+
     public class Person
     {
         private float _commitCounter;
@@ -14,6 +39,8 @@ namespace Assets.BL
 
         public TraitType[] Traits { get; set; }
 
+        public List<Effect> Effects { get; } = new List<Effect>();
+
         public event EventHandler<EventArgs> Commited;
 
         public int? LineIndex { get; set; }
@@ -22,12 +49,19 @@ namespace Assets.BL
         {
             HandleTraits();
 
+            HandleCurrentEffects();
+
             if (assignedUnit is null)
             {
                 return;
             }
 
             ProgressUnitSolving(assignedUnit, commitDeltaTime);
+        }
+
+        private void HandleCurrentEffects()
+        {
+            throw new NotImplementedException();
         }
 
         private void HandleTraits()
