@@ -10,6 +10,16 @@
         /// <summary>
         /// Opposit Carefull development.
         /// </summary>
-        RapidDevelopment
+        RapidDevelopment,
+
+        /// <summary>
+        /// Increase skill up speed but increase error chance.
+        /// </summary>
+        FastLearning,
+
+        /// <summary>
+        /// Desrease skill up speed but decrease error chance.
+        /// </summary>
+        Apologet
     }
 }

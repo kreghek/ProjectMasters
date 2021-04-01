@@ -19,7 +19,12 @@ namespace Assets.BL
         /// <summary>
         /// Increase chance of error.
         /// </summary>
-        Scattered
+        Scattered,
+
+        /// <summary>
+        /// Speed up learning twice.
+        /// </summary>
+        Evrika
     }
 
     public class Effect
@@ -30,11 +35,17 @@ namespace Assets.BL
 
     public class Person
     {
+        private const int COMMIT_SPEED_BASE = 1;
+        private const int ERROR_CHANCE_BASE = 50;
+        private const float SKILLUP_SPEED_BASE = 0.01f;
+        public const int MAX_SKILL_LEVEL = 16;
+        private const int EFFECT_CHANCE_BASE = 5;
         private float _commitCounter;
 
         public string Name { get; set; }
-        public float CommitSpeed { get; set; } = 1;
-        public float ErrorChanceBase { get; set; } = 50;
+        public float CommitSpeed { get; set; } = COMMIT_SPEED_BASE;
+        public float ErrorChance { get; set; } = ERROR_CHANCE_BASE;
+        public float SkillUpSpeed { get; set; } = SKILLUP_SPEED_BASE;
 
         public Skill[] Skills { get; set; }
 
@@ -48,9 +59,10 @@ namespace Assets.BL
 
         public void Update(ProjectUnitBase assignedUnit, float commitDeltaTime)
         {
+            ResetStats();
             HandleTraits();
 
-            HandleCurrentEffects();
+            HandleCurrentEffects(commitDeltaTime);
 
             if (assignedUnit is null)
             {
@@ -58,11 +70,71 @@ namespace Assets.BL
             }
 
             ProgressUnitSolving(assignedUnit, commitDeltaTime);
+
+            CheckForNewEffect();
         }
 
-        private void HandleCurrentEffects()
+        private void CheckForNewEffect()
         {
-            throw new NotImplementedException();
+            if (Effects.Any())
+            {
+                return;
+            }
+
+            var newEffectRoll = UnityEngine.Random.Range(1, 100);
+
+            if (newEffectRoll < EFFECT_CHANCE_BASE)
+            {
+                var effectTypeIndex = UnityEngine.Random.Range(0, 3);
+                var effectDuration = UnityEngine.Random.Range(2, 16);
+                var effect = new Effect
+                {
+                    EffectType = (EffectType)effectTypeIndex,
+                    Lifetime = effectDuration
+                };
+
+                Effects.Add(effect);
+            }
+        }
+
+        private void ResetStats()
+        {
+            SkillUpSpeed = SKILLUP_SPEED_BASE;
+            ErrorChance = ERROR_CHANCE_BASE;
+            CommitSpeed = COMMIT_SPEED_BASE;
+        }
+
+        private void HandleCurrentEffects(float commitDeltaTime)
+        {
+            foreach (var effect in Effects.ToArray())
+            {
+                effect.Lifetime-= commitDeltaTime;
+                if (effect.Lifetime <= 0)
+                {
+                    Effects.Remove(effect);
+                }
+                else
+                {
+                    switch (effect.EffectType)
+                    {
+                        case EffectType.Procrastination:
+                            CommitSpeed *= 0.5f;
+                            break;
+
+                        case EffectType.Stream:
+                            CommitSpeed *= 1.5f;
+                            break;
+
+                        case EffectType.Scattered:
+                            ErrorChance *= 1.5f;
+                            break;
+
+                        case EffectType.Evrika:
+                            SkillUpSpeed *= 2f;
+                            break;
+                    }
+                }
+            }
         }
 
         private void HandleTraits()
@@ -72,12 +144,12 @@ namespace Assets.BL
                 switch (trait)
                 {
                     case TraitType.CarefullDevelopment:
-                        ErrorChanceBase = 50 - 25 / 2;
+                        ErrorChance = 50 - 25 / 2;
                         CommitSpeed = 2;
                         break;
 
                     case TraitType.RapidDevelopment:
-                        ErrorChanceBase = 50 + 25 / 2;
+                        ErrorChance = 50 + 25 / 2;
                         CommitSpeed = 0.5f;
                         break;
                 }
@@ -103,9 +175,13 @@ namespace Assets.BL
                 var usedSkills = Skills.Where(x => unit.RequiredSkills.Contains(x.Scheme)).ToArray();
                 foreach (var usedSkill in usedSkills)
                 {
-                    if (usedSkill.Level < 16)
+                    if (usedSkill.Level < MAX_SKILL_LEVEL)
                     {
-                        usedSkill.Level += 0.01f;
+                        usedSkill.Level += SkillUpSpeed;
+                    }
+                    else
+                    {
+                        usedSkill.Level = MAX_SKILL_LEVEL;
                     }
                 }
             }

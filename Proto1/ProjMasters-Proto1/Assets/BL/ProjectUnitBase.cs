@@ -41,7 +41,7 @@ namespace Assets.BL
 
         protected bool RollCommitSuccess(IEnumerable<Skill> skills)
         {
-            var effectiveCommitRoll = UnityEngine.Random.Range(1, 16);
+            var effectiveCommitRoll = UnityEngine.Random.Range(1, Person.MAX_SKILL_LEVEL);
             var successCommitRoll = GetSuccessCommitRoll(skills);
 
             var successfullCommit = effectiveCommitRoll <= successCommitRoll;

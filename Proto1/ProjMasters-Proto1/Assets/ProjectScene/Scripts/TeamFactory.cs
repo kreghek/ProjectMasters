@@ -62,12 +62,12 @@ public class TeamFactory : MonoBehaviour
             new Person{Name = "Ivan Ivanov", Skills = new[]{
                 new Skill{ Level = 8, Scheme = SkillSchemeCatalog.SkillSchemes[0] }
             },
-            Traits = new TraitType[0]},
-            new Person{Name = "Sidre Patron", Skills = new[]{
+            Traits = new []{ TraitType.FastLearning } },
+            new Person{Name = "Sidre Patron [The Soul]", Skills = new[]{
                 new Skill{ Level = 4, Scheme = SkillSchemeCatalog.SkillSchemes[0] },
                 new Skill{ Level = 4, Scheme = SkillSchemeCatalog.SkillSchemes[1] }
             },
-            Traits = new[]{ TraitType.CarefullDevelopment } },
+            Traits = new[]{ TraitType.CarefullDevelopment, TraitType.Apologet } },
             new Person{Name = "John Smith", Skills = new[]{
                 new Skill{ Level = 9, Scheme = SkillSchemeCatalog.SkillSchemes[1] }
             },

@@ -15,7 +15,7 @@ namespace Assets.BL
                 DoTakeDamage();
             }
 
-            if (Random.Range(1, 100) < person.ErrorChanceBase)
+            if (Random.Range(1, 100) < person.ErrorChance)
             {
                 var formation = ProjectUnitFormation.Instance;
 
