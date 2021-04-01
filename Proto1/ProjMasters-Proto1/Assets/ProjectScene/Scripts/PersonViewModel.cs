@@ -24,7 +24,7 @@ public class PersonViewModel : MonoBehaviour
 
     public void Update()
     {
-        if (Person.RecoveryCounter is null)
+        if (Person.RecoveryCounter != null)
         {
             // The person is relaxing at home.
             gameObject.transform.position = Vector3.zero;
