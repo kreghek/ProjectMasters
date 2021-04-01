@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.BL
 {
@@ -96,6 +97,17 @@ namespace Assets.BL
                 Commited?.Invoke(this, EventArgs.Empty);
 
                 unit.ProcessCommit(this);
+
+                // Improve used skills
+
+                var usedSkills = Skills.Where(x => unit.RequiredSkills.Contains(x.Scheme)).ToArray();
+                foreach (var usedSkill in usedSkills)
+                {
+                    if (usedSkill.Level < 16)
+                    {
+                        usedSkill.Level += 0.01f;
+                    }
+                }
             }
         }
     }
