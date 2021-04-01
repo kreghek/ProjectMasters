@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
 
 namespace Assets.BL
 {
@@ -6,9 +8,10 @@ namespace Assets.BL
     {
         public override ProjectUnitType Type => ProjectUnitType.SubTask;
 
-        public override void ProcessCommit()
+        public override void ProcessCommit(IEnumerable<Skill> skills)
         {
-            if (Random.Range(1, 100) >= 50)
+            var isSuccessfullCommit = RollCommitSuccess(skills);
+            if (isSuccessfullCommit)
             {
                 TimeLog += 0.25f;
                 DoTakeDamage();
