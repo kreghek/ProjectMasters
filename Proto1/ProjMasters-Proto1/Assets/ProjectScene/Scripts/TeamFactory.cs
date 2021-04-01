@@ -28,11 +28,34 @@ public class TeamFactory : MonoBehaviour
     {
         var deltaTime = Time.deltaTime;
 
+        if (Player.WaitForDecision != null)
+        {
+            return;
+        }
+
         UpdateProjectLineSolving(deltaTime);
 
         UpdateDayly(deltaTime);
 
+        HandleDecision(deltaTime);
+
         ProcessGameOver();
+    }
+
+    private void HandleDecision(float deltaTime)
+    {
+        if (Player.DecisionCounter <= 0)
+        {
+            if (Random.Range(1, 100) < 25)
+            {
+                var decisionIndex = Random.Range(0, DecisionCatalog.Decisions.Length);
+                Player.WaitForDecision = DecisionCatalog.Decisions[decisionIndex];
+            }
+        }
+        else
+        {
+            Player.DecisionCounter -= deltaTime;
+        }
     }
 
     private static void ProcessGameOver()

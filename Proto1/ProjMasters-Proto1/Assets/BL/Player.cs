@@ -10,5 +10,9 @@
 
         public static int DayNumber { get; set; }
         public static float DayCounter { get; set; } = DAY_COUNTER_BASE;
+
+        public static Decision WaitForDecision { get; set; }
+
+        public static float DecisionCounter { get; set; } 4;
     }
 }

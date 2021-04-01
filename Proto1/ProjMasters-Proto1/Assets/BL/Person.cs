@@ -18,10 +18,15 @@ namespace Assets.BL
         private const int ENERGY_DOWN_SPEED_BASE = 1;
         private const int RECOVERY_SPEED_BASE = 1;
         private const int DAYLY_PAYMENT_BASE = 1;
+        private const float COMMIT_POWER_BASE = 0.25f;
+
         private float _commitCounter;
 
         public string Name { get; set; }
         public float CommitSpeed { get; set; } = COMMIT_SPEED_BASE;
+
+        public float CommitPower { get; set; } = COMMIT_POWER_BASE;
+
         public float ErrorChance { get; set; } = ERROR_CHANCE_BASE;
         public float SkillUpSpeed { get; set; } = SKILLUP_SPEED_BASE;
 
@@ -103,7 +108,7 @@ namespace Assets.BL
             if (newEffectRoll < EFFECT_CHANCE_BASE)
             {
                 var effectTypeIndex = UnityEngine.Random.Range(0, 3);
-                var effectDuration = UnityEngine.Random.Range(2, 16);
+                var effectDuration = UnityEngine.Random.Range(Effect.MIN_DURATION, Effect.MAX_DURATION);
                 var effect = new Effect
                 {
                     EffectType = (EffectType)effectTypeIndex,
@@ -119,6 +124,7 @@ namespace Assets.BL
             SkillUpSpeed = SKILLUP_SPEED_BASE;
             ErrorChance = ERROR_CHANCE_BASE;
             CommitSpeed = COMMIT_SPEED_BASE;
+            CommitPower = COMMIT_POWER_BASE;
         }
 
         private void HandleCurrentEffects(float commitDeltaTime)
@@ -148,6 +154,14 @@ namespace Assets.BL
 
                         case EffectType.Evrika:
                             SkillUpSpeed *= 2f;
+                            break;
+
+                        case EffectType.Despondency:
+                            CommitPower *= 0.1f;
+                            break;
+
+                        case EffectType.Toxic:
+                            CommitPower *= 0.1f;
                             break;
                     }
                 }

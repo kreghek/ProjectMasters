@@ -31,8 +31,8 @@ namespace Assets.BL
             var successfullCommit = RollCommitSuccess(person.Skills);
             if (successfullCommit)
             {
-                TimeLog += 0.25f;
-                CostToDecompose -= 0.25f;
+                TimeLog += person.CommitPower;
+                CostToDecompose -= person.CommitPower;
 
                 DoTakeDamage();
 

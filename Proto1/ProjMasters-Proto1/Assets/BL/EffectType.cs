@@ -20,6 +20,16 @@
         /// <summary>
         /// Speed up learning twice.
         /// </summary>
-        Evrika
+        Evrika,
+
+        /// <summary>
+        /// Really reduces a person commit speed.
+        /// </summary>
+        Despondency = 1000,
+
+        /// <summary>
+        /// Really reduces a person commit speed.
+        /// </summary>
+        Toxic = 1001
     }
 }

@@ -11,7 +11,7 @@ namespace Assets.BL
             var isSuccessfullCommit = RollCommitSuccess(person.Skills);
             if (isSuccessfullCommit)
             {
-                TimeLog += 0.25f;
+                TimeLog += person.CommitPower;
                 DoTakeDamage();
             }
 
