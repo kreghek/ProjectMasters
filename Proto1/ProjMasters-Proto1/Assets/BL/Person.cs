@@ -203,16 +203,29 @@ namespace Assets.BL
 
                 // Improve used skills
 
-                var usedSkills = Skills.Where(x => unit.RequiredSkills.Contains(x.Scheme)).ToArray();
-                foreach (var usedSkill in usedSkills)
+                foreach (var requiredSkillScheme in unit.RequiredSkills)
                 {
-                    if (usedSkill.Level < MAX_SKILL_LEVEL)
+                    var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
+                    if (usedSkill is null)
                     {
-                        usedSkill.Level += SkillUpSpeed;
+                        var newSkill = new Skill
+                        {
+                            Scheme = requiredSkillScheme,
+                            Level = 0
+                        };
+
+                        Skills = Skills.Concat(new[] { newSkill }).ToArray();
                     }
                     else
                     {
-                        usedSkill.Level = MAX_SKILL_LEVEL;
+                        if (usedSkill.Level < MAX_SKILL_LEVEL)
+                        {
+                            usedSkill.Level += SkillUpSpeed;
+                        }
+                        else
+                        {
+                            usedSkill.Level = MAX_SKILL_LEVEL;
+                        }
                     }
                 }
             }
