@@ -9,7 +9,7 @@ namespace Assets.BL
     {
         private const float _minDecomposeCost = 1;
         private const float _maxDecomposeCost = 2;
-        private const int _maxSubTask = 3;
+        private const int _maxSubTask = 5;
 
         public FeatureUnit()
         {
@@ -27,6 +27,8 @@ namespace Assets.BL
 
         public override void ProcessCommit()
         {
+            var formation = ProjectUnitFormation.Instance;
+
             if (Random.Range(1, 100) >= 50)
             {
                 TimeLog += 0.25f;
@@ -38,34 +40,25 @@ namespace Assets.BL
                 {
                     RefreshCostToDecompose();
 
-                    var subTaskCount = Random.Range(1, _maxSubTask);
+                    var subTaskCount = Random.Range(1, _maxSubTask + 1);
                     var subTasks = CreateSubTasks(this, subTaskCount);
-
-                    var featureX = 0;
-                    var featureY = 0;
-                    var formation = ProjectUnitFormation.Instance;
-                    for (int x = 0; x < formation.Matrix.GetLength(0); x++)
-                    {
-                        for (int y = 0; y < formation.Matrix.GetLength(1); y++)
-                        {
-                            if (formation.Matrix[x, y] == this)
-                            {
-                                featureX = x;
-                                featureY = y;
-                            }
-                        }
-                    }
 
                     foreach (var subTask in subTasks)
                     {
-                        formation.AddUnitInClosestPosition(subTask, featureX, featureY);
+                        if (Random.Range(1, 100) > 50)
+                        {
+                            formation.AddUnitIntoLine(LineIndex, 0, subTask);
+                        }
+                        else
+                        {
+                            formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, subTask);
+                        }
                     }
                 }
 
                 if (TimeLog >= Cost)
                 {
-                    var formation = ProjectUnitFormation.Instance;
-                    formation.DeleteUnit(this);
+                    formation.DeleteUnit(LineIndex, this);
                     IsDead = true;
                 }
             }

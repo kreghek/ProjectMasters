@@ -6,10 +6,16 @@ using UnityEngine;
 
 public class ProjectFactory : MonoBehaviour
 {
-
     public FormationViewModel FormationViewModelPrefab;
 
-    void Start()
+    private void Start()
+    {
+        var formation = ProjectUnitFormation.Instance;
+        var viewModel = Instantiate(FormationViewModelPrefab);
+        viewModel.Formation = formation;
+    }
+
+    void OldStart()
     {
         var formation = ProjectUnitFormation.Instance;
 
@@ -29,7 +35,7 @@ public class ProjectFactory : MonoBehaviour
             var requiredSkills = randomizedSkills.Take(requiredSkillCount);
             feature.RequiredSkills = requiredSkills.ToArray();
 
-            formation.AddUnitInClosestPosition(feature, x, y);
+            //formation.AddUnitInClosestPosition(feature, x, y);
         }
 
         var viewModel = Instantiate(FormationViewModelPrefab);
