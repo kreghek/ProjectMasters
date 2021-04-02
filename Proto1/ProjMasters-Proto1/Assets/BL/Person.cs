@@ -12,7 +12,7 @@ namespace Assets.BL
         private const int COMMIT_SPEED_BASE = 1;
         private const int ERROR_CHANCE_BASE = 50;
         private const float SKILLUP_SPEED_BASE = 0.01f;
-        private const int EFFECT_CHANCE_BASE = 5;
+        private const int EFFECT_CHANCE_BASE = 15;
         private const int ENERGY_BASE = 100;
         private const float RECOVERY_TIME_BASE = 8;
         private const int ENERGY_DOWN_SPEED_BASE = 1;
@@ -69,7 +69,6 @@ namespace Assets.BL
             HandleTraits();
 
             HandleCurrentEffects(commitDeltaTime);
-            CheckForNewEffect();
 
             HandleEnergy(commitDeltaTime);
             if (RecoveryCounter != null)
@@ -83,6 +82,11 @@ namespace Assets.BL
             }
 
             ProgressUnitSolving(assignedUnit, commitDeltaTime);
+        }
+
+        public void DaylyUpdate()
+        {
+            CheckForNewEffect();
         }
 
         private void HandleSpeechs(float commitDeltaTime)

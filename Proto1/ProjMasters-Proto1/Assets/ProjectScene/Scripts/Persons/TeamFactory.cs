@@ -38,7 +38,7 @@ public class TeamFactory : MonoBehaviour
 
         UpdateProjectLineSolving(deltaTime);
 
-        UpdateDayly(deltaTime);
+        UpdateProjectTime(deltaTime);
 
         HandleDecision(deltaTime);
 
@@ -72,13 +72,15 @@ public class TeamFactory : MonoBehaviour
         }
     }
 
-    private static void UpdateDayly(float deltaTime)
+    private static void UpdateProjectTime(float deltaTime)
     {
         Player.DayCounter -= deltaTime;
         if (Player.DayCounter <= 0)
         {
             Player.DayCounter = Player.DAY_COUNTER_BASE;
             Player.DayNumber++;
+
+            UpdateDayly();
 
             // payment
             if (Player.Money > 0)
@@ -92,6 +94,14 @@ public class TeamFactory : MonoBehaviour
             {
                 Player.FailureCount++;
             }
+        }
+    }
+
+    private static void UpdateDayly()
+    {
+        foreach (var person in Team.Persons)
+        {
+            person.DaylyUpdate();
         }
     }
 
