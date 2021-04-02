@@ -19,5 +19,7 @@
         public static bool WaitTutorial { get; set; }
 
         public static float DecisionCounter { get; set; } = DECISION_COUNTER_BASE;
+
+        public static ProjectUnitBase SelectedUnit;
     }
 }

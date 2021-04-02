@@ -100,4 +100,14 @@ public class ProjectUnitViewModel : MonoBehaviour
     {
         _damageTremorCounter = 0.5f;
     }
+
+    public void OnMouseEnter()
+    {
+        Player.SelectedUnit = ProjectUnit;
+    }
+
+    public void OnMouseExit()
+    {
+        Player.SelectedUnit = null;
+    }
 }
