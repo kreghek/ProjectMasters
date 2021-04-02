@@ -8,6 +8,7 @@ using UnityEngine;
 public class TeamFactory : MonoBehaviour
 {
     public PersonViewModel PersonViewModelPrefab;
+    public PersonsPanelHandler PersonsPanelHandler;
 
     void Start()
     {
@@ -22,6 +23,8 @@ public class TeamFactory : MonoBehaviour
 
             Team.Persons = persons.ToArray();
         }
+
+        PersonsPanelHandler.Init();
     }
 
     public void Update()

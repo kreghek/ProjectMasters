@@ -13,6 +13,7 @@ public class PersonViewModel : MonoBehaviour
     public SpriteRenderer FaceDecorSpriteRenderer;
 
     private float? _commitCounter;
+    private Vector3? _moveTargetPosition;
 
     public void Start()
     {
@@ -20,6 +21,8 @@ public class PersonViewModel : MonoBehaviour
 
         EyeSpriteRenderer.sprite = Resources.Load<Sprite>($"Persons/eye{Person.EyeIndex + 1}");
         FaceDecorSpriteRenderer.sprite = Resources.Load<Sprite>($"Persons/face-decor{Person.FaceDecorIndex}");
+
+        gameObject.transform.position = GetRestPosition();
     }
 
     private void Person_Commited(object sender, System.EventArgs e)
@@ -29,10 +32,18 @@ public class PersonViewModel : MonoBehaviour
 
     public void Update()
     {
+        if (_moveTargetPosition != null)
+        {
+            if ((gameObject.transform.position - _moveTargetPosition.Value).magnitude > 0.001f)
+            {
+                gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, _moveTargetPosition.Value, Time.deltaTime);
+            }
+        }
+
         if (Person.RecoveryCounter != null)
         {
             // The person is relaxing at home.
-            gameObject.transform.position = Vector3.zero;
+            _moveTargetPosition = GetRestPosition();
             return;
         }
 
@@ -41,14 +52,14 @@ public class PersonViewModel : MonoBehaviour
         {
             var formation = ProjectUnitFormation.Instance;
 
-            gameObject.transform.position = Vector3.zero;
+            _moveTargetPosition = GetRestPosition();
         }
         else
         {
             var firstUnit = personLine.Units.FirstOrDefault();
             if (firstUnit != null)
             {
-                gameObject.transform.position = new Vector3(firstUnit.QueueIndex - 1, firstUnit.LineIndex);
+                _moveTargetPosition = new Vector3(firstUnit.QueueIndex - 1, firstUnit.LineIndex);
 
                 if (_commitCounter != null)
                 {
@@ -59,14 +70,20 @@ public class PersonViewModel : MonoBehaviour
                     if (_commitCounter <= 0)
                     {
                         _commitCounter = 0;
-                        Graphics.transform.localPosition = new Vector3(0, 0);
+                        Graphics.transform.localPosition = Vector3.zero;
                     }
                 }
             }
             else
             {
-                gameObject.transform.position = Vector3.zero;
+                _moveTargetPosition = GetRestPosition();
             }
         }
+    }
+
+    private static Vector3 GetRestPosition()
+    {
+        var positionOffset = Random.insideUnitCircle * 0.2f;
+        return new Vector3(-2 + positionOffset.x, positionOffset.y, 0);
     }
 }
