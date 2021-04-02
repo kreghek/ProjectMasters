@@ -221,12 +221,12 @@ namespace Assets.BL
                 {
                     case TraitType.CarefullDevelopment:
                         ErrorChance = 50 - 25 / 2;
-                        CommitSpeed = 2;
+                        CommitSpeed = 0.5f;
                         break;
 
                     case TraitType.RapidDevelopment:
                         ErrorChance = 50 + 25 / 2;
-                        CommitSpeed = 0.5f;
+                        CommitSpeed = 2f;
                         break;
                 }
             }
@@ -234,10 +234,10 @@ namespace Assets.BL
 
         private void ProgressUnitSolving(ProjectUnitBase unit, float commitDeltaTime)
         {
-            _commitCounter += commitDeltaTime;
+            _commitCounter += commitDeltaTime * CommitSpeed;
 
             const float baseCommitTimeSeconds = 2;
-            var targetCommitCounter = baseCommitTimeSeconds * CommitSpeed;
+            var targetCommitCounter = baseCommitTimeSeconds;
 
             if (_commitCounter >= targetCommitCounter)
             {
