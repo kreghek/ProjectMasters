@@ -31,10 +31,10 @@ public class TeamFactory : MonoBehaviour
     {
         var deltaTime = Time.deltaTime;
 
-        if (Player.WaitForDecision != null || Player.WaitTutorial)
-        {
-            return;
-        }
+        //if (Player.WaitForDecision != null || Player.WaitTutorial)
+        //{
+        //    return;
+        //}
 
         UpdateProjectLineSolving(deltaTime);
 
@@ -54,8 +54,6 @@ public class TeamFactory : MonoBehaviour
                 var decisionIndex = Random.Range(0, DecisionCatalog.Decisions.Length);
                 Player.WaitForDecision = DecisionCatalog.Decisions[decisionIndex];
                 Player.DecisionCounter = Player.DECISION_COUNTER_BASE;
-
-                Debug.Log(Player.WaitForDecision.Text);
             }
         }
         else
