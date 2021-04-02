@@ -31,10 +31,23 @@ namespace Assets.BL
             var successfullCommit = RollCommitSuccess(person.Skills);
             if (successfullCommit)
             {
-                TimeLog += person.CommitPower;
-                CostToDecompose -= person.CommitPower;
+                var commitPower = person.CommitPower;
+                var isCritical = false;
 
-                DoTakeDamage();
+                if (Random.Range(1, 100) < person.CritCommitChance)
+                {
+                    isCritical = true;
+                }
+
+                if (isCritical)
+                {
+                    commitPower *= person.CritCommitMultiplicator;
+                }
+
+                TimeLog += commitPower;
+                CostToDecompose -= commitPower;
+
+                DoTakeDamage(commitPower, isCritical);
 
                 if (CostToDecompose <= 0)
                 {

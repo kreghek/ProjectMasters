@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace Assets.BL
 {
+
     public abstract class ProjectUnitBase: ISpeechSource
     {
         protected float _speechCounter;
@@ -20,11 +21,13 @@ namespace Assets.BL
 
         public int QueueIndex { get; set; }
 
-        public event EventHandler<EventArgs> TakeDamage;
+        public event EventHandler<UnitTakeDamageEventArgs> TakeDamage;
 
-        protected void DoTakeDamage()
+        public bool IsGoalItem { get; set; }
+
+        protected void DoTakeDamage(float damage, bool isCritical)
         {
-            TakeDamage?.Invoke(this, EventArgs.Empty);
+            TakeDamage?.Invoke(this, new UnitTakeDamageEventArgs { Damage = damage, IsCrit = isCritical });
         }
 
         protected float GetSuccessCommitRoll(IEnumerable<Skill> personSkills)

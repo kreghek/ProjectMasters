@@ -12,14 +12,20 @@ namespace Assets.BL
             if (isSuccessfullCommit)
             {
                 var commitPower = person.CommitPower;
+                var isCritical = false;
 
                 if (Random.Range(1, 100) < person.CritCommitChance)
+                {
+                    isCritical = true;
+                }
+
+                if (isCritical)
                 {
                     commitPower *= person.CritCommitMultiplicator;
                 }
 
                 TimeLog += commitPower;
-                DoTakeDamage();
+                DoTakeDamage(commitPower, isCritical);
             }
 
             if (Random.Range(1, 100) < person.ErrorChance)
