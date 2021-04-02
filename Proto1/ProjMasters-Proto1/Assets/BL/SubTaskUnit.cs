@@ -11,7 +11,14 @@ namespace Assets.BL
             var isSuccessfullCommit = RollCommitSuccess(person.Skills);
             if (isSuccessfullCommit)
             {
-                TimeLog += person.CommitPower;
+                var commitPower = person.CommitPower;
+
+                if (Random.Range(1, 100) < person.CritCommitChance)
+                {
+                    commitPower *= person.CritCommitMultiplicator;
+                }
+
+                TimeLog += commitPower;
                 DoTakeDamage();
             }
 
@@ -19,15 +26,19 @@ namespace Assets.BL
             {
                 var formation = ProjectUnitFormation.Instance;
 
-                var errorUnit = CreateErrorUnit();
+                var errorCount = Random.Range(1, 5);
+                for (int errorIndex = 0; errorIndex < errorCount; errorIndex++)
+                {
+                    var errorUnit = CreateErrorUnit();
 
-                if (Random.Range(1, 100) > 50)
-                {
-                    formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
-                }
-                else
-                {
-                    formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
+                    if (Random.Range(1, 100) > 50)
+                    {
+                        formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
+                    }
+                    else
+                    {
+                        formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
+                    }
                 }
             }
 
