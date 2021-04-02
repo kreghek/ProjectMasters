@@ -71,7 +71,7 @@ namespace Assets.BL
 
                 if (TimeLog >= Cost)
                 {
-                    formation.DeleteUnit(LineIndex, this);
+                    formation.ResolveUnit(LineIndex, this);
                     IsDead = true;
                 }
                 else

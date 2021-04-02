@@ -49,7 +49,7 @@ public class ProjectUnitViewModel : MonoBehaviour
 
     public void Update()
     {
-        transform.position = new Vector3(ProjectUnit.QueueIndex, ProjectUnit.LineIndex);
+        transform.position = new Vector3(ProjectUnit.QueueIndex, -ProjectUnit.LineIndex);
 
         if (_damageTremorCounter != null)
         {

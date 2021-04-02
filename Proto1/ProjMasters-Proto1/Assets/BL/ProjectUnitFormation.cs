@@ -5,6 +5,8 @@ namespace Assets.BL
 {
     public class ProjectUnitFormation
     {
+        public List<SolvedUnitInfo> SolvedUnits { get; } = new List<SolvedUnitInfo>();
+
         public List<ProjectLine> Lines { get; }
 
         public event EventHandler<UnitEventArgs> Added;
@@ -89,7 +91,7 @@ namespace Assets.BL
             Added?.Invoke(this, new UnitEventArgs { ProjectUnit = unit });
         }
 
-        public void DeleteUnit(int lineIndex, ProjectUnitBase unit)
+        public void ResolveUnit(int lineIndex, ProjectUnitBase unit)
         {
             Lines[lineIndex].Units.Remove(unit);
 
@@ -99,6 +101,8 @@ namespace Assets.BL
                 ProjectUnitBase unit1 = Lines[lineIndex].Units[i];
                 unit1.QueueIndex = i;
             }
+
+            SolvedUnits.Add(new SolvedUnitInfo { Cost = unit.Cost, TimeLog = unit.TimeLog });
 
             Removed?.Invoke(this, new UnitEventArgs { ProjectUnit = unit });
         }

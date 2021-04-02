@@ -59,7 +59,7 @@ public class PersonViewModel : MonoBehaviour
             var firstUnit = personLine.Units.FirstOrDefault();
             if (firstUnit != null)
             {
-                _moveTargetPosition = new Vector3(firstUnit.QueueIndex - 1, firstUnit.LineIndex);
+                _moveTargetPosition = new Vector3(firstUnit.QueueIndex - 1, -firstUnit.LineIndex);
 
                 if (_commitCounter != null)
                 {
@@ -83,7 +83,7 @@ public class PersonViewModel : MonoBehaviour
 
     private static Vector3 GetRestPosition()
     {
-        var positionOffset = Random.insideUnitCircle * 0.2f;
-        return new Vector3(-2 + positionOffset.x, positionOffset.y, 0);
+        var positionOffset = Random.insideUnitCircle * 2f;
+        return new Vector3(-3 + positionOffset.x, positionOffset.y, 0);
     }
 }
