@@ -1,8 +1,4 @@
-﻿using System;
-
-using UnityEngine;
-
-namespace Assets.BL
+﻿namespace Assets.BL
 {
     public sealed class ErrorUnit : ProjectUnitBase
     {
@@ -17,32 +13,12 @@ namespace Assets.BL
                 DoTakeDamage();
             }
 
-            if (UnityEngine.Random.Range(1, 100) < person.ErrorChance)
-            {
-                var formation = ProjectUnitFormation.Instance;
-
-                var errorUnit = CreateErrorUnit();
-
-                formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
-            }
-
             if (TimeLog >= Cost)
             {
                 var formation = ProjectUnitFormation.Instance;
                 formation.DeleteUnit(LineIndex, this);
                 IsDead = true;
             }
-        }
-
-        private ErrorUnit CreateErrorUnit()
-        {
-            var subTask = new ErrorUnit
-            {
-                Cost = Math.Max(Cost - TimeLog, 0.25f),
-                RequiredSkills = RequiredSkills
-            };
-
-            return subTask;
         }
     }
 }

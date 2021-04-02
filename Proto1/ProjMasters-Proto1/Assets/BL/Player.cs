@@ -4,9 +4,11 @@
     {
         public const int DAY_COUNTER_BASE = 24;
         public const float DECISION_COUNTER_BASE = 20;
+        private const int START_MONEY = 1000;
+        private const int START_AUTHORITY = 25;
 
-        public static int Money { get; set; } = 1000;
-        public static int Autority { get; set; } = 2;
+        public static int Money { get; set; } = START_MONEY;
+        public static int Autority { get; set; } = START_AUTHORITY;
         public static int FailureCount { get; set; }
 
         public static int DayNumber { get; set; }
