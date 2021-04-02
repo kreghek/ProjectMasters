@@ -5,7 +5,7 @@ using System.Linq;
 namespace Assets.BL
 {
 
-    public class Person
+    public class Person: ISpeechSource
     {
         public const int MAX_SKILL_LEVEL = 16;
 
@@ -21,6 +21,7 @@ namespace Assets.BL
         private const float COMMIT_POWER_BASE = 0.25f;
 
         private float _commitCounter;
+        private float _speechCounter = Speech.SPEECH_COUNTER;
 
         public int EyeIndex { get; set; }
         public int FaceDecorIndex { get; set; }
@@ -55,6 +56,8 @@ namespace Assets.BL
 
         public void Update(ProjectUnitBase assignedUnit, float commitDeltaTime)
         {
+            HandleSpeechs(commitDeltaTime);
+
             ResetStats();
             HandleTraits();
 
@@ -73,6 +76,34 @@ namespace Assets.BL
             }
 
             ProgressUnitSolving(assignedUnit, commitDeltaTime);
+        }
+
+        private void HandleSpeechs(float commitDeltaTime)
+        {
+            if (_speechCounter > 0)
+            {
+                _speechCounter -= commitDeltaTime;
+            }
+            else
+            {
+                _speechCounter = Speech.SPEECH_COUNTER;
+
+                if (Effects.Any(x => x.EffectType == EffectType.Despondency || x.EffectType == EffectType.Toxic || x.EffectType == EffectType.Procrastination))
+                {
+                    if (UnityEngine.Random.Range(1, 100) <= 15)
+                    {
+                        var rolledBadSpeechIndex = UnityEngine.Random.Range(0, SpeechCatalog.BadPersonSpeeches.Length);
+                        var speechText = SpeechCatalog.BadPersonSpeeches[rolledBadSpeechIndex];
+                        var speech = new Speech
+                        {
+                            Source = this,
+                            Text = speechText
+                        };
+
+                        SpeechPool.AddSpeech(speech);
+                    }
+                }
+            }
         }
 
         private void HandleEnergy(float commitDeltaTime)

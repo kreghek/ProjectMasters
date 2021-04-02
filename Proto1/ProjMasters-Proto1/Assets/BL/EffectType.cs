@@ -30,6 +30,11 @@
         /// <summary>
         /// Really reduces a person commit speed.
         /// </summary>
-        Toxic = 1001
+        Toxic = 1001,
+
+        /// <summary>
+        /// Increase damage.
+        /// </summary>
+        Devastator
     }
 }

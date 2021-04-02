@@ -41,7 +41,7 @@ namespace Assets.BL
                     RefreshCostToDecompose();
 
                     var subTaskCount = Random.Range(1, _maxSubTask + 1);
-                    var subTasks = CreateSubTasks(this, subTaskCount);
+                    var subTasks = CreateSubTasks(subTaskCount);
 
                     foreach (var subTask in subTasks)
                     {
@@ -61,10 +61,17 @@ namespace Assets.BL
                     formation.DeleteUnit(LineIndex, this);
                     IsDead = true;
                 }
+                else
+                {
+                    if ((Cost - TimeLog) > 8)
+                    {
+                        HandleSpeechs(Time.deltaTime);
+                    }
+                }
             }
         }
 
-        private IEnumerable<ProjectUnitBase> CreateSubTasks(ProjectUnitBase feature, int subTaskCount)
+        private IEnumerable<ProjectUnitBase> CreateSubTasks(int subTaskCount)
         {
             for (int i = 0; i < subTaskCount; i++)
             {

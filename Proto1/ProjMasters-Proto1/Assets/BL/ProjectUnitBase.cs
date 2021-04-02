@@ -4,8 +4,9 @@ using System.Linq;
 
 namespace Assets.BL
 {
-    public abstract class ProjectUnitBase
+    public abstract class ProjectUnitBase: ISpeechSource
     {
+        protected float _speechCounter;
         public abstract ProjectUnitType Type { get; }
         public float Cost { get; set; }
         public float TimeLog { get; set; }
@@ -46,6 +47,31 @@ namespace Assets.BL
 
             var successfullCommit = effectiveCommitRoll <= successCommitRoll;
             return successfullCommit;
+        }
+
+        protected void HandleSpeechs(float commitDeltaTime)
+        {
+            if (_speechCounter > 0)
+            {
+                _speechCounter -= commitDeltaTime;
+            }
+            else
+            {
+                _speechCounter = Speech.SPEECH_COUNTER;
+
+                if (UnityEngine.Random.Range(1, 100) <= 15)
+                {
+                    var rolledBadSpeechIndex = UnityEngine.Random.Range(0, SpeechCatalog.UnitTauntSpeeches.Length);
+                    var speechText = SpeechCatalog.UnitTauntSpeeches[rolledBadSpeechIndex];
+                    var speech = new Speech
+                    {
+                        Source = this,
+                        Text = speechText
+                    };
+
+                    SpeechPool.AddSpeech(speech);
+                }
+            }
         }
     }
 }

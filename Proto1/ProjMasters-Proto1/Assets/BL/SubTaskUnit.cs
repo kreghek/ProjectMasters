@@ -37,6 +37,13 @@ namespace Assets.BL
                 formation.DeleteUnit(LineIndex, this);
                 IsDead = true;
             }
+            else
+            {
+                if ((Cost - TimeLog) > 8)
+                {
+                    HandleSpeechs(Time.deltaTime);
+                }
+            }
         }
 
         private ErrorUnit CreateErrorUnit()
