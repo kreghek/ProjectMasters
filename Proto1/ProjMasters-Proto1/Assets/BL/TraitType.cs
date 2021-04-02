@@ -20,6 +20,16 @@
         /// <summary>
         /// Desrease skill up speed but decrease error chance.
         /// </summary>
-        Apologet
+        Apologet,
+
+        /// <summary>
+        /// Has more energy but low commit speed.
+        /// </summary>
+        Capacipator,
+
+        /// <summary>
+        /// Has less energy but high commit speed.
+        /// </summary>
+        Sprinter
     }
 }

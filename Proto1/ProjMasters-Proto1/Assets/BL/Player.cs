@@ -3,7 +3,7 @@
     public static class Player
     {
         public const int DAY_COUNTER_BASE = 24;
-        public const float DECISION_COUNTER_BASE = 20;
+        public const float DECISION_COUNTER_BASE = 120;
         private const int START_MONEY = 1000;
         private const int START_AUTHORITY = 25;
 

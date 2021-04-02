@@ -28,7 +28,7 @@ namespace Assets.BL
                 DoTakeDamage(commitPower, isCritical);
             }
 
-            if (Random.Range(1, 100) < person.ErrorChance)
+            if (Cost * 0.5f < TimeLog && Random.Range(1, 100) < person.ErrorChance)
             {
                 var formation = ProjectUnitFormation.Instance;
 
