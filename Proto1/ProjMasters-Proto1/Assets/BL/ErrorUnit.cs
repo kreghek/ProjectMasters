@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+
+using UnityEngine;
 
 namespace Assets.BL
 {
@@ -15,7 +17,7 @@ namespace Assets.BL
                 DoTakeDamage();
             }
 
-            if (Random.Range(1, 100) < person.ErrorChance)
+            if (UnityEngine.Random.Range(1, 100) < person.ErrorChance)
             {
                 var formation = ProjectUnitFormation.Instance;
 
@@ -36,7 +38,7 @@ namespace Assets.BL
         {
             var subTask = new ErrorUnit
             {
-                Cost = Random.Range(4, 16),
+                Cost = Math.Max(Cost - TimeLog, 0.25f),
                 RequiredSkills = RequiredSkills
             };
 

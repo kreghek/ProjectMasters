@@ -22,6 +22,9 @@ namespace Assets.BL
 
         private float _commitCounter;
 
+        public int EyeIndex { get; set; }
+        public int FaceDecorIndex { get; set; }
+
         public string Name { get; set; }
         public float CommitSpeed { get; set; } = COMMIT_SPEED_BASE;
 

@@ -9,12 +9,17 @@ public class PersonViewModel : MonoBehaviour
     public Person Person;
 
     public GameObject Graphics;
+    public SpriteRenderer EyeSpriteRenderer;
+    public SpriteRenderer FaceDecorSpriteRenderer;
 
     private float? _commitCounter;
 
     public void Start()
     {
         Person.Commited += Person_Commited;
+
+        EyeSpriteRenderer.sprite = Resources.Load<Sprite>($"Persons/eye{Person.EyeIndex + 1}");
+        FaceDecorSpriteRenderer.sprite = Resources.Load<Sprite>($"Persons/face-decor{Person.FaceDecorIndex}");
     }
 
     private void Person_Commited(object sender, System.EventArgs e)
