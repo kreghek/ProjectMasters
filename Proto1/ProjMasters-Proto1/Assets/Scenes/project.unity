@@ -421,6 +421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 167590623}
   - component: {fileID: 167590624}
+  - component: {fileID: 167590625}
   m_Layer: 0
   m_Name: ProjectUnits
   m_TagString: Untagged
@@ -455,6 +456,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FormationViewModelPrefab: {fileID: 4073965598199610944, guid: 98d0f1056e717fd42bc1fdb83d466c73, type: 3}
+  SpeechWaiter: {fileID: 167590625}
+--- !u!114 &167590625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167590622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 646244779a17b4244856b9d7aecff399, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FormationViewModel: {fileID: 0}
+  SpeechViewModelPrefab: {fileID: -4429126733149396213, guid: e3e7815c4a49c3a4796e45e4c5c7a4cc, type: 3}
 --- !u!1 &214471364
 GameObject:
   m_ObjectHideFlags: 0
@@ -604,7 +620,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Unit Description
 --- !u!222 &252939982
 CanvasRenderer:
   m_ObjectHideFlags: 0
