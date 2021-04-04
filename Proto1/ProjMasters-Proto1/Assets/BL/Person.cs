@@ -11,7 +11,7 @@ namespace Assets.BL
 
         private const int COMMIT_SPEED_BASE = 1;
         private const int ERROR_CHANCE_BASE = 50;
-        private const float SKILLUP_SPEED_BASE = 0.01f;
+        private const float SKILLUP_SPEED_BASE = 0.001f;
         private const int EFFECT_CHANCE_BASE = 15;
         private const int ENERGY_BASE = 100;
         private const float RECOVERY_TIME_BASE = 8;
@@ -198,7 +198,7 @@ namespace Assets.BL
                             break;
 
                         case EffectType.Evrika:
-                            SkillUpSpeed *= 2f;
+                            SkillUpSpeed *= 5f;
                             break;
 
                         case EffectType.Despondency:
@@ -220,13 +220,23 @@ namespace Assets.BL
                 switch (trait)
                 {
                     case TraitType.CarefullDevelopment:
-                        ErrorChance = 50 - 25 / 2;
-                        CommitSpeed = 0.5f;
+                        ErrorChance -= ERROR_CHANCE_BASE / 2;
+                        CommitSpeed *= 0.5f;
                         break;
 
                     case TraitType.RapidDevelopment:
-                        ErrorChance = 50 + 25 / 2;
-                        CommitSpeed = 2f;
+                        ErrorChance += ERROR_CHANCE_BASE / 2;
+                        CommitSpeed *= 2f;
+                        break;
+
+                    case TraitType.FastLearning:
+                        SkillUpSpeed *= 3;
+                        ErrorChance += ERROR_CHANCE_BASE / 2;
+                        break;
+
+                    case TraitType.Apologet:
+                        SkillUpSpeed *= 0.3f;
+                        ErrorChance -= ERROR_CHANCE_BASE / 2;
                         break;
                 }
             }

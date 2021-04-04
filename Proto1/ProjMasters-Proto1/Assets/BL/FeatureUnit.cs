@@ -49,7 +49,7 @@ namespace Assets.BL
 
                 DoTakeDamage(commitPower, isCritical);
 
-                if (CostToDecompose <= 0)
+                if (CostToDecompose <= 0 || TimeLog >= Cost)
                 {
                     RefreshCostToDecompose();
 
@@ -90,7 +90,7 @@ namespace Assets.BL
             {
                 var subTask = new SubTaskUnit
                 {
-                    Cost = Random.Range(4, 16)
+                    Cost = Random.Range(2, 5)
                 };
 
                 var randomizedSkills = SkillSchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));

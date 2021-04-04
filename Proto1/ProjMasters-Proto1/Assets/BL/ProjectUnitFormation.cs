@@ -27,7 +27,7 @@ namespace Assets.BL
             {
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
-                        Cost = 20,
+                        Cost = 2,
                         LineIndex = 0,
                         QueueIndex = 0,
                         RequiredSkills = new[]{
@@ -41,7 +41,7 @@ namespace Assets.BL
             {
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
-                        Cost = 60,
+                        Cost = 6,
                         LineIndex = 1,
                         QueueIndex = 0,
                         RequiredSkills = new[]{
@@ -50,7 +50,7 @@ namespace Assets.BL
                         }
                     },
                     new FeatureUnit{
-                        Cost = 10,
+                        Cost = 1,
                         LineIndex = 1,
                         QueueIndex = 1,
                         RequiredSkills = new[]{
@@ -64,7 +64,7 @@ namespace Assets.BL
             {
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
-                        Cost = 8,
+                        Cost = 0.8f,
                         LineIndex = 2,
                         QueueIndex = 0,
                         RequiredSkills = new[]{
