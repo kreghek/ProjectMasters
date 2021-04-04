@@ -16,12 +16,11 @@ public class SpeechWaiter : MonoBehaviour
 
     private void SpeechPool_SpeechAdded(object sender, SpeechAddedEventArgs e)
     {
-        var viewModel = Instantiate(SpeechViewModelPrefab, FormationViewModel.transform);
-
         var allUnitModels = FormationViewModel.GetComponentsInChildren<ProjectUnitViewModel>();
         var unitViewModel = allUnitModels.SingleOrDefault(x => x.ProjectUnit == e.Speech.Source);
-        if (viewModel != null)
+        if (unitViewModel != null)
         {
+            var viewModel = Instantiate(SpeechViewModelPrefab, FormationViewModel.transform);
             viewModel.Init(e.Speech, unitViewModel.gameObject);
         }
     }

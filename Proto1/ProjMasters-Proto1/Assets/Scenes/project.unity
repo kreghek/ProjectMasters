@@ -3070,6 +3070,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PersonCardHandlerPrefab: {fileID: 2649147336008929927, guid: a280cbd2618c45442a7d5d23a4a1c094, type: 3}
+  PersonCardModalHandler: {fileID: 1685945634}
 --- !u!114 &1740741033
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,10 +31,10 @@ public class TeamFactory : MonoBehaviour
     {
         var deltaTime = Time.deltaTime;
 
-        //if (Player.WaitForDecision != null || Player.WaitTutorial)
-        //{
-        //    return;
-        //}
+        if (Player.WaitForDecision != null || Player.WaitTutorial)
+        {
+            return;
+        }
 
         UpdateProjectLineSolving(deltaTime);
 
