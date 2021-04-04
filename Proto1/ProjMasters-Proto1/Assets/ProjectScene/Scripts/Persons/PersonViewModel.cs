@@ -48,7 +48,7 @@ public class PersonViewModel : MonoBehaviour
         }
 
         var personLine = ProjectUnitFormation.Instance.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(Person));
-        if (personLine == null)
+        if (personLine is null)
         {
             var formation = ProjectUnitFormation.Instance;
 
@@ -59,7 +59,8 @@ public class PersonViewModel : MonoBehaviour
             var firstUnit = personLine.Units.FirstOrDefault();
             if (firstUnit != null)
             {
-                _moveTargetPosition = new Vector3(firstUnit.QueueIndex - 1, -firstUnit.LineIndex);
+                var personIndexInGroup = personLine.AssignedPersons.IndexOf(Person);
+                _moveTargetPosition = new Vector3(firstUnit.QueueIndex - 1 - personIndexInGroup * 0.3f, -firstUnit.LineIndex + personIndexInGroup * 0.1f);
 
                 if (_commitCounter != null)
                 {
