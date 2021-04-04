@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 using Assets.BL;
 
@@ -9,13 +10,19 @@ public class PersonCardHandler : MonoBehaviour
 {
     public Person Person { get; set; }
 
+    public PersonAvatarHandler PersonAvatarHandler;
+
     public Text NameText;
     public Text TraitText;
     public Text EffectsText;
     public Text SkillsText;
 
-    public Image EyeImage;
-    public Image FaceDecorImage;
+    public event EventHandler<EventArgs> PersonModalClicked;
+
+    private void Start()
+    {
+        PersonAvatarHandler.Person = Person;
+    }
 
     void Update()
     {
@@ -23,15 +30,10 @@ public class PersonCardHandler : MonoBehaviour
         TraitText.text = string.Join(", ", Person.Traits.Select(x => x.ToString()));
         EffectsText.text = string.Join(", ", Person.Effects.Select(x => x.EffectType.ToString()));
         SkillsText.text = string.Join("\n", Person.Skills.Select(x =>$"{x.Scheme.Sid}: {x.Level:0.#}"));
+    }
 
-        EyeImage.sprite = Resources.Load<Sprite>($"Persons/eye{Person.EyeIndex + 1}");
-        if (Person.FaceDecorIndex > 0)
-        {
-            FaceDecorImage.sprite = Resources.Load<Sprite>($"Persons/face-decor{Person.FaceDecorIndex}");
-        }
-        else
-        {
-            FaceDecorImage.gameObject.SetActive(false);
-        }
+    public void ModalClickButtonHandler()
+    {
+        PersonModalClicked?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -54,8 +54,6 @@ namespace Assets.BL
         public float? RecoveryCounter { get; set; }
 
         public event EventHandler<EventArgs> Commited;
-
-        public int? LineIndex { get; set; }
         public float EnergyDownSpeed { get; private set; } = ENERGY_DOWN_SPEED_BASE;
         public float RecoverySpeed { get; private set; } = RECOVERY_SPEED_BASE;
 

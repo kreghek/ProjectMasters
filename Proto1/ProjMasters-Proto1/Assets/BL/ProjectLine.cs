@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Assets.BL
 {
@@ -7,11 +6,11 @@ namespace Assets.BL
     {
         public ProjectLine()
         {
-            AssignedPersons = Array.Empty<Person>();
+            AssignedPersons = new List<Person>();
             Units = new List<ProjectUnitBase>();
         }
 
-        public Person[] AssignedPersons { get; set; }
+        public List<Person> AssignedPersons { get; set; }
 
         public List<ProjectUnitBase> Units { get; set; }
     }

@@ -117,7 +117,7 @@ public class TeamFactory : MonoBehaviour
 
                     if (firstFreePerson != null)
                     {
-                        line.AssignedPersons = new[] { firstFreePerson };
+                        line.AssignedPersons.Add(firstFreePerson);
                         assignedPersons = line.AssignedPersons;
                     }
                 }
