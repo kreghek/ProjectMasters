@@ -28,6 +28,21 @@
                         Text = "Find and execute the invader"
                     }
                 }
+            },
+
+            new Decision
+            { 
+                Text = "The customer ask to add a new little feature.",
+                Choises = new DecisionAftermathBase[]{
+                    new PaymentDecisionAftermath{
+                        AuthorityCost = -25,
+                        Text = "Ignore"
+                    },
+                    new AddFeatureDecisionAftermath
+                    {
+                        Text = "Plan the new feature"
+                    }
+                }
             }
         };
     }

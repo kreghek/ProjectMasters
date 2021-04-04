@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 
 namespace Assets.BL
 {
+
     public sealed class AddDismoraleEffectToOneDecisionAftermath : DecisionAftermathBase
     {
         public override string Description => "The one of eployees gain negative morale effect. It reduces effecient of employee.";
