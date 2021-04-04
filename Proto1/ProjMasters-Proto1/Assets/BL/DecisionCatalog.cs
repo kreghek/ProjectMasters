@@ -3,7 +3,8 @@
     public static class DecisionCatalog
     {
         public static Decision[] Decisions { get; } = new[]{
-            new Decision {
+            new Decision
+            {
                 Text = "You've been afraid the project is late.",
                 Choises = new DecisionAftermathBase[]{
                     new PaymentDecisionAftermath{
@@ -17,7 +18,8 @@
                 }
             },
 
-            new Decision{ 
+            new Decision
+            { 
                 Text = "Some of your employees told bad about you",
                 Choises = new DecisionAftermathBase[]{
                     new PaymentDecisionAftermath{

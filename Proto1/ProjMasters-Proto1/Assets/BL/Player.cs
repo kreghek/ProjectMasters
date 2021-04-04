@@ -14,6 +14,8 @@
         public static int DayNumber { get; set; }
         public static float DayCounter { get; set; } = DAY_COUNTER_BASE;
 
+        public static int DeadlineDayNumber { get; set; } = 100;
+
         public static Decision WaitForDecision { get; set; }
 
         public static bool WaitTutorial { get; set; }
