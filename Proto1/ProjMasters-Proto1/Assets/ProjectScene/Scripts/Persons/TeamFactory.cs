@@ -31,7 +31,7 @@ public class TeamFactory : MonoBehaviour
     {
         var deltaTime = Time.deltaTime;
 
-        if (Player.WaitForDecision != null || Player.WaitTutorial)
+        if (Player.WaitForDecision != null || Player.WaitTutorial/* || Player.WaitKeyDayReport*/)
         {
             return;
         }
@@ -79,6 +79,16 @@ public class TeamFactory : MonoBehaviour
             Player.DayNumber++;
 
             UpdateDayly();
+
+            if (Player.KeyDayCounter > 0)
+            {
+                Player.KeyDayCounter--;
+            }
+            else
+            {
+                Player.KeyDayCounter = Player.KEY_DAY_COUNTER;
+                Player.WaitKeyDayReport = true;
+            }
 
             // payment
             if (Player.Money > 0)
