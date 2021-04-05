@@ -21,6 +21,7 @@ namespace Assets.BL
         private const float COMMIT_POWER_BASE = 0.25f;
         private static float CRIT_COMMIT_CHANCE_BASE = 2.5f;
         private static float CRIT_COMMIT_MULTIPLICATOR_BASE = 2;
+        public static float PROJECT_KNOWEDGE_INCREMENT = 0.25f;
 
         private float _commitCounter;
         private float _speechCounter = Speech.SPEECH_COUNTER;
@@ -33,6 +34,8 @@ namespace Assets.BL
         public float CommitSpeed { get; set; } = COMMIT_SPEED_BASE;
 
         public float CommitPower { get; set; } = COMMIT_POWER_BASE;
+
+        public float ProjectKnowedgeCoef { get; set; } = 1;
 
         public float CritCommitChance { get; set; } = CRIT_COMMIT_CHANCE_BASE;
 

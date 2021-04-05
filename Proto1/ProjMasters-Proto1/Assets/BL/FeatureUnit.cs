@@ -31,7 +31,7 @@ namespace Assets.BL
             var successfullCommit = RollCommitSuccess(person.Skills);
             if (successfullCommit)
             {
-                var commitPower = person.CommitPower;
+                var commitPower = person.CommitPower * person.ProjectKnowedgeCoef;
                 var isCritical = false;
 
                 if (Random.Range(1, 100) < person.CritCommitChance)
@@ -67,12 +67,16 @@ namespace Assets.BL
                             formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, subTask);
                         }
                     }
+
+                    person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT + Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
                 }
 
                 if (TimeLog >= Cost)
                 {
                     formation.ResolveUnit(LineIndex, this);
                     IsDead = true;
+
+                    person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT + Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
                 }
                 else
                 {

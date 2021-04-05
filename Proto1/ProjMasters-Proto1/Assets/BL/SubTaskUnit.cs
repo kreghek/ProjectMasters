@@ -11,7 +11,7 @@ namespace Assets.BL
             var isSuccessfullCommit = RollCommitSuccess(person.Skills);
             if (isSuccessfullCommit)
             {
-                var commitPower = person.CommitPower;
+                var commitPower = person.CommitPower * person.ProjectKnowedgeCoef;
                 var isCritical = false;
 
                 if (Random.Range(1, 100) < person.CritCommitChance)
@@ -53,6 +53,7 @@ namespace Assets.BL
                 var formation = ProjectUnitFormation.Instance;
                 formation.ResolveUnit(LineIndex, this);
                 IsDead = true;
+                person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT + Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
             }
             else
             {
