@@ -4,6 +4,48 @@ using System.Linq;
 
 namespace Assets.BL
 {
+    public sealed class Act
+    {
+        const float baseCommitTimeSeconds = 2;
+
+        private float _commitCounter = baseCommitTimeSeconds;
+
+        public ActTargetPattern ActTargetPattern { get; set; }
+        public ActPosition Position { get; set; }
+        public ActImpact Impact { get; set; }
+
+        public bool IsReadyToUse => _commitCounter <= 0;
+
+        public void Update(float commitDeltaTime)
+        {
+            if (_commitCounter <= 0)
+            {
+
+            }
+            else
+            {
+                _commitCounter -= commitDeltaTime;
+            }
+        }
+    }
+
+    public enum ActTargetPattern
+    {
+        ClosestUnit = 1,
+        OneOfFirstHalf
+    }
+
+    public enum ActPosition
+    {
+        First,
+        Second
+    }
+
+    public enum ActImpact
+    {
+        Units,
+        Persons
+    }
 
     public class Person: ISpeechSource
     {
@@ -25,7 +67,11 @@ namespace Assets.BL
 
         private float _commitCounter;
         private float _speechCounter = Speech.SPEECH_COUNTER;
-        
+
+        public Act[] Acts { get; set; } = new Act[] {
+            new Act{ ActTargetPattern = ActTargetPattern.ClosestUnit, Impact = ActImpact.Units, Position = ActPosition.First },
+            new Act{ ActTargetPattern = ActTargetPattern.OneOfFirstHalf, Impact = ActImpact.Units, Position = ActPosition.Second },
+        };
 
         public int EyeIndex { get; set; }
         public int FaceDecorIndex { get; set; }
@@ -62,7 +108,7 @@ namespace Assets.BL
 
         public int DaylyPayment { get; set; } = DAYLY_PAYMENT_BASE;
 
-        public void Update(ProjectUnitBase assignedUnit, float commitDeltaTime)
+        internal void Update(List<ProjectUnitBase> units, List<Person> assignedPersons, float commitDeltaTime)
         {
             HandleSpeechs(commitDeltaTime);
 
@@ -77,6 +123,7 @@ namespace Assets.BL
                 return;
             }
 
+            var assignedUnit = units.FirstOrDefault();
             if (assignedUnit is null)
             {
                 return;
@@ -245,6 +292,11 @@ namespace Assets.BL
 
         private void ProgressUnitSolving(ProjectUnitBase unit, float commitDeltaTime)
         {
+            foreach (var act in Acts)
+            {
+                act.Update(commitDeltaTime * CommitSpeed);
+            }
+
             _commitCounter += commitDeltaTime * CommitSpeed;
 
             const float baseCommitTimeSeconds = 2;

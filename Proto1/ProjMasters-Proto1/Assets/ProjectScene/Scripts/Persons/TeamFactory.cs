@@ -134,7 +134,7 @@ public class TeamFactory : MonoBehaviour
 
                 foreach (var assignedPerson in assignedPersons)
                 {
-                    assignedPerson.Update(line.Units.First(), deltaTime);
+                    assignedPerson.Update(line.Units, line.AssignedPersons, deltaTime);
                 }
             }
             else
