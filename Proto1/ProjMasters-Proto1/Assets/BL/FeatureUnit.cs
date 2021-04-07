@@ -25,25 +25,12 @@ namespace Assets.BL
 
         public float CostToDecompose { get; private set; }
 
-        public override void ProcessCommit(Person person)
+        public override void ProcessCommit(float commitPower, bool isCritical,Person person)
         {
             var formation = ProjectUnitFormation.Instance;
             var successfullCommit = RollCommitSuccess(person.Skills);
             if (successfullCommit)
             {
-                var commitPower = person.CommitPower * person.ProjectKnowedgeCoef;
-                var isCritical = false;
-
-                if (Random.Range(1, 100) < person.CritCommitChance)
-                {
-                    isCritical = true;
-                }
-
-                if (isCritical)
-                {
-                    commitPower *= person.CritCommitMultiplicator;
-                }
-
                 TimeLog += commitPower;
                 CostToDecompose -= commitPower;
 

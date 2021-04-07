@@ -13,7 +13,7 @@ namespace Assets.BL
         public float TimeLog { get; set; }
         public SkillScheme[] RequiredSkills { get; set; }
 
-        public abstract void ProcessCommit(Person person);
+        public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
 
         public bool IsDead { get; set; }
 

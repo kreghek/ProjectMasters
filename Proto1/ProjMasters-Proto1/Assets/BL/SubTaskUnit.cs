@@ -6,24 +6,11 @@ namespace Assets.BL
     {
         public override ProjectUnitType Type => ProjectUnitType.SubTask;
 
-        public override void ProcessCommit(Person person)
+        public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {
             var isSuccessfullCommit = RollCommitSuccess(person.Skills);
             if (isSuccessfullCommit)
             {
-                var commitPower = person.CommitPower * person.ProjectKnowedgeCoef;
-                var isCritical = false;
-
-                if (Random.Range(1, 100) < person.CritCommitChance)
-                {
-                    isCritical = true;
-                }
-
-                if (isCritical)
-                {
-                    commitPower *= person.CritCommitMultiplicator;
-                }
-
                 TimeLog += commitPower;
                 DoTakeDamage(commitPower, isCritical);
             }

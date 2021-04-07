@@ -1,29 +1,14 @@
-﻿using UnityEngine;
-
-namespace Assets.BL
+﻿namespace Assets.BL
 {
     public sealed class ErrorUnit : ProjectUnitBase
     {
         public override ProjectUnitType Type => ProjectUnitType.Error;
 
-        public override void ProcessCommit(Person person)
+        public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {
             var isSuccessfullCommit = RollCommitSuccess(person.Skills);
             if (isSuccessfullCommit)
             {
-                var commitPower = person.CommitPower * person.ProjectKnowedgeCoef;
-                var isCritical = false;
-
-                if (Random.Range(1, 100) < person.CritCommitChance)
-                {
-                    isCritical = true;
-                }
-
-                if (isCritical)
-                {
-                    commitPower *= person.CritCommitMultiplicator;
-                }
-
                 TimeLog += commitPower;
                 DoTakeDamage(commitPower, isCritical);
             }

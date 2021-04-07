@@ -5,7 +5,7 @@
         public const int DAY_COUNTER_BASE = 240;
         public const float DECISION_COUNTER_BASE = 120;
         private const int START_MONEY = 1000;
-        private const int START_AUTHORITY = 25;
+        private const int START_AUTHORITY = 100;
         public const int KEY_DAY_COUNTER = 5;
 
         public static int Money { get; set; } = START_MONEY;

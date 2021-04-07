@@ -4,54 +4,6 @@ using System.Linq;
 
 namespace Assets.BL
 {
-    public sealed class Act
-    {
-        const float baseCommitTimeSeconds = 1;
-
-        private float _commitCounter = baseCommitTimeSeconds;
-
-        public ActTargetPattern ActTargetPattern { get; set; }
-        public ActPosition Position { get; set; }
-        public ActImpact Impact { get; set; }
-
-        public bool IsReadyToUse => _commitCounter <= 0;
-
-        public void Update(float commitDeltaTime)
-        {
-            if (_commitCounter <= 0)
-            {
-
-            }
-            else
-            {
-                _commitCounter -= commitDeltaTime;
-            }
-        }
-
-        public void Reset()
-        {
-            _commitCounter = baseCommitTimeSeconds;
-        }
-    }
-
-    public enum ActTargetPattern
-    {
-        ClosestUnit = 1,
-        OneOfFirstHalf
-    }
-
-    public enum ActPosition
-    {
-        First,
-        Second
-    }
-
-    public enum ActImpact
-    {
-        Units,
-        Persons
-    }
-
     public class Person: ISpeechSource
     {
         public const int MAX_SKILL_LEVEL = 16;
@@ -70,10 +22,10 @@ namespace Assets.BL
         private static float CRIT_COMMIT_MULTIPLICATOR_BASE = 2;
         public static float PROJECT_KNOWEDGE_INCREMENT = 0.25f;
 
-        private float _commitCounter;
         private float _speechCounter = Speech.SPEECH_COUNTER;
 
-        public Act[] Acts { get; set; } = new Act[] {
+        public Act[] Acts { get; set; } = new Act[]
+        {
             new Act{ ActTargetPattern = ActTargetPattern.ClosestUnit, Impact = ActImpact.Units, Position = ActPosition.First },
             new Act{ ActTargetPattern = ActTargetPattern.OneOfFirstHalf, Impact = ActImpact.Units, Position = ActPosition.Second },
         };
@@ -352,7 +304,21 @@ namespace Assets.BL
                 {
                     foreach (var unit in unitsToAttack)
                     {
-                        unit.ProcessCommit(this);
+                        var authorityCoef = Math.Max(Player.Autority * 0.01f, 0.01f) * 0.1f;
+                        var commitPower = CommitPower * ProjectKnowedgeCoef * authorityCoef;
+                        var isCritical = false;
+
+                        if (UnityEngine.Random.Range(1, 100) < CritCommitChance)
+                        {
+                            isCritical = true;
+                        }
+
+                        if (isCritical)
+                        {
+                            commitPower *= CritCommitMultiplicator;
+                        }
+
+                        unit.ProcessCommit(commitPower, isCritical, this);
                         actTouse.Reset();
 
                         // Improve used skills
@@ -381,6 +347,11 @@ namespace Assets.BL
                                     usedSkill.Level = MAX_SKILL_LEVEL;
                                 }
                             }
+                        }
+
+                        if (ProjectKnowedgeCoef <= 2)
+                        {
+                            ProjectKnowedgeCoef += SkillUpSpeed;
                         }
                     }
 
