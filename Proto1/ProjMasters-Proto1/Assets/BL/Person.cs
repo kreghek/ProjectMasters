@@ -304,7 +304,15 @@ namespace Assets.BL
                 {
                     foreach (var unit in unitsToAttack)
                     {
-                        var authorityCoef = Math.Max(Player.Autority * 0.01f, 0.01f) * 1.1f;
+                        const float MAX_AUTHORITY = 200f;
+                        const float MIN_AUTHORITY = 0;
+                        const float MAX_EFFECT = 1.1f;
+                        const float MIN_EFFECT = 0.9f;
+
+                        var currentAuthorityPercentage = (Player.Autority - MIN_AUTHORITY) / (MIN_AUTHORITY - MAX_AUTHORITY);
+
+                        var authorityCoef = MIN_EFFECT + (MAX_EFFECT - MIN_EFFECT) * currentAuthorityPercentage;
+
                         var commitPower = CommitPower * ProjectKnowedgeCoef * authorityCoef;
                         var isCritical = false;
 
