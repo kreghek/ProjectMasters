@@ -304,7 +304,7 @@ namespace Assets.BL
                 {
                     foreach (var unit in unitsToAttack)
                     {
-                        var authorityCoef = Math.Max(Player.Autority * 0.01f, 0.01f) * 0.1f;
+                        var authorityCoef = Math.Max(Player.Autority * 0.01f, 0.01f) * 1.1f;
                         var commitPower = CommitPower * ProjectKnowedgeCoef * authorityCoef;
                         var isCritical = false;
 

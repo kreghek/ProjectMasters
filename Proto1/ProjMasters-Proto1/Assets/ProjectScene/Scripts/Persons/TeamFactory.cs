@@ -40,26 +40,20 @@ public class TeamFactory : MonoBehaviour
 
         UpdateProjectTime(deltaTime);
 
-        HandleDecision(deltaTime);
-
         ProcessGameOver();
     }
 
-    private void HandleDecision(float deltaTime)
+    private static void HandleDecision()
     {
-        if (Player.DecisionCounter <= 0)
+        var decisionCount = Random.Range(2, 5);
+        Player.ActiveDecisions = new Decision[decisionCount];
+        for (int i = 0; i < decisionCount; i++)
         {
-            if (Random.Range(1, 100) < 25)
-            {
-                var decisionIndex = Random.Range(0, DecisionCatalog.Decisions.Length);
-                Player.WaitForDecision = DecisionCatalog.Decisions[decisionIndex];
-                Player.DecisionCounter = Player.DECISION_COUNTER_BASE;
-            }
+            var rolledDecisionIndex = Random.Range(0, DecisionCatalog.Decisions.Length);
+            Player.ActiveDecisions[i] = DecisionCatalog.Decisions[rolledDecisionIndex];
         }
-        else
-        {
-            Player.DecisionCounter -= deltaTime;
-        }
+
+        Player.WaitForDecision = Player.ActiveDecisions[0];
     }
 
     private static void ProcessGameOver()
@@ -79,16 +73,6 @@ public class TeamFactory : MonoBehaviour
             Player.DayNumber++;
 
             UpdateDayly();
-
-            if (Player.KeyDayCounter > 0)
-            {
-                Player.KeyDayCounter--;
-            }
-            else
-            {
-                Player.KeyDayCounter = Player.KEY_DAY_COUNTER;
-                Player.WaitKeyDayReport = true;
-            }
 
             // payment
             if (Player.Money > 0)
@@ -111,6 +95,8 @@ public class TeamFactory : MonoBehaviour
         {
             person.DaylyUpdate();
         }
+
+        HandleDecision();
     }
 
     private static void UpdateProjectLineSolving(float deltaTime)

@@ -1,4 +1,6 @@
-﻿using Assets.BL;
+﻿using System.Linq;
+
+using Assets.BL;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -46,7 +48,23 @@ public class DecisionHandler : MonoBehaviour
     private void ProcessSelection(DecisionAftermathBase decisionAftermath)
     {
         decisionAftermath.Apply();
-        Player.WaitForDecision = null;
+
+        Player.ActiveDecisions = Player.ActiveDecisions.Skip(1).ToArray();
+        if (!Player.ActiveDecisions.Any())
+        {
+            Player.ActiveDecisions = null;
+        }
+
+
+        if (Player.ActiveDecisions == null)
+        {
+            Player.WaitForDecision = null;
+        }
+        else
+        {
+            Player.WaitForDecision = Player.ActiveDecisions[0];
+        }
+
         Close();
     }
 }
