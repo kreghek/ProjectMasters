@@ -4,6 +4,53 @@ using System.Linq;
 
 namespace Assets.BL
 {
+    public sealed class Act
+    {
+        const float baseCommitTimeSeconds = 1;
+
+        private float _commitCounter = baseCommitTimeSeconds;
+
+        public ActTargetPattern ActTargetPattern { get; set; }
+        public ActPosition Position { get; set; }
+        public ActImpact Impact { get; set; }
+
+        public bool IsReadyToUse => _commitCounter <= 0;
+
+        public void Update(float commitDeltaTime)
+        {
+            if (_commitCounter <= 0)
+            {
+
+            }
+            else
+            {
+                _commitCounter -= commitDeltaTime;
+            }
+        }
+
+        public void Reset()
+        {
+            _commitCounter = baseCommitTimeSeconds;
+        }
+    }
+
+    public enum ActTargetPattern
+    {
+        ClosestUnit = 1,
+        OneOfFirstHalf
+    }
+
+    public enum ActPosition
+    {
+        First,
+        Second
+    }
+
+    public enum ActImpact
+    {
+        Units,
+        Persons
+    }
 
     public class Person: ISpeechSource
     {
@@ -25,7 +72,11 @@ namespace Assets.BL
 
         private float _commitCounter;
         private float _speechCounter = Speech.SPEECH_COUNTER;
-        
+
+        public Act[] Acts { get; set; } = new Act[] {
+            new Act{ ActTargetPattern = ActTargetPattern.ClosestUnit, Impact = ActImpact.Units, Position = ActPosition.First },
+            new Act{ ActTargetPattern = ActTargetPattern.OneOfFirstHalf, Impact = ActImpact.Units, Position = ActPosition.Second },
+        };
 
         public int EyeIndex { get; set; }
         public int FaceDecorIndex { get; set; }
@@ -62,7 +113,7 @@ namespace Assets.BL
 
         public int DaylyPayment { get; set; } = DAYLY_PAYMENT_BASE;
 
-        public void Update(ProjectUnitBase assignedUnit, float commitDeltaTime)
+        internal void Update(List<ProjectUnitBase> units, List<Person> assignedPersons, float commitDeltaTime)
         {
             HandleSpeechs(commitDeltaTime);
 
@@ -77,12 +128,7 @@ namespace Assets.BL
                 return;
             }
 
-            if (assignedUnit is null)
-            {
-                return;
-            }
-
-            ProgressUnitSolving(assignedUnit, commitDeltaTime);
+            ProgressUnitSolving(units, assignedPersons, commitDeltaTime);
         }
 
         public void DaylyUpdate()
@@ -243,46 +289,102 @@ namespace Assets.BL
             }
         }
 
-        private void ProgressUnitSolving(ProjectUnitBase unit, float commitDeltaTime)
+        private void ProgressUnitSolving(List<ProjectUnitBase> units, List<Person> assignedPersons, float commitDeltaTime)
         {
-            _commitCounter += commitDeltaTime * CommitSpeed;
-
-            const float baseCommitTimeSeconds = 2;
-            var targetCommitCounter = baseCommitTimeSeconds;
-
-            if (_commitCounter >= targetCommitCounter)
+            Act actTouse = null;
+            foreach (var act in Acts)
             {
-                _commitCounter = 0;
-                Commited?.Invoke(this, EventArgs.Empty);
-
-                unit.ProcessCommit(this);
-
-                // Improve used skills
-
-                foreach (var requiredSkillScheme in unit.RequiredSkills)
+                var personIndex = assignedPersons.IndexOf(this);
+                var groupDebuff = 0.8f / assignedPersons.Count;
+                if (assignedPersons.Count == 1)
                 {
-                    var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
-                    if (usedSkill is null)
-                    {
-                        var newSkill = new Skill
-                        {
-                            Scheme = requiredSkillScheme,
-                            Level = 0
-                        };
+                    groupDebuff = 1;
+                }
 
-                        Skills = Skills.Concat(new[] { newSkill }).ToArray();
-                    }
-                    else
+                switch (act.Position)
+                {
+                    case ActPosition.First:
+                        if (personIndex == 0)
+                        {
+                            act.Update(commitDeltaTime * CommitSpeed * groupDebuff);
+                        }
+                        break;
+
+                    case ActPosition.Second:
+                        if (personIndex == 1)
+                        {
+                            act.Update(commitDeltaTime * CommitSpeed * groupDebuff);
+                        }
+                        break;
+                }
+
+                if (actTouse == null && act.IsReadyToUse)
+                {
+                    actTouse = act;
+                }
+            }
+
+            var unitsToAttack = new ProjectUnitBase[0];
+
+            if (actTouse != null)
+            {
+                switch (actTouse.Impact)
+                {
+                    case ActImpact.Units:
+
+                        switch (actTouse.ActTargetPattern)
+                        {
+                            case ActTargetPattern.ClosestUnit:
+                                var closestUnit = units.FirstOrDefault();
+                                unitsToAttack = new[] { closestUnit };
+                                break;
+
+                            case ActTargetPattern.OneOfFirstHalf:
+                                var closestRandomUnit = units.Take(2).OrderBy(x => UnityEngine.Random.Range(1, 100)).FirstOrDefault();
+                                unitsToAttack = new[] { closestRandomUnit };
+                                break;
+                        }
+
+                        break;
+                }
+
+                if (unitsToAttack.Any() && actTouse != null)
+                {
+                    foreach (var unit in unitsToAttack)
                     {
-                        if (usedSkill.Level < MAX_SKILL_LEVEL)
+                        unit.ProcessCommit(this);
+                        actTouse.Reset();
+
+                        // Improve used skills
+
+                        foreach (var requiredSkillScheme in unit.RequiredSkills)
                         {
-                            usedSkill.Level += SkillUpSpeed;
-                        }
-                        else
-                        {
-                            usedSkill.Level = MAX_SKILL_LEVEL;
+                            var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
+                            if (usedSkill is null)
+                            {
+                                var newSkill = new Skill
+                                {
+                                    Scheme = requiredSkillScheme,
+                                    Level = 0
+                                };
+
+                                Skills = Skills.Concat(new[] { newSkill }).ToArray();
+                            }
+                            else
+                            {
+                                if (usedSkill.Level < MAX_SKILL_LEVEL)
+                                {
+                                    usedSkill.Level += SkillUpSpeed;
+                                }
+                                else
+                                {
+                                    usedSkill.Level = MAX_SKILL_LEVEL;
+                                }
+                            }
                         }
                     }
+
+                    Commited?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
