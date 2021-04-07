@@ -1,19 +1,16 @@
 ﻿using System.Linq;
+using System.Text;
 
 using Assets.BL;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PersonCardModalHandler : MonoBehaviour
 {
     public Person Person;
     public PersonAvatarHandler PersonAvatarHandler;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        PersonAvatarHandler.Person = Person;
-    }
+    public Text StatsText;
 
     public void ChangeLine(int lineIndex)
     {
@@ -32,6 +29,18 @@ public class PersonCardModalHandler : MonoBehaviour
     public void Show(Person person)
     {
         Person = person;
+
+        PersonAvatarHandler.Person = Person;
+
+        var sb = new StringBuilder();
+
+        sb.AppendLine($"Feature decomposes: {Person.FeatureCompleteCount}");
+        sb.AppendLine($"Sub tasks: {Person.SubTasksCompleteCount}");
+        sb.AppendLine($"Error Fixes: {Person.ErrorCompleteCount}");
+        sb.AppendLine($"Error Made: {Person.ErrorMadeCount}");
+
+        StatsText.text = sb.ToString();
+
         gameObject.SetActive(true);
     }
 

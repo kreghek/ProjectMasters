@@ -55,6 +55,8 @@ namespace Assets.BL
                         }
                     }
 
+                    person.FeatureCompleteCount++;
+
                     person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT + Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
                 }
 

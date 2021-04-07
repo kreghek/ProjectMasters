@@ -30,7 +30,7 @@ namespace Assets.BL
             return new Effect
             {
                 EffectType = EffectType.Despondency,
-                Lifetime = Effect.MAX_DURATION * 2
+                Lifetime = Effect.MAX_DURATION * 3
             };
         }
     }

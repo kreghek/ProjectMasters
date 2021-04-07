@@ -17,6 +17,7 @@
             {
                 var formation = ProjectUnitFormation.Instance;
                 formation.ResolveUnit(LineIndex, this);
+                person.ErrorCompleteCount++;
                 IsDead = true;
             }
         }

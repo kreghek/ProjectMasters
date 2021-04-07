@@ -33,12 +33,15 @@ namespace Assets.BL
                         formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
                     }
                 }
+
+                person.ErrorMadeCount += errorCount;
             }
 
             if (TimeLog >= Cost)
             {
                 var formation = ProjectUnitFormation.Instance;
                 formation.ResolveUnit(LineIndex, this);
+                person.SubTasksCompleteCount++;
                 IsDead = true;
                 person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT + Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
             }

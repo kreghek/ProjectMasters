@@ -88,6 +88,11 @@ namespace Assets.BL
             CheckForNewEffect();
         }
 
+        public int FeatureCompleteCount { get; set; }
+        public int SubTasksCompleteCount { get; set; }
+        public int ErrorCompleteCount { get; set; }
+        public int ErrorMadeCount { get; set; }
+
         private void HandleSpeechs(float commitDeltaTime)
         {
             if (_speechCounter > 0)
