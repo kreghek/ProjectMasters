@@ -6,7 +6,7 @@ namespace Assets.BL
 {
     public sealed class Act
     {
-        const float baseCommitTimeSeconds = 2;
+        const float baseCommitTimeSeconds = 1;
 
         private float _commitCounter = baseCommitTimeSeconds;
 
@@ -26,6 +26,11 @@ namespace Assets.BL
             {
                 _commitCounter -= commitDeltaTime;
             }
+        }
+
+        public void Reset()
+        {
+            _commitCounter = baseCommitTimeSeconds;
         }
     }
 
@@ -123,13 +128,7 @@ namespace Assets.BL
                 return;
             }
 
-            var assignedUnit = units.FirstOrDefault();
-            if (assignedUnit is null)
-            {
-                return;
-            }
-
-            ProgressUnitSolving(assignedUnit, commitDeltaTime);
+            ProgressUnitSolving(units, assignedPersons, commitDeltaTime);
         }
 
         public void DaylyUpdate()
@@ -290,51 +289,102 @@ namespace Assets.BL
             }
         }
 
-        private void ProgressUnitSolving(ProjectUnitBase unit, float commitDeltaTime)
+        private void ProgressUnitSolving(List<ProjectUnitBase> units, List<Person> assignedPersons, float commitDeltaTime)
         {
+            Act actTouse = null;
             foreach (var act in Acts)
             {
-                act.Update(commitDeltaTime * CommitSpeed);
+                var personIndex = assignedPersons.IndexOf(this);
+                var groupDebuff = 0.8f / assignedPersons.Count;
+                if (assignedPersons.Count == 1)
+                {
+                    groupDebuff = 1;
+                }
+
+                switch (act.Position)
+                {
+                    case ActPosition.First:
+                        if (personIndex == 0)
+                        {
+                            act.Update(commitDeltaTime * CommitSpeed * groupDebuff);
+                        }
+                        break;
+
+                    case ActPosition.Second:
+                        if (personIndex == 1)
+                        {
+                            act.Update(commitDeltaTime * CommitSpeed * groupDebuff);
+                        }
+                        break;
+                }
+
+                if (actTouse == null && act.IsReadyToUse)
+                {
+                    actTouse = act;
+                }
             }
 
-            _commitCounter += commitDeltaTime * CommitSpeed;
+            var unitsToAttack = new ProjectUnitBase[0];
 
-            const float baseCommitTimeSeconds = 2;
-            var targetCommitCounter = baseCommitTimeSeconds;
-
-            if (_commitCounter >= targetCommitCounter)
+            if (actTouse != null)
             {
-                _commitCounter = 0;
-                Commited?.Invoke(this, EventArgs.Empty);
-
-                unit.ProcessCommit(this);
-
-                // Improve used skills
-
-                foreach (var requiredSkillScheme in unit.RequiredSkills)
+                switch (actTouse.Impact)
                 {
-                    var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
-                    if (usedSkill is null)
-                    {
-                        var newSkill = new Skill
-                        {
-                            Scheme = requiredSkillScheme,
-                            Level = 0
-                        };
+                    case ActImpact.Units:
 
-                        Skills = Skills.Concat(new[] { newSkill }).ToArray();
-                    }
-                    else
+                        switch (actTouse.ActTargetPattern)
+                        {
+                            case ActTargetPattern.ClosestUnit:
+                                var closestUnit = units.FirstOrDefault();
+                                unitsToAttack = new[] { closestUnit };
+                                break;
+
+                            case ActTargetPattern.OneOfFirstHalf:
+                                var closestRandomUnit = units.Take(2).OrderBy(x => UnityEngine.Random.Range(1, 100)).FirstOrDefault();
+                                unitsToAttack = new[] { closestRandomUnit };
+                                break;
+                        }
+
+                        break;
+                }
+
+                if (unitsToAttack.Any() && actTouse != null)
+                {
+                    foreach (var unit in unitsToAttack)
                     {
-                        if (usedSkill.Level < MAX_SKILL_LEVEL)
+                        unit.ProcessCommit(this);
+                        actTouse.Reset();
+
+                        // Improve used skills
+
+                        foreach (var requiredSkillScheme in unit.RequiredSkills)
                         {
-                            usedSkill.Level += SkillUpSpeed;
-                        }
-                        else
-                        {
-                            usedSkill.Level = MAX_SKILL_LEVEL;
+                            var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
+                            if (usedSkill is null)
+                            {
+                                var newSkill = new Skill
+                                {
+                                    Scheme = requiredSkillScheme,
+                                    Level = 0
+                                };
+
+                                Skills = Skills.Concat(new[] { newSkill }).ToArray();
+                            }
+                            else
+                            {
+                                if (usedSkill.Level < MAX_SKILL_LEVEL)
+                                {
+                                    usedSkill.Level += SkillUpSpeed;
+                                }
+                                else
+                                {
+                                    usedSkill.Level = MAX_SKILL_LEVEL;
+                                }
+                            }
                         }
                     }
+
+                    Commited?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
