@@ -79,7 +79,14 @@ namespace Assets.BL
         {
             unit.LineIndex = lineIndex;
 
-            Lines[lineIndex].Units.Insert(positionIndex, unit);
+            if (positionIndex >= Lines[lineIndex].Units.Count)
+            {
+                Lines[lineIndex].Units.Add(unit);
+            }
+            else
+            {
+                Lines[lineIndex].Units.Insert(positionIndex, unit);
+            }
 
             // reindex
             for (int i = 0; i < Lines[lineIndex].Units.Count; i++)

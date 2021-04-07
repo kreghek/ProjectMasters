@@ -31,7 +31,7 @@ public class TeamFactory : MonoBehaviour
     {
         var deltaTime = Time.deltaTime;
 
-        if (Player.WaitForDecision != null || Player.WaitTutorial/* || Player.WaitKeyDayReport*/)
+        if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
         {
             return;
         }
@@ -97,6 +97,8 @@ public class TeamFactory : MonoBehaviour
         }
 
         HandleDecision();
+
+        Player.WaitKeyDayReport = true;
     }
 
     private static void UpdateProjectLineSolving(float deltaTime)

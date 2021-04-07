@@ -21,6 +21,6 @@ public class ProjectInfoHandler : MonoBehaviour
 
         var timeRemainsPercentage = (float)(Player.DeadlineDayNumber - Player.DayNumber) / Player.DeadlineDayNumber * 100;
 
-        ProgressText.text = $"Day: {Player.DayNumber}({timeRemainsPercentage:0.##}%) Project: {completenessPercentage:0.##}%";
+        ProgressText.text = $"Day: {Player.DayNumber}({timeRemainsPercentage:0}%) Project: {completenessPercentage:0.##}%";
     }
 }

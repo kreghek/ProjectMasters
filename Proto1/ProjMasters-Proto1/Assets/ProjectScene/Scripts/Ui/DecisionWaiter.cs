@@ -8,11 +8,11 @@ public class DecisionWaiter : MonoBehaviour
 
     public void Update()
     {
-        if (Player.WaitForDecision != null)
+        if (Player.WaitForDecision != null && !Player.WaitKeyDayReport)
         {
             if (!DecisionHandler.gameObject.activeSelf)
             {
-                DecisionHandler.Init(Player.WaitForDecision);
+                DecisionHandler.Show(Player.WaitForDecision);
             }
         }
     }

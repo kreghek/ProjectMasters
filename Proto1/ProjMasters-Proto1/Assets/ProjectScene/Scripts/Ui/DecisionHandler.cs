@@ -15,7 +15,7 @@ public class DecisionHandler : MonoBehaviour
 
     private Decision _decision;
 
-    public void Init(Decision decision)
+    public void Show(Decision decision)
     {
         _decision = decision;
 
