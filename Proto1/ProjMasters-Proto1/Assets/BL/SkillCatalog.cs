@@ -10,7 +10,7 @@ namespace Assets.BL
             public static string DotnetAsyncProgramming = "dotnet-async-programming";
             public static string AspNetCoreFoundations = "asp-net-core-foundations";
             public static string JavaScriptFoundations = "javascript-foundations";
-            public static string JavaScriptReactiveProgramming = "javascript-foundations";
+            public static string JavaScriptReactiveProgramming = "javascript-reactive-foundations";
             public static string AngularFoundations = "angular-foundations";
         }
 
@@ -106,7 +106,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AspNetCoreFoundations + "-1",
-                DisplayTitle = "ASP.NET Core Foundations",
+                DisplayTitle = "ASP.NET Core Foundations 1",
 
                 RequiredParentsSids = new[]{ Sids.CSharpFoundations + "-1" },
                 MasteryIncrenemt = 1f,
@@ -121,7 +121,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AspNetCoreFoundations + "-2",
-                DisplayTitle = "ASP.NET Core Foundations",
+                DisplayTitle = "ASP.NET Core Foundations 2",
 
                 RequiredParentsSids = new[]{ Sids.AspNetCoreFoundations + "-1" },
                 MasteryIncrenemt = 1f,
@@ -136,7 +136,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AspNetCoreFoundations + "-3",
-                DisplayTitle = "ASP.NET Core Foundations",
+                DisplayTitle = "ASP.NET Core Foundations 3",
 
                 RequiredParentsSids = new[]{ Sids.AspNetCoreFoundations + "-2" },
                 MasteryIncrenemt = 1f,
@@ -151,7 +151,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AspNetCoreFoundations + "-4",
-                DisplayTitle = "ASP.NET Core Foundations",
+                DisplayTitle = "ASP.NET Core Foundations 4",
 
                 RequiredParentsSids = new[]{ Sids.AspNetCoreFoundations + "-3" },
                 MasteryIncrenemt = 1f,
@@ -258,7 +258,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AngularFoundations + "-1",
-                DisplayTitle = "Angular Foundations",
+                DisplayTitle = "Angular Foundations 1",
 
                 RequiredParentsSids = new[]{ Sids.JavaScriptFoundations + "-1" },
                 MasteryIncrenemt = 1f,
@@ -273,7 +273,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AngularFoundations + "-2",
-                DisplayTitle = "Angular Foundations",
+                DisplayTitle = "Angular Foundations 2",
 
                 RequiredParentsSids = new[]{ Sids.AngularFoundations + "-1" },
                 MasteryIncrenemt = 1f,
@@ -288,7 +288,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AngularFoundations + "-3",
-                DisplayTitle = "Angular Foundations",
+                DisplayTitle = "Angular Foundations 3",
 
                 RequiredParentsSids = new[]{ Sids.AngularFoundations + "-2" },
                 MasteryIncrenemt = 1f,
@@ -303,7 +303,7 @@ namespace Assets.BL
 
             new SkillScheme{
                 Sid = Sids.AngularFoundations + "-4",
-                DisplayTitle = "Angular Foundations",
+                DisplayTitle = "Angular Foundations 4",
 
                 RequiredParentsSids = new[]{ Sids.AngularFoundations + "-3" },
                 MasteryIncrenemt = 1f,
