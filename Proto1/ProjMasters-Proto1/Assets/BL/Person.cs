@@ -50,7 +50,7 @@ namespace Assets.BL
         public float ErrorChance { get; set; } = ERROR_CHANCE_BASE;
         public float SkillUpSpeed { get; set; } = SKILLUP_SPEED_BASE;
 
-        public Skill[] Skills { get; set; }
+        public Mastery[] Skills { get; set; }
 
         public TraitType[] Traits { get; set; }
 
@@ -350,7 +350,7 @@ namespace Assets.BL
                             var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
                             if (usedSkill is null)
                             {
-                                var newSkill = new Skill
+                                var newSkill = new Mastery
                                 {
                                     Scheme = requiredSkillScheme,
                                     Level = 0
