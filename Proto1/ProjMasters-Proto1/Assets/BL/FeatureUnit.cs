@@ -89,7 +89,7 @@ namespace Assets.BL
                 var randomizedSkills = MasterySchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
                 var requiredSkillCount = Random.Range(1, MasterySchemeCatalog.SkillSchemes.Length);
                 var requiredSkills = randomizedSkills.Take(requiredSkillCount);
-                subTask.RequiredSkills = requiredSkills.ToArray();
+                subTask.RequiredMasteryItems = requiredSkills.ToArray();
 
                 yield return subTask;
             }

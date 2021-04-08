@@ -21,7 +21,7 @@ namespace Assets.BL
             {
                 Cost = Random.Range(1, 5),
                 LineIndex = rollNewFeatureLineIndex,
-                RequiredSkills = requiredSkills.ToArray()
+                RequiredMasteryItems = requiredSkills.ToArray()
             };
 
             ProjectUnitFormation.Instance.AddUnitIntoLine(rollNewFeatureLineIndex, lines.Count, featureUnit);

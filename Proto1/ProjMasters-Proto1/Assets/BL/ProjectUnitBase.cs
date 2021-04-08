@@ -11,7 +11,7 @@ namespace Assets.BL
         public abstract ProjectUnitType Type { get; }
         public float Cost { get; set; }
         public float TimeLog { get; set; }
-        public MasteryScheme[] RequiredSkills { get; set; }
+        public MasteryScheme[] RequiredMasteryItems { get; set; }
 
         public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
 
@@ -32,7 +32,7 @@ namespace Assets.BL
 
         protected float GetSuccessCommitRoll(IEnumerable<Mastery> personSkills)
         {
-            var usedSkills = personSkills.Where(x => RequiredSkills.Contains(x.Scheme)).ToArray();
+            var usedSkills = personSkills.Where(x => RequiredMasteryItems.Contains(x.Scheme)).ToArray();
             if (usedSkills.Any())
             {
                 return usedSkills.Average(x => x.Level);

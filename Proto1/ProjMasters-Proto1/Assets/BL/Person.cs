@@ -53,6 +53,7 @@ namespace Assets.BL
         public List<Mastery> MasteryLevels { get; set; } = new List<Mastery>();
 
         public Skill[] Skills { get; set; }
+        public Skill ActiveSkill { get; set; }
 
         public TraitType[] Traits { get; set; }
 
@@ -106,7 +107,7 @@ namespace Assets.BL
             foreach (var skill in Skills)
             {
 
-                for (var skillLevelIndex = 0; skillLevelIndex < skill.Level; skillLevelIndex++)
+                for (var skillLevelIndex = 0; skillLevelIndex < skill.CurrentLevelIndex; skillLevelIndex++)
                 {
                     var skillLevel = skill.Scheme.Levels[skillLevelIndex];
 
