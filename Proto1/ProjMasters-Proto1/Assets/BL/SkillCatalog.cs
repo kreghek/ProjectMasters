@@ -16,80 +16,97 @@ namespace Assets.BL
 
         public static SkillScheme[] AllSchemes { get; } = new SkillScheme[] {
             new SkillScheme{
-                Sid = Sids.CSharpFoundations,
-                Display = "C# Foundations",
-                Levels = new[]{ 
-                    new SkillLevelScheme{ 
-                        MasterIncrenemt = 1f,
-                        MasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                        RequiredJobs = new []{ 
-                            new JobScheme{
-                                MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                                CompleteSubTasksAmount = 10
-                            }
-                        }
-                    },
-                    new SkillLevelScheme{
-                        MasterIncrenemt = 0.5f,
-                        MasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                        RequiredJobs = new []{
-                            new JobScheme{
-                                MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                                CompleteSubTasksAmount = 10
-                            }
-                        }
-                    },
-                    new SkillLevelScheme{
-                        MasterIncrenemt = 0.5f,
-                        MasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                        RequiredJobs = new []{
-                            new JobScheme{
-                                MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                                CompleteSubTasksAmount = 10
-                            }
-                        }
+                Sid = Sids.CSharpFoundations + "1",
+                DisplayTitle = "C# Foundations 1",
+
+                MasteryIncrenemt = 1f,
+                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                RequiredJobs = new []{
+                    new JobScheme{
+                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        CompleteSubTasksAmount = 10
                     }
                 }
             },
+
             new SkillScheme{
-                Sid = Sids.DotnetAsyncProgramming,
-                Display = ".NET Async Programming",
-                Levels = new[]{
-                    new SkillLevelScheme{
-                        MasterIncrenemt = 1f,
-                        MasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                        RequiredJobs = new []{
-                            new JobScheme{
-                                MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                                CompleteSubTasksAmount = 10
-                            }
-                        }
-                    },
-                    new SkillLevelScheme{
-                        MasterIncrenemt = 0.5f,
-                        MasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                        RequiredJobs = new []{
-                            new JobScheme{
-                                MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                                CompleteSubTasksAmount = 10
-                            }
-                        }
-                    },
-                    new SkillLevelScheme{
-                        MasterIncrenemt = 0.5f,
-                        MasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                        RequiredJobs = new []{
-                            new JobScheme{
-                                MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
-                                CompleteSubTasksAmount = 10
-                            }
-                        }
+                Sid = Sids.CSharpFoundations + "2",
+                DisplayTitle = "C# Foundations 2",
+
+                RequiredParentsSids = new[]{ Sids.CSharpFoundations + "1" },
+                MasteryIncrenemt = 0.5f,
+                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                RequiredJobs = new []{
+                    new JobScheme{
+                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        CompleteSubTasksAmount = 20
                     }
                 }
             },
+
+            new SkillScheme{
+                Sid = Sids.CSharpFoundations + "3",
+                DisplayTitle = "C# Foundations 3",
+
+                RequiredParentsSids = new[]{ Sids.CSharpFoundations + "2" },
+                MasteryIncrenemt = 0.5f,
+                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                RequiredJobs = new []{
+                    new JobScheme{
+                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        CompleteSubTasksAmount = 40
+                    }
+                }
+            },
+
+            new SkillScheme{
+                Sid = Sids.DotnetAsyncProgramming + "1",
+                DisplayTitle = ".NET Async Programming 1",
+
+                RequiredParentsSids = new[]{ Sids.CSharpFoundations + "1" },
+                MasteryIncrenemt = 1f,
+                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                RequiredJobs = new []{
+                    new JobScheme{
+                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        CompleteSubTasksAmount = 10
+                    }
+                }
+            },
+
+            new SkillScheme{
+                Sid = Sids.DotnetAsyncProgramming + "2",
+                DisplayTitle = ".NET Async Programming 2",
+
+                RequiredParentsSids = new[]{ Sids.DotnetAsyncProgramming + "1" },
+                MasteryIncrenemt = 0.5f,
+                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                RequiredJobs = new []{
+                    new JobScheme{
+                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        CompleteSubTasksAmount = 20
+                    }
+                }
+            },
+
+            new SkillScheme{
+                Sid = Sids.DotnetAsyncProgramming + "3",
+                DisplayTitle = ".NET Async Programming 3",
+
+                RequiredParentsSids = new[]{ Sids.DotnetAsyncProgramming + "2" },
+                MasteryIncrenemt = 0.5f,
+                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                RequiredJobs = new []{
+                    new JobScheme{
+                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        CompleteSubTasksAmount = 40
+                    }
+                }
+            },
+
             new SkillScheme{
                 Sid = Sids.AspNetCoreFoundations,
-                Display = "ASP.NET Core Foundations",
+                DisplayTitle = "ASP.NET Core Foundations",
                 Levels = new[]{
                     new SkillLevelScheme{
                         RequiredParentsSids = new[]{ "csharp-foundations" },
@@ -139,7 +156,7 @@ namespace Assets.BL
             },
             new SkillScheme{
                 Sid = Sids.JavaScriptFoundations,
-                Display = "JavaScript Foundations",
+                DisplayTitle = "JavaScript Foundations",
                 Levels = new[]{
                     new SkillLevelScheme{
                         MasterIncrenemt = 1f,
@@ -175,7 +192,7 @@ namespace Assets.BL
             },
             new SkillScheme{
                 Sid = Sids.JavaScriptReactiveProgramming,
-                Display = "JS Reactive Programming",
+                DisplayTitle = "JS Reactive Programming",
                 Levels = new[]{
                     new SkillLevelScheme{
                         MasterIncrenemt = 1f,
@@ -211,7 +228,7 @@ namespace Assets.BL
             },
             new SkillScheme{
                 Sid = Sids.AngularFoundations,
-                Display = "Angular Foundations",
+                DisplayTitle = "Angular Foundations",
                 Levels = new[]{
                     new SkillLevelScheme{
                         MasterIncrenemt = 1f,

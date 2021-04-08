@@ -4,6 +4,5 @@
     { 
         public SkillScheme Scheme { get; set; }
         public Job[] Jobs { get; set; }
-        public int CurrentLevelIndex { get; set; }
     }
 }
