@@ -125,6 +125,61 @@ namespace Assets.BL
         public void DaylyUpdate()
         {
             CheckForNewEffect();
+            SelectRandomActiveSkill();
+        }
+
+        private void SelectRandomActiveSkill()
+        {
+            var availableSkills = new List<Skill>();
+            foreach (var skillScheme in SkillCatalog.AllSchemes)
+            {
+                if (skillScheme.RequiredParentsSids is null || !skillScheme.RequiredParentsSids.Any())
+                {
+                    var knownSkill = Skills.SingleOrDefault(x => x.Scheme == skillScheme);
+                    if (knownSkill is null)
+                    {
+                        availableSkills.Add(new Skill { Scheme = skillScheme });
+                    }
+                    else
+                    {
+                        if (!knownSkill.IsLearnt)
+                        {
+                            availableSkills.Add(knownSkill);
+                        }
+                    }
+                }
+                else
+                {
+                    var learnedParents = Skills.Where(x => x.IsLearnt && skillScheme.RequiredParentsSids.Contains(x.Scheme.Sid)).ToList();
+                    var remainsLearnedParents = skillScheme.RequiredParentsSids.Except(learnedParents.Select(x => x.Scheme.Sid)).ToList();
+                    if (!remainsLearnedParents.Any())
+                    {
+                        // dups
+
+                        var knownSkill = Skills.SingleOrDefault(x => x.Scheme == skillScheme);
+                        if (knownSkill is null)
+                        {
+                            availableSkills.Add(new Skill { Scheme = skillScheme });
+                        }
+                        else
+                        {
+                            if (!knownSkill.IsLearnt)
+                            {
+                                availableSkills.Add(knownSkill);
+                            }
+                        }
+
+                        // end dups
+                    }
+                }
+            }
+
+            //Select random available skill to learn
+            if (availableSkills.Any())
+            {
+                var rolledSkillIndex = UnityEngine.Random.Range(0, availableSkills.Count);
+                ActiveSkill = availableSkills[rolledSkillIndex];
+            }
         }
 
         public int FeatureCompleteCount { get; set; }
