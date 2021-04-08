@@ -140,9 +140,11 @@ public class TeamFactory : MonoBehaviour
                 Name = "Ivan Ivanov",
                 Traits = new []{ TraitType.FastLearning },
                 Skills = new []{
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptFoundations) },
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptReactiveProgramming) },
-                    new Skill {  CurrentLevelIndex = 3, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AngularFoundations) },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptFoundations + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptFoundations + "-2") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptReactiveProgramming + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptReactiveProgramming + "-2") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AngularFoundations + "-1") },
                 },
 
                 EyeIndex = 0,
@@ -154,13 +156,14 @@ public class TeamFactory : MonoBehaviour
                 Name = "Sidre Patron [The Soul]",
                 Traits = new[]{ TraitType.CarefullDevelopment, TraitType.Apologet },
                 Skills = new []{
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptFoundations) },
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptReactiveProgramming) },
-                    new Skill {  CurrentLevelIndex = 1, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AngularFoundations) },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.CSharpFoundations + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming + "-2") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AspNetCoreFoundations + "-1") },
 
-                    new Skill {  CurrentLevelIndex = 1, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.CSharpFoundations) },
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming) },
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AspNetCoreFoundations) },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptFoundations + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptReactiveProgramming + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AngularFoundations + "-1") },
                 },
 
                 EyeIndex = 1,
@@ -172,9 +175,11 @@ public class TeamFactory : MonoBehaviour
                 Name = "John Smith",
                 Traits = new[]{ TraitType.RapidDevelopment },
                 Skills = new []{
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.CSharpFoundations) },
-                    new Skill {  CurrentLevelIndex = 1, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming) },
-                    new Skill {  CurrentLevelIndex = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AspNetCoreFoundations) },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.CSharpFoundations + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming + "-2") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AspNetCoreFoundations + "-1") },
+                    new Skill {  Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AspNetCoreFoundations + "-2") },
                 },
                 EyeIndex = 2,
                 FaceDecorIndex = 0
