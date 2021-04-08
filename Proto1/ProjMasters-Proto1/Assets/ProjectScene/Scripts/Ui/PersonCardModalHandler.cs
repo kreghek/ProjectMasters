@@ -11,6 +11,8 @@ public class PersonCardModalHandler : MonoBehaviour
     public Person Person;
     public PersonAvatarHandler PersonAvatarHandler;
     public Text StatsText;
+    public SkillListItem SkillListItemPrefab;
+    public Transform SkillsParent;
 
     public void ChangeLine(int lineIndex)
     {
@@ -39,8 +41,25 @@ public class PersonCardModalHandler : MonoBehaviour
         sb.AppendLine($"Sub tasks: {Person.SubTasksCompleteCount}");
         sb.AppendLine($"Error Fixes: {Person.ErrorCompleteCount}");
         sb.AppendLine($"Error Made: {Person.ErrorMadeCount}");
+        /*sb.AppendLine(string.Join(", ", Person.Skills.Select(x => x.Scheme.DisplayTitle)));
+
+        if (Person.ActiveSkill != null)
+        {
+            sb.AppendLine($"Active skill: {Person.ActiveSkill.Scheme.DisplayTitle} ({Person.ActiveSkill.GetPercentage()}%)");
+        }*/
 
         StatsText.text = sb.ToString();
+
+        foreach (Transform childItem in SkillsParent)
+        {
+            Destroy(childItem.gameObject);
+        }
+
+        foreach (var skill in Person.Skills)
+        {
+            var skillItem = Instantiate(SkillListItemPrefab, SkillsParent);
+            skillItem.Skill = skill;
+        }
 
         gameObject.SetActive(true);
     }
