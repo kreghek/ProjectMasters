@@ -12,9 +12,16 @@ public class TeamFactory : MonoBehaviour
 
     void Start()
     {
-        if (Team.Persons == null)
+        if (Team.Persons is null)
         {
             var persons = CreateStartTeam();
+
+            // Build in skills are learnt at start.
+            foreach (var skill in persons.SelectMany(x => x.Skills))
+            {
+                skill.IsLearnt = true;
+            }
+
             foreach (var person in persons)
             {
                 var personViewModel = Instantiate(PersonViewModelPrefab);

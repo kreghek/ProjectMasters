@@ -106,25 +106,19 @@ namespace Assets.BL
 
             foreach (var skill in Skills)
             {
-
-                for (var skillLevelIndex = 0; skillLevelIndex < skill.CurrentLevelIndex; skillLevelIndex++)
+                var mastery = MasteryLevels.SingleOrDefault(x => x.Scheme == skill.Scheme.TargetMasteryScheme);
+                if (mastery is null)
                 {
-                    var skillLevel = skill.Scheme.Levels[skillLevelIndex];
-
-                    var mastery = MasteryLevels.SingleOrDefault(x => x.Scheme == skillLevel.MasteryScheme);
-                    if (mastery is null)
+                    mastery = new Mastery
                     {
-                        mastery = new Mastery
-                        {
-                            Scheme = skillLevel.MasteryScheme,
-                            Level = 0
-                        };
+                        Scheme = skill.Scheme.TargetMasteryScheme,
+                        Level = 0
+                    };
 
-                        MasteryLevels.Add(mastery);
-                    }
-
-                    mastery.Level += skillLevel.MasterIncrenemt;
+                    MasteryLevels.Add(mastery);
                 }
+
+                mastery.Level += skill.Scheme.MasteryIncrenemt;
             }
         }
 

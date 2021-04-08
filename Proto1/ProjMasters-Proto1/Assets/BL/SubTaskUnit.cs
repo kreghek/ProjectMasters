@@ -54,72 +54,64 @@ namespace Assets.BL
                 var skillToUp = person.ActiveSkill;
                 if (skillToUp != null)
                 {
+                    // Add active skill to Skills collection
+                    // If it is not there. Union checks duplicates.
+                    person.Skills = person.Skills.Union(new[] { skillToUp }).ToArray();
+
                     if (skillToUp.Jobs is null)
                     {
                         skillToUp.Jobs = Array.Empty<Job>();
                     }
 
-                    int? currentSkillLevelIndex = 0;
-                    var currentSkillState = person.Skills.SingleOrDefault(x => x.Scheme == skillToUp.Scheme);
-                    if (currentSkillState is null)
+                    var affectedJobsFromScheme = skillToUp.Scheme.RequiredJobs.Where(x => RequiredMasteryItems.Contains(x.MasteryScheme) && x.CompleteSubTasksAmount > 0);
+
+                    foreach (var affectedJobScheme in affectedJobsFromScheme)
                     {
-                        currentSkillLevelIndex = currentSkillState.CurrentLevelIndex + 1;
-                        if (currentSkillLevelIndex >= skillToUp.Scheme.Levels.Length - 1)
+                        var affectedJobInSkillToUp = skillToUp.Jobs.SingleOrDefault(x => x.Scheme == affectedJobScheme);
+                        if (affectedJobInSkillToUp is null)
                         {
-                            currentSkillLevelIndex = null;
+                            affectedJobInSkillToUp = new Job
+                            {
+                                Scheme = affectedJobScheme
+                            };
+
+                            skillToUp.Jobs = skillToUp.Jobs.Concat(new[] { affectedJobInSkillToUp }).ToArray();
+                        }
+
+                        affectedJobInSkillToUp.CompleteSubTasksAmount++;
+                    }
+
+                    var isSkillArchieved = true;
+                    var notStartedJobs = skillToUp.Scheme.RequiredJobs.Except(skillToUp.Jobs.Select(x => x.Scheme));
+                    if (!notStartedJobs.Any())
+                    {
+                        foreach (var job in skillToUp.Jobs)
+                        {
+                            if (job.CompleteSubTasksAmount < job.Scheme.CompleteSubTasksAmount)
+                            {
+                                isSkillArchieved = false;
+                                break;
+                            }
+
+                            if (job.CompleteErrorsAmount < job.Scheme.CompleteErrorsAmount)
+                            {
+                                isSkillArchieved = false;
+                                break;
+                            }
+
+                            if (job.FeatureDecomposesAmount < job.Scheme.FeatureDecomposesAmount)
+                            {
+                                isSkillArchieved = false;
+                                break;
+                            }
                         }
                     }
 
-                    if (currentSkillLevelIndex != null)
+                    if (isSkillArchieved)
                     {
-                        var currentLevel = skillToUp.Scheme.Levels[currentSkillLevelIndex.Value];
-                        var affectedJobsFromScheme = currentLevel.RequiredJobs.Where(x => RequiredMasteryItems.Contains(x.MasteryScheme) && x.CompleteSubTasksAmount > 0);
-
-                        foreach (var affectedJobScheme in affectedJobsFromScheme)
-                        {
-                            var affectedJobInSkillToUp = skillToUp.Jobs.SingleOrDefault(x => x.Scheme == affectedJobScheme);
-                            if (affectedJobInSkillToUp is null)
-                            {
-                                affectedJobInSkillToUp = new Job
-                                {
-                                    Scheme = affectedJobScheme
-                                };
-
-                                skillToUp.Jobs = skillToUp.Jobs.Concat(new[] { affectedJobInSkillToUp }).ToArray();
-                            }
-
-                            affectedJobInSkillToUp.CompleteSubTasksAmount++;
-                        }
-
-                        var isSkillArchieved = true;
-                        if (!currentLevel.RequiredJobs.Intersect(skillToUp.Jobs.Select(x => x.Scheme)).Any())
-                        {
-                            foreach (var job in skillToUp.Jobs)
-                            {
-                                if (job.CompleteSubTasksAmount < job.Scheme.CompleteSubTasksAmount)
-                                {
-                                    isSkillArchieved = false;
-                                    break;
-                                }
-
-                                if (job.CompleteErrorsAmount < job.Scheme.CompleteErrorsAmount)
-                                {
-                                    isSkillArchieved = false;
-                                    break;
-                                }
-
-                                if (job.FeatureDecomposesAmount < job.Scheme.FeatureDecomposesAmount)
-                                {
-                                    isSkillArchieved = false;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (isSkillArchieved)
-                        {
-                            ////////
-                        }
+                        // Skill are in skills collection already.
+                        skillToUp.IsLearnt = true;
+                        person.ActiveSkill = null;
                     }
                 }
             }
