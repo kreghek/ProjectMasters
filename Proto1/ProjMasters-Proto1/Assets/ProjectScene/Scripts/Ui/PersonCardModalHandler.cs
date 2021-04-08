@@ -24,6 +24,7 @@ public class PersonCardModalHandler : MonoBehaviour
         }
 
         targetLine.AssignedPersons.Add(Person);
+        Person.SetChangeLineCounter();
     }
 
     public void Show(Person person)

@@ -18,11 +18,14 @@ namespace Assets.BL
         private const int RECOVERY_SPEED_BASE = 1;
         private const int DAYLY_PAYMENT_BASE = 1;
         private const float COMMIT_POWER_BASE = 0.25f;
+
         private static float CRIT_COMMIT_CHANCE_BASE = 2.5f;
         private static float CRIT_COMMIT_MULTIPLICATOR_BASE = 2;
         public static float PROJECT_KNOWEDGE_INCREMENT = 0.25f;
+        private static float CHANGE_LINE_COUNTER_MULTIPLICATOR_BASE = 3;
 
         private float _speechCounter = Speech.SPEECH_COUNTER;
+        private float _changeLineCounter = 0;
 
         public Act[] Acts { get; set; } = new Act[]
         {
@@ -77,6 +80,12 @@ namespace Assets.BL
             HandleEnergy(commitDeltaTime);
             if (RecoveryCounter != null)
             {
+                return;
+            }
+
+            if (_changeLineCounter > 0)
+            {
+                _changeLineCounter -= commitDeltaTime;
                 return;
             }
 
@@ -371,6 +380,11 @@ namespace Assets.BL
                     Commited?.Invoke(this, EventArgs.Empty);
                 }
             }
+        }
+
+        internal void SetChangeLineCounter()
+        {
+            _changeLineCounter = CHANGE_LINE_COUNTER_MULTIPLICATOR_BASE * CommitSpeed;
         }
     }
 }
