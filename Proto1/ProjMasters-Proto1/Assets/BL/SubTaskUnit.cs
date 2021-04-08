@@ -8,7 +8,7 @@ namespace Assets.BL
 
         public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {
-            var isSuccessfullCommit = RollCommitSuccess(person.Skills);
+            var isSuccessfullCommit = RollCommitSuccess(person.MasteryLevels);
             if (isSuccessfullCommit)
             {
                 TimeLog += commitPower;

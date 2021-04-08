@@ -28,7 +28,7 @@ namespace Assets.BL
         public override void ProcessCommit(float commitPower, bool isCritical,Person person)
         {
             var formation = ProjectUnitFormation.Instance;
-            var successfullCommit = RollCommitSuccess(person.Skills);
+            var successfullCommit = RollCommitSuccess(person.MasteryLevels);
             if (successfullCommit)
             {
                 TimeLog += commitPower;

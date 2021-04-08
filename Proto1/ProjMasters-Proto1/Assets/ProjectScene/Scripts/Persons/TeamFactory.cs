@@ -138,8 +138,13 @@ public class TeamFactory : MonoBehaviour
             new Person
             {
                 Name = "Ivan Ivanov",
-                Skills = new[] { new Mastery{ Level = 8, Scheme = MasterySchemeCatalog.SkillSchemes[0] } },
                 Traits = new []{ TraitType.FastLearning },
+                Skills = new []{
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptFoundations) },
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptReactiveProgramming) },
+                    new Skill {  Level = 3, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AngularFoundations) },
+                },
+
                 EyeIndex = 0,
                 FaceDecorIndex = 1,
             },
@@ -147,12 +152,17 @@ public class TeamFactory : MonoBehaviour
             new Person
             {
                 Name = "Sidre Patron [The Soul]",
-                Skills = new[]
-                { 
-                    new Mastery{ Level = 4, Scheme = MasterySchemeCatalog.SkillSchemes[0] },
-                    new Mastery{ Level = 4, Scheme = MasterySchemeCatalog.SkillSchemes[1] }
-                },
                 Traits = new[]{ TraitType.CarefullDevelopment, TraitType.Apologet },
+                Skills = new []{
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptFoundations) },
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.JavaScriptReactiveProgramming) },
+                    new Skill {  Level = 1, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AngularFoundations) },
+
+                    new Skill {  Level = 1, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.CSharpFoundations) },
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming) },
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AspNetCoreFoundations) },
+                },
+
                 EyeIndex = 1,
                 FaceDecorIndex = 2
             },
@@ -160,11 +170,12 @@ public class TeamFactory : MonoBehaviour
             new Person
             {
                 Name = "John Smith",
-                Skills = new[]
-                {
-                    new Mastery{ Level = 9, Scheme = MasterySchemeCatalog.SkillSchemes[1] }
-                },
                 Traits = new[]{ TraitType.RapidDevelopment },
+                Skills = new []{
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.CSharpFoundations) },
+                    new Skill {  Level = 1, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.DotnetAsyncProgramming) },
+                    new Skill {  Level = 2, Scheme = SkillCatalog.AllSchemes.Single(x=>x.Sid == SkillCatalog.Sids.AspNetCoreFoundations) },
+                },
                 EyeIndex = 2,
                 FaceDecorIndex = 0
             },

@@ -50,7 +50,9 @@ namespace Assets.BL
         public float ErrorChance { get; set; } = ERROR_CHANCE_BASE;
         public float SkillUpSpeed { get; set; } = SKILLUP_SPEED_BASE;
 
-        public Mastery[] Skills { get; set; }
+        public List<Mastery> MasteryLevels { get; set; } = new List<Mastery>();
+
+        public Skill[] Skills { get; set; }
 
         public TraitType[] Traits { get; set; }
 
@@ -89,7 +91,40 @@ namespace Assets.BL
                 return;
             }
 
+            CalcMasteryLevels();
+
             ProgressUnitSolving(units, assignedPersons, commitDeltaTime);
+        }
+
+        private void CalcMasteryLevels()
+        {
+            foreach (var masteryLevel in MasteryLevels)
+            {
+                masteryLevel.Level = 0;
+            }
+
+            foreach (var skill in Skills)
+            {
+
+                for (var skillLevelIndex = 0; skillLevelIndex < skill.Level; skillLevelIndex++)
+                {
+                    var skillLevel = skill.Scheme.Levels[skillLevelIndex];
+
+                    var mastery = MasteryLevels.SingleOrDefault(x => x.Scheme == skillLevel.MasteryScheme);
+                    if (mastery is null)
+                    {
+                        mastery = new Mastery
+                        {
+                            Scheme = skillLevel.MasteryScheme,
+                            Level = 0
+                        };
+
+                        MasteryLevels.Add(mastery);
+                    }
+
+                    mastery.Level += skillLevel.MasterIncrenemt;
+                }
+            }
         }
 
         public void DaylyUpdate()
@@ -342,34 +377,6 @@ namespace Assets.BL
 
                         unit.ProcessCommit(commitPower, isCritical, this);
                         actTouse.Reset();
-
-                        // Improve used skills
-
-                        foreach (var requiredSkillScheme in unit.RequiredSkills)
-                        {
-                            var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
-                            if (usedSkill is null)
-                            {
-                                var newSkill = new Mastery
-                                {
-                                    Scheme = requiredSkillScheme,
-                                    Level = 0
-                                };
-
-                                Skills = Skills.Concat(new[] { newSkill }).ToArray();
-                            }
-                            else
-                            {
-                                if (usedSkill.Level < MAX_SKILL_LEVEL)
-                                {
-                                    usedSkill.Level += SkillUpSpeed;
-                                }
-                                else
-                                {
-                                    usedSkill.Level = MAX_SKILL_LEVEL;
-                                }
-                            }
-                        }
 
                         if (ProjectKnowedgeCoef <= 2)
                         {
