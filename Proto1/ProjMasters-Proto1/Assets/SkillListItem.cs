@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text;
 
 using Assets.BL;
@@ -15,7 +13,7 @@ public class SkillListItem : MonoBehaviour
     public Text TitleText;
 
     public Text DescriptionText { get; set; }
-    public Button KnowedgeBaseLinkButton;
+    public SkillListItemLinkHandler KnowedgeBaseLinkHandler { get; set; }
 
     public Image StateImage;
 
@@ -42,11 +40,12 @@ public class SkillListItem : MonoBehaviour
 
         if (Skill.Scheme.KnowedgeBaseUrl != null)
         {
-            KnowedgeBaseLinkButton.gameObject.SetActive(true);
+            KnowedgeBaseLinkHandler.gameObject.SetActive(true);
+            KnowedgeBaseLinkHandler.Url = Skill.Scheme.KnowedgeBaseUrl;
         }
         else
         {
-            KnowedgeBaseLinkButton.gameObject.SetActive(false);
+            KnowedgeBaseLinkHandler.gameObject.SetActive(false);
         }
 
         if (!Skill.IsLearnt)

@@ -14,6 +14,7 @@ public class PersonCardModalHandler : MonoBehaviour
     public SkillListItem SkillListItemPrefab;
     public Transform SkillsParent;
     public Text DescriptionText;
+    public SkillListItemLinkHandler KnowedgeBaseLinkHandler;
 
     public void ChangeLine(int lineIndex)
     {
@@ -42,12 +43,6 @@ public class PersonCardModalHandler : MonoBehaviour
         sb.AppendLine($"Sub tasks: {Person.SubTasksCompleteCount}");
         sb.AppendLine($"Error Fixes: {Person.ErrorCompleteCount}");
         sb.AppendLine($"Error Made: {Person.ErrorMadeCount}");
-        /*sb.AppendLine(string.Join(", ", Person.Skills.Select(x => x.Scheme.DisplayTitle)));
-
-        if (Person.ActiveSkill != null)
-        {
-            sb.AppendLine($"Active skill: {Person.ActiveSkill.Scheme.DisplayTitle} ({Person.ActiveSkill.GetPercentage()}%)");
-        }*/
 
         StatsText.text = sb.ToString();
 
@@ -61,6 +56,7 @@ public class PersonCardModalHandler : MonoBehaviour
             var skillItem = Instantiate(SkillListItemPrefab, SkillsParent);
             skillItem.Skill = skill;
             skillItem.DescriptionText = DescriptionText;
+            skillItem.KnowedgeBaseLinkHandler = KnowedgeBaseLinkHandler;
         }
 
         gameObject.SetActive(true);
