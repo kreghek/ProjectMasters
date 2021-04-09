@@ -29,7 +29,7 @@ public class PersonCardHandler : MonoBehaviour
         NameText.text = Person.Name;
         TraitText.text = string.Join(", ", Person.Traits.Select(x => x.ToString()));
         EffectsText.text = string.Join(", ", Person.Effects.Select(x => x.EffectType.ToString()));
-        SkillsText.text = string.Join("\n", Person.Skills.Select(x =>$"{x.Scheme.Sid}: {x.Level:0.#}"));
+        SkillsText.text = string.Join("\n", Person.MasteryLevels.Select(x =>$"{x.Scheme.Sid}: {x.Level:0.#}"));
     }
 
     public void ModalClickButtonHandler()

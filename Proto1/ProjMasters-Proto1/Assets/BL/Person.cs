@@ -50,7 +50,10 @@ namespace Assets.BL
         public float ErrorChance { get; set; } = ERROR_CHANCE_BASE;
         public float SkillUpSpeed { get; set; } = SKILLUP_SPEED_BASE;
 
+        public List<Mastery> MasteryLevels { get; set; } = new List<Mastery>();
+
         public Skill[] Skills { get; set; }
+        public Skill ActiveSkill { get; set; }
 
         public TraitType[] Traits { get; set; }
 
@@ -89,12 +92,94 @@ namespace Assets.BL
                 return;
             }
 
+            CalcMasteryLevels();
+
             ProgressUnitSolving(units, assignedPersons, commitDeltaTime);
+        }
+
+        private void CalcMasteryLevels()
+        {
+            foreach (var masteryLevel in MasteryLevels)
+            {
+                masteryLevel.Level = 0;
+            }
+
+            foreach (var skill in Skills)
+            {
+                var mastery = MasteryLevels.SingleOrDefault(x => x.Scheme == skill.Scheme.TargetMasteryScheme);
+                if (mastery is null)
+                {
+                    mastery = new Mastery
+                    {
+                        Scheme = skill.Scheme.TargetMasteryScheme,
+                        Level = 0
+                    };
+
+                    MasteryLevels.Add(mastery);
+                }
+
+                mastery.Level += skill.Scheme.MasteryIncrenemt;
+            }
         }
 
         public void DaylyUpdate()
         {
             CheckForNewEffect();
+            SelectRandomActiveSkill();
+        }
+
+        private void SelectRandomActiveSkill()
+        {
+            var availableSkills = new List<Skill>();
+            foreach (var skillScheme in SkillCatalog.AllSchemes)
+            {
+                if (skillScheme.RequiredParentsSids is null || !skillScheme.RequiredParentsSids.Any())
+                {
+                    var knownSkill = Skills.SingleOrDefault(x => x.Scheme == skillScheme);
+                    if (knownSkill is null)
+                    {
+                        availableSkills.Add(new Skill { Scheme = skillScheme });
+                    }
+                    else
+                    {
+                        if (!knownSkill.IsLearnt)
+                        {
+                            availableSkills.Add(knownSkill);
+                        }
+                    }
+                }
+                else
+                {
+                    var learnedParents = Skills.Where(x => x.IsLearnt && skillScheme.RequiredParentsSids.Contains(x.Scheme.Sid)).ToList();
+                    var remainsLearnedParents = skillScheme.RequiredParentsSids.Except(learnedParents.Select(x => x.Scheme.Sid)).ToList();
+                    if (!remainsLearnedParents.Any())
+                    {
+                        // dups
+
+                        var knownSkill = Skills.SingleOrDefault(x => x.Scheme == skillScheme);
+                        if (knownSkill is null)
+                        {
+                            availableSkills.Add(new Skill { Scheme = skillScheme });
+                        }
+                        else
+                        {
+                            if (!knownSkill.IsLearnt)
+                            {
+                                availableSkills.Add(knownSkill);
+                            }
+                        }
+
+                        // end dups
+                    }
+                }
+            }
+
+            //Select random available skill to learn
+            if (availableSkills.Any())
+            {
+                var rolledSkillIndex = UnityEngine.Random.Range(0, availableSkills.Count);
+                ActiveSkill = availableSkills[rolledSkillIndex];
+            }
         }
 
         public int FeatureCompleteCount { get; set; }
@@ -342,34 +427,6 @@ namespace Assets.BL
 
                         unit.ProcessCommit(commitPower, isCritical, this);
                         actTouse.Reset();
-
-                        // Improve used skills
-
-                        foreach (var requiredSkillScheme in unit.RequiredSkills)
-                        {
-                            var usedSkill = Skills.SingleOrDefault(x => x.Scheme == requiredSkillScheme);
-                            if (usedSkill is null)
-                            {
-                                var newSkill = new Skill
-                                {
-                                    Scheme = requiredSkillScheme,
-                                    Level = 0
-                                };
-
-                                Skills = Skills.Concat(new[] { newSkill }).ToArray();
-                            }
-                            else
-                            {
-                                if (usedSkill.Level < MAX_SKILL_LEVEL)
-                                {
-                                    usedSkill.Level += SkillUpSpeed;
-                                }
-                                else
-                                {
-                                    usedSkill.Level = MAX_SKILL_LEVEL;
-                                }
-                            }
-                        }
 
                         if (ProjectKnowedgeCoef <= 2)
                         {

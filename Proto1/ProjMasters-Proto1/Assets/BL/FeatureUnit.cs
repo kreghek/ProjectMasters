@@ -28,7 +28,7 @@ namespace Assets.BL
         public override void ProcessCommit(float commitPower, bool isCritical,Person person)
         {
             var formation = ProjectUnitFormation.Instance;
-            var successfullCommit = RollCommitSuccess(person.Skills);
+            var successfullCommit = RollCommitSuccess(person.MasteryLevels);
             if (successfullCommit)
             {
                 TimeLog += commitPower;
@@ -86,10 +86,10 @@ namespace Assets.BL
                     Cost = Random.Range(2, 5)
                 };
 
-                var randomizedSkills = SkillSchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
-                var requiredSkillCount = Random.Range(1, SkillSchemeCatalog.SkillSchemes.Length);
+                var randomizedSkills = MasterySchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
+                var requiredSkillCount = Random.Range(1, MasterySchemeCatalog.SkillSchemes.Length);
                 var requiredSkills = randomizedSkills.Take(requiredSkillCount);
-                subTask.RequiredSkills = requiredSkills.ToArray();
+                subTask.RequiredMasteryItems = requiredSkills.ToArray();
 
                 yield return subTask;
             }

@@ -11,7 +11,7 @@ namespace Assets.BL
         public abstract ProjectUnitType Type { get; }
         public float Cost { get; set; }
         public float TimeLog { get; set; }
-        public SkillScheme[] RequiredSkills { get; set; }
+        public MasteryScheme[] RequiredMasteryItems { get; set; }
 
         public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
 
@@ -30,9 +30,9 @@ namespace Assets.BL
             TakeDamage?.Invoke(this, new UnitTakeDamageEventArgs { Damage = damage, IsCrit = isCritical });
         }
 
-        protected float GetSuccessCommitRoll(IEnumerable<Skill> personSkills)
+        protected float GetSuccessCommitRoll(IEnumerable<Mastery> personSkills)
         {
-            var usedSkills = personSkills.Where(x => RequiredSkills.Contains(x.Scheme)).ToArray();
+            var usedSkills = personSkills.Where(x => RequiredMasteryItems.Contains(x.Scheme)).ToArray();
             if (usedSkills.Any())
             {
                 return usedSkills.Average(x => x.Level);
@@ -43,7 +43,7 @@ namespace Assets.BL
             }
         }
 
-        protected bool RollCommitSuccess(IEnumerable<Skill> skills)
+        protected bool RollCommitSuccess(IEnumerable<Mastery> skills)
         {
             var effectiveCommitRoll = UnityEngine.Random.Range(1, Person.MAX_SKILL_LEVEL);
             var successCommitRoll = GetSuccessCommitRoll(skills);

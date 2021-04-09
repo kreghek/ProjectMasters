@@ -30,8 +30,8 @@ namespace Assets.BL
                         Cost = 2,
                         LineIndex = 0,
                         QueueIndex = 0,
-                        RequiredSkills = new[]{
-                            SkillSchemeCatalog.SkillSchemes[0]
+                        RequiredMasteryItems = new[]{
+                            MasterySchemeCatalog.SkillSchemes[0]
                         }
                     }
                 }
@@ -44,17 +44,17 @@ namespace Assets.BL
                         Cost = 6,
                         LineIndex = 1,
                         QueueIndex = 0,
-                        RequiredSkills = new[]{
-                            SkillSchemeCatalog.SkillSchemes[0],
-                            SkillSchemeCatalog.SkillSchemes[1]
+                        RequiredMasteryItems = new[]{
+                            MasterySchemeCatalog.SkillSchemes[0],
+                            MasterySchemeCatalog.SkillSchemes[1]
                         }
                     },
                     new FeatureUnit{
                         Cost = 1,
                         LineIndex = 1,
                         QueueIndex = 1,
-                        RequiredSkills = new[]{
-                            SkillSchemeCatalog.SkillSchemes[1]
+                        RequiredMasteryItems = new[]{
+                            MasterySchemeCatalog.SkillSchemes[1]
                         }
                     }
                 }
@@ -67,8 +67,8 @@ namespace Assets.BL
                         Cost = 0.8f,
                         LineIndex = 2,
                         QueueIndex = 0,
-                        RequiredSkills = new[]{
-                            SkillSchemeCatalog.SkillSchemes[0]
+                        RequiredMasteryItems = new[]{
+                            MasterySchemeCatalog.SkillSchemes[0]
                         }
                     }
                 }

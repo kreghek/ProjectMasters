@@ -13,15 +13,15 @@ namespace Assets.BL
             var lines = ProjectUnitFormation.Instance.Lines;
             var rollNewFeatureLineIndex = Random.Range(0, lines.Count);
 
-            var randomizedSkills = SkillSchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
-            var requiredSkillCount = Random.Range(1, SkillSchemeCatalog.SkillSchemes.Length);
+            var randomizedSkills = MasterySchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
+            var requiredSkillCount = Random.Range(1, MasterySchemeCatalog.SkillSchemes.Length);
             var requiredSkills = randomizedSkills.Take(requiredSkillCount);
 
             var featureUnit = new FeatureUnit
             {
                 Cost = Random.Range(1, 5),
                 LineIndex = rollNewFeatureLineIndex,
-                RequiredSkills = requiredSkills.ToArray()
+                RequiredMasteryItems = requiredSkills.ToArray()
             };
 
             ProjectUnitFormation.Instance.AddUnitIntoLine(rollNewFeatureLineIndex, lines.Count, featureUnit);

@@ -11,6 +11,10 @@ public class PersonCardModalHandler : MonoBehaviour
     public Person Person;
     public PersonAvatarHandler PersonAvatarHandler;
     public Text StatsText;
+    public SkillListItem SkillListItemPrefab;
+    public Transform SkillsParent;
+    public Text DescriptionText;
+    public SkillListItemLinkHandler KnowedgeBaseLinkHandler;
 
     public void ChangeLine(int lineIndex)
     {
@@ -41,6 +45,19 @@ public class PersonCardModalHandler : MonoBehaviour
         sb.AppendLine($"Error Made: {Person.ErrorMadeCount}");
 
         StatsText.text = sb.ToString();
+
+        foreach (Transform childItem in SkillsParent)
+        {
+            Destroy(childItem.gameObject);
+        }
+
+        foreach (var skill in Person.Skills)
+        {
+            var skillItem = Instantiate(SkillListItemPrefab, SkillsParent);
+            skillItem.Skill = skill;
+            skillItem.DescriptionText = DescriptionText;
+            skillItem.KnowedgeBaseLinkHandler = KnowedgeBaseLinkHandler;
+        }
 
         gameObject.SetActive(true);
     }
