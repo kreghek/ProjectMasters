@@ -18,6 +18,7 @@ namespace Assets.BL
             new SkillScheme{
                 Sid = Sids.CSharpFoundations + "-1",
                 DisplayTitle = "C# Foundations 1",
+                KnowedgeBaseUrl = Sids.CSharpFoundations + "-1",
 
                 MasteryIncrenemt = 1f,
                 TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),

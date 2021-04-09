@@ -8,6 +8,6 @@ public class SkillListItemLinkHandler : MonoBehaviour
 
     public void OnClick()
     {
-        Application.OpenURL(Url);
+        Application.OpenURL($"https://projectmastersstrategygame.github.io/Skills/{Url}");
     }
 }
