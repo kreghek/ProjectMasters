@@ -10,6 +10,8 @@ namespace Assets.BL
         private const float _minDecomposeCost = 1;
         private const float _maxDecomposeCost = 2;
         private const int _maxSubTask = 5;
+        private const int MIN_SUBTASK_COST = 1;
+        private const int MAX_SUBTASK_COST = 2;
 
         public FeatureUnit()
         {
@@ -83,7 +85,7 @@ namespace Assets.BL
             {
                 var subTask = new SubTaskUnit
                 {
-                    Cost = Random.Range(2, 5)
+                    Cost = Random.Range(MIN_SUBTASK_COST, MAX_SUBTASK_COST + 1)
                 };
 
                 var randomizedSkills = MasterySchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
