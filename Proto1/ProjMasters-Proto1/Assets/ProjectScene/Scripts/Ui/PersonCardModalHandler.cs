@@ -13,6 +13,7 @@ public class PersonCardModalHandler : MonoBehaviour
     public Text StatsText;
     public SkillListItem SkillListItemPrefab;
     public Transform SkillsParent;
+    public Text DescriptionText;
 
     public void ChangeLine(int lineIndex)
     {
@@ -59,6 +60,7 @@ public class PersonCardModalHandler : MonoBehaviour
         {
             var skillItem = Instantiate(SkillListItemPrefab, SkillsParent);
             skillItem.Skill = skill;
+            skillItem.DescriptionText = DescriptionText;
         }
 
         gameObject.SetActive(true);

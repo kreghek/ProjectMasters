@@ -14,7 +14,7 @@ public class SkillListItem : MonoBehaviour
 
     public Text TitleText;
 
-    public Text DescriptionText;
+    public Text DescriptionText { get; set; }
     public Button KnowedgeBaseLinkButton;
 
     public Image StateImage;
@@ -24,6 +24,10 @@ public class SkillListItem : MonoBehaviour
     {
         TitleText.text = Skill.Scheme.DisplayTitle;
 
+        if (Skill.IsLearnt)
+        {
+            StateImage.color = Color.green;
+        }
     }
 
     public void Select()
