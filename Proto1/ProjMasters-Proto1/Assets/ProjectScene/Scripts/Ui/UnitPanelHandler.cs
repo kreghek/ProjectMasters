@@ -16,6 +16,12 @@ public class UnitPanelHandler : MonoBehaviour
         {
             var requiredSkills = Player.SelectedUnit.RequiredMasteryItems;
             var skillsDescription = string.Join("\n", requiredSkills.Select(x => $"{x.Sid}"));
+
+            if (Player.SelectedUnit is FeatureUnit)
+            {
+                skillsDescription = string.Empty;
+            }
+
             UnitDescriptionText.text = $"{skillsDescription}\n{Player.SelectedUnit.TimeLog:0.##}/{Player.SelectedUnit.Cost}";
         }
         else

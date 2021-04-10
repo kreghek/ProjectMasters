@@ -30,7 +30,7 @@ namespace Assets.BL
         public override void ProcessCommit(float commitPower, bool isCritical,Person person)
         {
             var formation = ProjectUnitFormation.Instance;
-            var successfullCommit = RollCommitSuccess(person.MasteryLevels);
+            var successfullCommit = Random.Range(1, 16) <= 8;
             if (successfullCommit)
             {
                 TimeLog += commitPower;

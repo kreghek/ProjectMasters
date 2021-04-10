@@ -42,19 +42,11 @@ namespace Assets.BL
             {
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
-                        Cost = 6,
+                        Cost = 1,
                         LineIndex = 1,
                         QueueIndex = 0,
                         RequiredMasteryItems = new[]{
                             MasterySchemeCatalog.SkillSchemes[0],
-                            MasterySchemeCatalog.SkillSchemes[1]
-                        }
-                    },
-                    new FeatureUnit{
-                        Cost = 1,
-                        LineIndex = 1,
-                        QueueIndex = 1,
-                        RequiredMasteryItems = new[]{
                             MasterySchemeCatalog.SkillSchemes[1]
                         }
                     }
