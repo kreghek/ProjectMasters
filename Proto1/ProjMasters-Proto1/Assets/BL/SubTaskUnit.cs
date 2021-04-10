@@ -9,6 +9,8 @@ namespace Assets.BL
     {
         private const int MIN_ERROR_COST = 1;
         private const int MAX_ERROR_COST = 2;
+        private const float PROGRESS_TO_SPAWN_ERROR = 0.5f;
+        private int _errorRoundeIndex = 0;
 
         public override ProjectUnitType Type => ProjectUnitType.SubTask;
 
@@ -21,7 +23,10 @@ namespace Assets.BL
                 DoTakeDamage(commitPower, isCritical);
             }
 
-            if (Cost * 0.5f < TimeLog && UnityEngine.Random.Range(1, 100) < person.ErrorChance)
+            // The sub-task starts to spawn errors only after some progress is done.
+            var isHpRemainsToSpawnErrors = Cost * PROGRESS_TO_SPAWN_ERROR < TimeLog;
+
+            if (isHpRemainsToSpawnErrors && UnityEngine.Random.Range(1, 100) < person.ErrorChance && _errorRoundeIndex < 1)
             {
                 var formation = ProjectUnitFormation.Instance;
 
@@ -41,6 +46,8 @@ namespace Assets.BL
                 }
 
                 person.ErrorMadeCount += errorCount;
+
+                _errorRoundeIndex++;
             }
 
             if (TimeLog >= Cost)

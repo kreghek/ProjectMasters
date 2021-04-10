@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Assets.BL
 {
@@ -102,14 +103,23 @@ namespace Assets.BL
         {
             Lines[lineIndex].Units.Remove(unit);
 
-            // reindex
-            for (int i = 0; i < Lines[lineIndex].Units.Count; i++)
+            if (!Lines[lineIndex].Units.Any())
             {
-                ProjectUnitBase unit1 = Lines[lineIndex].Units[i];
-                unit1.QueueIndex = i;
+                Lines.RemoveAt(lineIndex);
             }
 
-            SolvedUnits.Add(new SolvedUnitInfo { Cost = unit.Cost, TimeLog = unit.TimeLog });
+            // reindex
+            for (var lineIndex1 = 0; lineIndex1 < Lines.Count; lineIndex1++)
+            {
+                for (var i = 0; i < Lines[lineIndex1].Units.Count; i++)
+                {
+                    ProjectUnitBase unit1 = Lines[lineIndex1].Units[i];
+                    unit1.QueueIndex = i;
+                    unit1.LineIndex = lineIndex1;
+                }
+
+                SolvedUnits.Add(new SolvedUnitInfo { Cost = unit.Cost, TimeLog = unit.TimeLog });
+            }
 
             Removed?.Invoke(this, new UnitEventArgs { ProjectUnit = unit });
         }
