@@ -16,7 +16,7 @@ namespace Assets.BL
         private const float RECOVERY_TIME_BASE = 8;
         private const int ENERGY_DOWN_SPEED_BASE = 1;
         private const int RECOVERY_SPEED_BASE = 1;
-        private const int DAYLY_PAYMENT_BASE = 1;
+        private const int DAYLY_PAYMENT_BASE = 60;
         private const float COMMIT_POWER_BASE = 0.25f;
 
         private static float CRIT_COMMIT_CHANCE_BASE = 2.5f;
