@@ -24,5 +24,6 @@
         public static bool WaitKeyDayReport { get; set; }
 
         public static ProjectUnitBase SelectedUnit;
+        public static MeetingDialogNode MeetingNode { get; set; }
     }
 }
