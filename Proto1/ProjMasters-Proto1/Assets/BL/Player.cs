@@ -1,4 +1,6 @@
-﻿namespace Assets.BL
+﻿using System;
+
+namespace Assets.BL
 {
     public static class Player
     {
@@ -25,5 +27,6 @@
 
         public static ProjectUnitBase SelectedUnit;
         public static MeetingDialogNode MeetingNode { get; set; }
+        public static int ProjectLevel { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.BL;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TeamFactory : MonoBehaviour
 {
@@ -22,13 +23,13 @@ public class TeamFactory : MonoBehaviour
                 skill.IsLearnt = true;
             }
 
-            foreach (var person in persons)
-            {
-                var personViewModel = Instantiate(PersonViewModelPrefab);
-                personViewModel.Person = person;
-            }
-
             Team.Persons = persons.ToArray();
+        }
+
+        foreach (var person in Team.Persons)
+        {
+            var personViewModel = Instantiate(PersonViewModelPrefab);
+            personViewModel.Person = person;
         }
 
         PersonsPanelHandler.Init();
@@ -68,6 +69,20 @@ public class TeamFactory : MonoBehaviour
         if (Player.FailureCount > 3)
         {
             // Game over
+        }
+
+        if (!ProjectUnitFormation.Instance.Lines.SelectMany(x => x.Units).Any())
+        {
+            if (Player.MeetingNode is null)
+            {
+                Player.MeetingNode = MeetingDialogCatalog.DialogNodes[0];
+            }
+            else
+            {
+                Player.MeetingNode = MeetingDialogCatalog.DialogNodes[Player.ProjectLevel];
+            }
+
+            SceneManager.LoadScene("meeting");
         }
     }
 

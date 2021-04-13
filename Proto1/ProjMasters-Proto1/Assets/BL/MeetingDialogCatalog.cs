@@ -9,10 +9,10 @@ namespace Assets.BL
                 Text = "[The project has been completed. The boss summoned you to the carpet.] You've done well. We need people like that. Now we have a \"burning\" project that should have been done yesterday. Take a promising newbie to help you. This is the beloved nephew of a very respected person in our corporation.",
                 SpeakerName = "Angela Mercedes",
                 Answers = new MeetingAnswer[] { 
-                    new MeetingAnswer
+                    new AddNewPersonAnswer
                     { 
                         Text = "Ok",
-                        AddNewPerson = new Person
+                        NewPerson = new Person
                         {
                             Name = "Peter Gipsi",
                             Traits = Array.Empty<TraitType>(),
@@ -23,7 +23,8 @@ namespace Assets.BL
                         NextDialogNode = new MeetingDialogNode
                         { 
                             Text = "Good. This problem now is not my problem.",
-                            IsEndNode = true
+                            IsEndNode = true,
+                            ProjectLevel = 1
                         }
                     }
                 }

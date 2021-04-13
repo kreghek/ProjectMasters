@@ -6,9 +6,11 @@ namespace Assets.BL
 {
     public class ProjectUnitFormation
     {
+        public int ProjectMoneyEarning = 1000;
+        public int ProjectAuthrityEarning = 100;
         public List<SolvedUnitInfo> SolvedUnits { get; } = new List<SolvedUnitInfo>();
 
-        public List<ProjectLine> Lines { get; }
+        public List<ProjectLine> Lines { get; set; }
 
         public event EventHandler<UnitEventArgs> Added;
         public event EventHandler<UnitEventArgs> Removed;
@@ -17,12 +19,26 @@ namespace Assets.BL
 
         public ProjectUnitFormation()
         {
-            Lines = new List<ProjectLine>();
-
-            FillLines();
+            Recreate();
         }
 
-        private void FillLines()
+        public void Recreate()
+        {
+            Lines = new List<ProjectLine>();
+
+            switch (Player.ProjectLevel)
+            {
+                case 0:
+                    FillLines1();
+                    break;
+
+                case 1:
+                    FillLines2();
+                    break;
+            }
+        }
+
+        private void FillLines1()
         {
             Lines.Add(new ProjectLine
             {
@@ -53,6 +69,57 @@ namespace Assets.BL
                         Cost = 0.8f,
                         LineIndex = 2,
                         QueueIndex = 0
+                    }
+                }
+            });
+        }
+
+        private void FillLines2()
+        {
+            Lines.Add(new ProjectLine
+            {
+                Units = new List<ProjectUnitBase> {
+                    new FeatureUnit{
+                        Cost = 2,
+                        LineIndex = 0,
+                        QueueIndex = 0
+                    },
+                       new FeatureUnit{
+                        Cost = 2,
+                        LineIndex = 0,
+                        QueueIndex = 1
+                    }
+                }
+            });
+
+            Lines.Add(new ProjectLine
+            {
+                Units = new List<ProjectUnitBase> {
+                    new FeatureUnit{
+                        Cost = 1,
+                        LineIndex = 1,
+                        QueueIndex = 0
+                    },
+                    new FeatureUnit{
+                        Cost = 2,
+                        LineIndex = 1,
+                        QueueIndex = 1
+                    }
+                }
+            });
+
+            Lines.Add(new ProjectLine
+            {
+                Units = new List<ProjectUnitBase> {
+                    new FeatureUnit{
+                        Cost = 0.8f,
+                        LineIndex = 2,
+                        QueueIndex = 0
+                    },
+                    new FeatureUnit{
+                        Cost = 2f,
+                        LineIndex = 2,
+                        QueueIndex = 1
                     }
                 }
             });
