@@ -83,9 +83,9 @@ namespace Assets.BL
                     skillToUp.Jobs = Array.Empty<Job>();
                 }
 
-                var affectedJobsFromScheme = skillToUp.Scheme.RequiredJobs.Where(x => RequiredMasteryItems.Contains(x.MasteryScheme) && x.CompleteSubTasksAmount > 0);
+                var affectedJobsFromSchemeList = skillToUp.Scheme.RequiredJobs.Where(x => RequiredMasteryItems.Contains(x.MasterySid) && x.CompleteSubTasksAmount > 0);
 
-                foreach (var affectedJobScheme in affectedJobsFromScheme)
+                foreach (var affectedJobScheme in affectedJobsFromSchemeList)
                 {
                     var affectedJobInSkillToUp = skillToUp.Jobs.SingleOrDefault(x => x.Scheme == affectedJobScheme);
                     if (affectedJobInSkillToUp is null)

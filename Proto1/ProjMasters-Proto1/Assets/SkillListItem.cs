@@ -75,6 +75,12 @@ public class SkillListItem : MonoBehaviour
             }
         }
 
+        sb.AppendLine("Mastery Tags:");
+        foreach (var masterySid in Skill.Scheme.MasteryTags)
+        {
+            sb.AppendLine($"- {masterySid}");
+        }
+
         DescriptionText.text = sb.ToString();
     }
 }
