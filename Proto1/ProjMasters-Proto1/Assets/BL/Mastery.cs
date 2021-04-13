@@ -2,7 +2,7 @@
 {
     public class Mastery
     {
-        public MasteryScheme Scheme { get; set; }
+        public string Sid { get; set; }
         public float Level { get; set; }
     }
 }

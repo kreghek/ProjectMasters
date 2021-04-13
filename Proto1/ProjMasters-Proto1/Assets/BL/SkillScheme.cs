@@ -10,6 +10,6 @@
         public string[] RequiredParentsSids { get; set; }
         public JobScheme[] RequiredJobs { get; set; }
         public float MasteryIncrenemt { get; set; }
-        public MasteryScheme TargetMasteryScheme { get; set; }
+        public string[] MasteryTags { get; set; }
     }
 }

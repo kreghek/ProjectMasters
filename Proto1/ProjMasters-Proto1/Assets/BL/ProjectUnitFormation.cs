@@ -30,10 +30,7 @@ namespace Assets.BL
                     new FeatureUnit{
                         Cost = 2,
                         LineIndex = 0,
-                        QueueIndex = 0,
-                        RequiredMasteryItems = new[]{
-                            MasterySchemeCatalog.SkillSchemes[0]
-                        }
+                        QueueIndex = 0
                     }
                 }
             });
@@ -44,11 +41,7 @@ namespace Assets.BL
                     new FeatureUnit{
                         Cost = 1,
                         LineIndex = 1,
-                        QueueIndex = 0,
-                        RequiredMasteryItems = new[]{
-                            MasterySchemeCatalog.SkillSchemes[0],
-                            MasterySchemeCatalog.SkillSchemes[1]
-                        }
+                        QueueIndex = 0
                     }
                 }
             });
@@ -59,10 +52,7 @@ namespace Assets.BL
                     new FeatureUnit{
                         Cost = 0.8f,
                         LineIndex = 2,
-                        QueueIndex = 0,
-                        RequiredMasteryItems = new[]{
-                            MasterySchemeCatalog.SkillSchemes[0]
-                        }
+                        QueueIndex = 0
                     }
                 }
             });

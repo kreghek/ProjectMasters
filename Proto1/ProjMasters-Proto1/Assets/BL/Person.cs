@@ -16,7 +16,7 @@ namespace Assets.BL
         private const float RECOVERY_TIME_BASE = 8;
         private const int ENERGY_DOWN_SPEED_BASE = 1;
         private const int RECOVERY_SPEED_BASE = 1;
-        private const int DAYLY_PAYMENT_BASE = 1;
+        private const int DAYLY_PAYMENT_BASE = 60;
         private const float COMMIT_POWER_BASE = 0.25f;
 
         private static float CRIT_COMMIT_CHANCE_BASE = 2.5f;
@@ -106,19 +106,22 @@ namespace Assets.BL
 
             foreach (var skill in Skills)
             {
-                var mastery = MasteryLevels.SingleOrDefault(x => x.Scheme == skill.Scheme.TargetMasteryScheme);
-                if (mastery is null)
+                foreach (var skillMasteryTag in skill.Scheme.MasteryTags)
                 {
-                    mastery = new Mastery
+                    var mastery = MasteryLevels.SingleOrDefault(x => x.Sid == skillMasteryTag);
+                    if (mastery is null)
                     {
-                        Scheme = skill.Scheme.TargetMasteryScheme,
-                        Level = 0
-                    };
+                        mastery = new Mastery
+                        {
+                            Sid = skillMasteryTag,
+                            Level = 0
+                        };
 
-                    MasteryLevels.Add(mastery);
+                        MasteryLevels.Add(mastery);
+                    }
+
+                    mastery.Level += skill.Scheme.MasteryIncrenemt;
                 }
-
-                mastery.Level += skill.Scheme.MasteryIncrenemt;
             }
         }
 
