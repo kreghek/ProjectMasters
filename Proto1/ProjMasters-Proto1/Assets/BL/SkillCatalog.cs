@@ -14,6 +14,12 @@ namespace Assets.BL
             public static string AngularFoundations = "angular-foundations";
         }
 
+        public static class MasterySids
+        {
+            public static string BackendMastery = "backend";
+            public static string FrontendMastery = "frontend";
+        }
+
         public static SkillScheme[] AllSchemes { get; } = new SkillScheme[] {
             new SkillScheme{
                 Sid = Sids.CSharpFoundations + "-1",
@@ -21,10 +27,11 @@ namespace Assets.BL
                 KnowedgeBaseUrl = Sids.CSharpFoundations + "-1",
 
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
+                
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid = MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 10
                     }
                 }
@@ -36,10 +43,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.CSharpFoundations + "-1" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 20
                     }
                 }
@@ -51,10 +58,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.CSharpFoundations + "-2" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 40
                     }
                 }
@@ -66,10 +73,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.CSharpFoundations + "-1" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 10
                     }
                 }
@@ -81,10 +88,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.DotnetAsyncProgramming + "-1" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 20
                     }
                 }
@@ -96,10 +103,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.DotnetAsyncProgramming + "-2" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 40
                     }
                 }
@@ -111,10 +118,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.CSharpFoundations + "-1" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 10
                     }
                 }
@@ -126,10 +133,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.AspNetCoreFoundations + "-1" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 20
                     }
                 }
@@ -141,10 +148,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.AspNetCoreFoundations + "-2" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 40
                     }
                 }
@@ -156,10 +163,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.AspNetCoreFoundations + "-3" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                MasteryTags = new[]{ MasterySids.BackendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.BackendMastery),
+                        MasterySid =  MasterySids.BackendMastery,
                         CompleteSubTasksAmount = 100
                     }
                 }
@@ -173,10 +180,10 @@ namespace Assets.BL
                 DisplayTitle = "JavaScript Foundations 1",
 
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 10
                     }
                 }
@@ -188,10 +195,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.JavaScriptFoundations + "-1" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 20
                     }
                 }
@@ -203,10 +210,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.JavaScriptFoundations + "-2" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 40
                     }
                 }
@@ -218,10 +225,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.JavaScriptFoundations + "-1" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 10
                     }
                 }
@@ -233,10 +240,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.JavaScriptReactiveProgramming + "-1" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 20
                     }
                 }
@@ -248,10 +255,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.JavaScriptReactiveProgramming + "-2" },
                 MasteryIncrenemt = 0.5f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 40
                     }
                 }
@@ -263,10 +270,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.JavaScriptFoundations + "-1" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 10
                     }
                 }
@@ -278,10 +285,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.AngularFoundations + "-1" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 20
                     }
                 }
@@ -293,10 +300,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.AngularFoundations + "-2" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 40
                     }
                 }
@@ -308,10 +315,10 @@ namespace Assets.BL
 
                 RequiredParentsSids = new[]{ Sids.AngularFoundations + "-3" },
                 MasteryIncrenemt = 1f,
-                TargetMasteryScheme = MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                MasteryTags = new[]{ MasterySids.FrontendMastery },
                 RequiredJobs = new []{
                     new JobScheme{
-                        MasteryScheme =  MasterySchemeCatalog.SkillSchemes.Single(x=>x.Sid == MasterySchemeCatalog.Sids.FrontendMastery),
+                        MasterySid =  MasterySids.FrontendMastery,
                         CompleteSubTasksAmount = 100
                     }
                 }

@@ -88,10 +88,10 @@ namespace Assets.BL
                     Cost = Random.Range(MIN_SUBTASK_COST, MAX_SUBTASK_COST + 1)
                 };
 
-                var randomizedSkills = MasterySchemeCatalog.SkillSchemes.OrderBy(x1 => Random.Range(1, 100));
-                var requiredSkillCount = Random.Range(1, MasterySchemeCatalog.SkillSchemes.Length);
-                var requiredSkills = randomizedSkills.Take(requiredSkillCount);
-                subTask.RequiredMasteryItems = requiredSkills.ToArray();
+                var randomizedMasteries = new[] { SkillCatalog.MasterySids.BackendMastery, SkillCatalog.MasterySids.FrontendMastery }.OrderBy(x1 => Random.Range(1, 100));
+                var requiredMasteryCount = Random.Range(1, randomizedMasteries.Count() + 1);
+                var requiredMasteries = randomizedMasteries.Take(requiredMasteryCount);
+                subTask.RequiredMasteryItems = requiredMasteries.ToArray();
 
                 yield return subTask;
             }
