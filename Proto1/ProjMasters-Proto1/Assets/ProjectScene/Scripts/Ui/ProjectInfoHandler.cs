@@ -23,4 +23,9 @@ public class ProjectInfoHandler : MonoBehaviour
 
         ProgressText.text = $"Day: {Player.DayNumber}({timeRemainsPercentage:0}%) Project: {completenessPercentage:0.##}%";
     }
+
+    public void FastWinButtonHandler()
+    {
+        ProjectUnitFormation.Instance.Lines.Clear();
+    }
 }
