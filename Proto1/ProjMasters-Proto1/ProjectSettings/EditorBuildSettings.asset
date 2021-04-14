@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/project.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/meeting.unity
+    guid: 9660ce9afb882e545b532e702ba3570b
   m_configObjects: {}
