@@ -15,18 +15,35 @@
 </head>
 <body>
     <div style="width:100%; height: 786px; position: relative" id="main">
-        
-            <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px;">START</button>
+
+        <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px;">START</button>
+        <dialog id="decisionDialog" style="background: rgba(255, 255, 255, 0.7); width: 300px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); border-radius: 5px;">
+            <p><button id="leftDecision" onclick="leftDecisionPicked()">Выбрать решение</button></p>
+            <p><button id="rightDecision" onclick="rightDecisionPicked()">Выбрать решение</button></p>
+        </dialog>
     </div>
 
-    <script type="text/javascript">
-        function startGame() {
-            startSignalRConnection();
-            app.stage.removeChild(titleBackground);
-            var startButton = document.getElementById("startButton");
-            startButton.remove();
-        }
-    </script>
+<script type="text/javascript">
+
+    function leftDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(0);
+    }
+
+    function rightDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(1);
+    }
+    function startGame() {
+        startSignalRConnection();
+        app.stage.removeChild(titleBackground);
+        var startButton = document.getElementById("startButton");
+        startButton.remove();
+        
+    }
+</script>
     <script type="text/javascript">
         let type = "WebGL"
         if (!PIXI.utils.isWebGLSupported()) {
@@ -35,12 +52,12 @@
 
         //Create a Pixi Application
         let app = new PIXI.Application({
-            width: 1024,
-            height: 768,
-            antialias: true,
-            transparent: false,
-            resolution: 1
-        }
+                width: 1024,
+                height: 768,
+                antialias: true,
+                transparent: false,
+                resolution: 1
+            }
         );
 
         //Add the canvas that Pixi automatically created for you to the HTML document
@@ -63,7 +80,7 @@
             .add("images/mouth3.png")
             .add("images/title.jpg")
             .add("images/feature.png")
-        .load(setup);
+            .load(setup);
 
 
         var titleBackground;
@@ -106,6 +123,10 @@
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/game")
             .build();
+
+        function sendDecision(number) {
+            connection.invoke("SendDecision", number);
+        }
 
         async function startSignalRConnection() {
             try {
@@ -206,6 +227,15 @@
                 let personWidth = 200;
                 unitContainer.x = 200 + personWidth + data[i].queueIndex * 100;
             }
+        });
+
+        connection.on("StartDecision", function (data) {
+            var dialog = document.getElementById("decisionDialog");
+            dialog.title = data.text;
+            for (let i = 0; i < data.choises.length; i++) {
+                dialog. += data.choises[i].text;
+            }
+            dialog.show();
         });
 
         connection.on("CreateUnitAsync", function (unitDto) {

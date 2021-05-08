@@ -32,6 +32,8 @@ namespace ProjectMasters.Games
         public static event EventHandler<PersonEventArgs> PersonIsRested;
         public static event EventHandler<PersonEventArgs> PersonIsTired;
         public static event EventHandler<LineEventArgs> LineIsRemoved;
+        public static event EventHandler<DecisionEventArgs> DecisionIsStarted;
+
 
         public static void RemoveEffect(Effect effect)
         {
@@ -65,9 +67,15 @@ namespace ProjectMasters.Games
         {
             UnitIsDead?.Invoke(null, new UnitEventArgs(unit));
         }
+
         internal static void RemoveLine(ProjectLine line)
         {
             LineIsRemoved?.Invoke(null, new LineEventArgs(line));
+        }
+
+        public static void StartDecision(Decision decision)
+        {
+            DecisionIsStarted?.Invoke(null,new DecisionEventArgs(decision));
         }
     }
 }

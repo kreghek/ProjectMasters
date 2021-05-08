@@ -191,6 +191,7 @@ public class TeamFactory
         }
 
         Player.WaitForDecision = Player.ActiveDecisions[0];
+        GameState.StartDecision(Player.WaitForDecision);
     }
 
     private void UpdateDayly()
@@ -200,7 +201,9 @@ public class TeamFactory
             person.DaylyUpdate();
         }
 
-        //HandleDecision();
+        HandleDecision();
+
+        Player.WaitKeyDayReport = true;
     }
 
     private void UpdateProjectLineSolving(float deltaTime)
@@ -243,8 +246,8 @@ public class TeamFactory
     {
         Player.DayCounter -= deltaTime;
 
-        if (Player.DayCounter > 0)
-            return;
+        //if (Player.DayCounter > 0)
+        //    return;
 
         Player.DayCounter = Player.DAY_COUNTER_BASE;
         Player.DayNumber++;

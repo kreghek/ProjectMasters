@@ -8,13 +8,19 @@
     using ProjectMasters.Games;
     using ProjectMasters.Web.DTOs;
 
-    public class GameHub : Hub<IGame>
+    public class 
+        GameHub : Hub<IGame>
     {
         public void InitServerState()
         {
             GameState.Started = true;
 
             
+        }
+
+        public void SendDecision(int number)
+        {
+            var count = number;
         }
 
         public void ChangeUnitPositionsServer(int lineId)
