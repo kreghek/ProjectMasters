@@ -16,7 +16,10 @@
             {
                 Id = person.Id,
                 // Получаем линию, которая содержит персонажа.
-                LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
+                LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+                MouthIndex = person.MouthIndex,
+                HairIndex = person.HairIndex,
+                EyesIndex = person.EyesIndex
             });
 
             var lineDtos = GameState._project.Lines.Select(x=> new LineDto {

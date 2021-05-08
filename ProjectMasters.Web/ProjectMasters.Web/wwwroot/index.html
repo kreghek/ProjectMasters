@@ -54,12 +54,10 @@
         //This `setup` function will run when the image has loaded
         function setup() {
 
-            let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
+            let background = new PIXI.Sprite(PIXI.loader.resources["images/Background.png"].texture);
 
             app.stage.addChild(background);
         }
-
-
     </script>
 
     <script>
@@ -90,7 +88,7 @@
             function(personDtos, lineDtos, unitDtos) {
                 console.log("personDtos = ", personDtos);
                 for (let i = 0; i < personDtos.length; i++) {
-                    let container = getPersonContainer();
+                    let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex);
                     container.id = personDtos[i].id;
                     container.x = 100;
                     container.y = (personDtos[i].lineId - 1) * 200 + 50;
