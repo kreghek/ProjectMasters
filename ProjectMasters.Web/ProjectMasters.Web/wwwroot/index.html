@@ -159,6 +159,7 @@
             .add("images/feature.png")
             .add("images/backendTask.png")
             .add("images/frontendTask.png")
+            .add("images/fullstack.png")
             .load(setup);
 
 
@@ -182,6 +183,7 @@
 
             textures.backendTask = PIXI.loader.resources["images/backendTask.png"].texture;
             textures.frontendTask = PIXI.loader.resources["images/frontendTask.png"].texture;
+            textures.fullStackTask = PIXI.loader.resources["images/fullstack.png"].texture;
 
             textures.eyes1 = PIXI.loader.resources["images/eyes.png"].texture;
             textures.eyes2 = PIXI.loader.resources["images/eyes2.png"].texture;
@@ -418,8 +420,7 @@
             function (personDto) {
                 let personContainer = listPerson.get(personDto.id);
 
-                personContainer.x = 0;
-                personContainer.y = 0;
+                movePersonOutOfWork(personContainer);
 
             });
 
@@ -433,8 +434,17 @@
 
         connection.on("RemoveLineAsync", 
             function (lineDto) {
-                
+                for (let i = 0; i < lineDto.persons.length; i++) {
+                    let personContainer = listPerson.get(lineDto.persons[i].id);
+
+                    movePersonOutOfWork(personContainer);
+                }
             });
+
+        function movePersonOutOfWork(personContainer) {
+            personContainer.x = 0;
+            personContainer.y = 0;
+        }
 
 
     </script>
