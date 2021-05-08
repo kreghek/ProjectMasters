@@ -418,8 +418,7 @@
             function (personDto) {
                 let personContainer = listPerson.get(personDto.id);
 
-                personContainer.x = 0;
-                personContainer.y = 0;
+                movePersonOutOfWork(personContainer);
 
             });
 
@@ -433,8 +432,17 @@
 
         connection.on("RemoveLineAsync", 
             function (lineDto) {
-                
+                for (let i = 0; i < lineDto.persons.length; i++) {
+                    let personContainer = listPerson.get(lineDto.persons[i].id);
+
+                    movePersonOutOfWork(personContainer);
+                }
             });
+
+        function movePersonOutOfWork(personContainer) {
+            personContainer.x = 0;
+            personContainer.y = 0;
+        }
 
 
     </script>
