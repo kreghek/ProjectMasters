@@ -11,5 +11,10 @@ namespace ProjectMasters.Games.Asserts
     public class Project
     {
         public List<ProjectLine> Lines;
+        public void Update()
+        {
+        }
+
     }
+
 }

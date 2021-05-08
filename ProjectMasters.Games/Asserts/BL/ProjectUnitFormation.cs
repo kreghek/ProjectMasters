@@ -17,12 +17,12 @@ namespace Assets.BL
 
         public static ProjectUnitFormation Instance = new ProjectUnitFormation();
 
-        public ProjectUnitFormation()
+        private ProjectUnitFormation()
         {
             Recreate();
         }
 
-        public void Recreate()
+        private void Recreate()
         {
             Lines = new List<ProjectLine>();
 
