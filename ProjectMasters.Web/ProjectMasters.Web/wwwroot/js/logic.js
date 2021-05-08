@@ -34,7 +34,7 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex) {
 }
 
 function getUnitContainer(type) {
-    let body = new PIXI.Sprite(PIXI.loader.resources["images/unit.png"].texture);
+    let body = new PIXI.Sprite(PIXI.loader.resources["images/bug.png"].texture);
     body.pivot = new PIXI.Point(0.5, 1);
 
     if (type == "Feature") {
@@ -47,7 +47,7 @@ function getUnitContainer(type) {
 
     let container = new PIXI.Container();
     container.addChild(body);
-    container.scale = new PIXI.Point(0.5, 0.5);
+    container.scale = new PIXI.Point(0.12, 0.12);
     container.pivot = new PIXI.Point(0.5, 1);
 
     return container;

@@ -39,7 +39,7 @@
             .add("images/Background.png")
             .add("images/empty_body.png")
             .add("images/shirt.png")
-            .add("images/unit.png")
+            .add("images/bug.png")
             .add("images/eyes.png")
             .add("images/eyes2.png")
             .add("images/eyes3.png")
@@ -115,7 +115,7 @@
                     container.id = unitDtos[i].id;
                     let personWidth = 200;
                     container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
-                    container.y = 100 + (unitDtos[i].lineId) * 200;
+                    container.y = 100 + (unitDtos[i].lineId) * 200 - 25;
                     app.stage.addChild(container);
 
                     units.set(unitDtos[i].id, container);
