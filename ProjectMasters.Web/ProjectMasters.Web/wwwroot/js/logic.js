@@ -33,17 +33,11 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
     return container;
 }
 
-function getUnitContainer(type) {
-    let body = new PIXI.Sprite(PIXI.loader.resources["images/bug.png"].texture);
+function getUnitContainer(type, textures) {
+
+    let body = getContainerByType(type, textures);
+
     body.pivot = new PIXI.Point(0.5, 1);
-
-    if (type == "Feature") {
-        body.tint = 16776960;
-    }
-
-    if (type == "Error") {
-        body.tint = 16711680;
-    }
 
     let container = new PIXI.Container();
     container.addChild(body);
@@ -51,5 +45,16 @@ function getUnitContainer(type) {
     container.pivot = new PIXI.Point(0.5, 1);
 
     return container;
+}
 
+function getContainerByType(type, textures) {
+    if (type == "Feature") {
+        return  new PIXI.Sprite(textures.feature.texture);
+    }
+
+    if (type == "Error") {
+        return new PIXI.Sprite(textures.bug.texture);
+    }
+
+    return new PIXI.Sprite(textures.bug.texture);
 }
