@@ -63,7 +63,7 @@ function getSpriteByType(type, textures, masteryItems) {
             return new PIXI.Sprite(textures.frontendTask);
         }
         if (masteryItems.includes("frontend") && masteryItems.includes("backend")) {
-            return new PIXI.Sprite(textures.bug2);//TODO подставить fullstack task
+            return new PIXI.Sprite(textures.frontendTask);//TODO подставить fullstack task
         }
     }
 
