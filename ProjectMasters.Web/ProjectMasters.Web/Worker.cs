@@ -60,7 +60,6 @@ namespace ProjectMasters.Games
         private void GameState_PersonAttacked(object sender, PersonAttackedEventArgs e)
         {
             _gameHub.Clients.All.AttackPersonAsync(new PersonDto(e.Person), new UnitDto(e.Unit));
-            _logger.LogWarning($"Person {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
         }
 
         private void GameState_UnitIsCreated(object sender, UnitIsCreatedEventArgs e)

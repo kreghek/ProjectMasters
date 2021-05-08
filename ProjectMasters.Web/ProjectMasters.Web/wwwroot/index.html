@@ -167,8 +167,20 @@
                 let personWidth = 200;
                 unitContainer.x = 200 + personWidth + data[i].queueIndex * 100;
             }
-        })
+        });
 
+        connection.on("CreateUnitAsync", function (unitDto) {
+            let container = getUnitContainer(unitDto.type);
+            container.id = unitDto.id;
+            let personWidth = 200;
+            container.x = 200 + personWidth + unitDto.queueIndex * 100;
+            container.y = 100 + (unitDto.lineId) * 200;
+            app.stage.addChild(container);
+
+            units.set(unitDto.id, container);
+
+            connection.invoke("ChangeUnitPositionsServer", data.lineId);
+        });
     </script>
 
 
