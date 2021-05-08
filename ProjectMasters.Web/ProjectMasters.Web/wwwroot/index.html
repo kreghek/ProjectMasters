@@ -210,7 +210,6 @@
                     listPerson.set(personDtos[i].id, container);
 
                     setPeopleInfo(personDtos[i].id, personDtos[i].name, personDtos[i].masteryLevels);
-
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
@@ -245,6 +244,7 @@
         });
 
         connection.on("AttackPersonAsync", function (data) {
+            setPeopleInfo(data.id, data.name, data.masteryLevels);
             let personContainer = listPerson.get(data.id);
             let attackMoveEngine = {
                 counter: 0.5,
