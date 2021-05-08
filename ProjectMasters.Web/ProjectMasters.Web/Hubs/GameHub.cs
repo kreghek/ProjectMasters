@@ -1,24 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.SignalR;
 
-using Microsoft.AspNetCore.SignalR;
+using ProjectMasters.Games;
 
 namespace ProjectMasters.Web.Hubs
 {
-    public class GameHub: Hub
+    public class GameHub : Hub<IGame>
     {
-        private readonly GameService _gameService;
-
-        public GameHub(GameService gameService)
-        {
-            _gameService = gameService;
-        }
-
-        public Task StartGameAsync(string user)
-        {
-            return Task.Run(() =>
-            {
-                _gameService.AddGame(user);
-            });
-        }
     }
 }
