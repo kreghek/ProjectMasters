@@ -12,12 +12,14 @@ namespace ProjectMasters.Web.Hubs
     public interface IGame
     {
         Task AssignPersonAsync(PersonDto person, LineDto line);
-
         Task SetupClientStateAsync(IEnumerable<PersonDto> personDto, IEnumerable<UnitDto> units);
         Task AttackPersonAsync(PersonDto person, UnitDto unit);
         Task KillUnitAsync(UnitDto unit);
         Task ChangeUnitPositionsAsync(IEnumerable<object> enumerable);
         Task CreateUnitAsync(UnitDto unit);
         Task AddEffectAsync(Effect effect);
+        Task RemoveEffectAsync(Effect effect);
+        Task TirePerson(PersonDto person);
+        Task RestPerson(PersonDto person);
     }
 }

@@ -13,6 +13,42 @@ namespace ProjectMasters.Games
         public static Team _team;
         public static TeamFactory _teamFactory;
 
+        public static void AddEffect(Effect effect)
+        {
+            EffectIsAdded?.Invoke(null, new EffectEventArgs(effect));
+        }
+
+        public static void CreateUnit(ProjectUnitBase unit)
+        {
+            UnitIsCreated?.Invoke(null, new UnitEventArgs(unit));
+        }
+
+        public static event EventHandler<EffectEventArgs> EffectIsAdded;
+        public static event EventHandler<EffectEventArgs> EffectIsRemoved;
+
+        public static event EventHandler<PersonAssignedEventArgs> PersonAssigned;
+        public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
+        public static event EventHandler<PersonEventArgs> PersonIsRested;
+        public static event EventHandler<PersonEventArgs> PersonIsTired;
+
+        public static void RemoveEffect(Effect effect)
+        {
+            EffectIsRemoved?.Invoke(null, new EffectEventArgs(effect));
+        }
+
+        public static void RestPerson(Person person)
+        {
+            PersonIsRested?.Invoke(null, new PersonEventArgs(person));
+        }
+
+        public static void TirePerson(Person person)
+        {
+            PersonIsTired?.Invoke(null, new PersonEventArgs(person));
+        }
+
+        public static event EventHandler<UnitEventArgs> UnitIsCreated;
+        public static event EventHandler<UnitEventArgs> UnitIsDead;
+
         internal static void AssignPerson(ProjectLine line, Person person)
         {
             PersonAssigned?.Invoke(null, new PersonAssignedEventArgs(line, person));
@@ -25,24 +61,7 @@ namespace ProjectMasters.Games
 
         internal static void KillUnit(ProjectUnitBase unit)
         {
-            UnitIsDead?.Invoke(null, new UnitIsDeadEventArgs(unit));
-        }
-
-        public static event EventHandler<PersonAssignedEventArgs> PersonAssigned;
-        public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
-        public static event EventHandler<UnitIsDeadEventArgs> UnitIsDead;
-        public static event EventHandler<UnitIsCreatedEventArgs> UnitIsCreated;
-        public static event EventHandler<EffectIsAddedEventArgs> EffectIsAdded;
-
-
-        public static void CreateUnit(ProjectUnitBase unit)
-        {
-            UnitIsCreated?.Invoke(null, new UnitIsCreatedEventArgs(unit));
-        }
-
-        public static void AddEffect(Effect effect)
-        {
-            EffectIsAdded?.Invoke(null, new EffectIsAddedEventArgs(effect));
+            UnitIsDead?.Invoke(null, new UnitEventArgs(unit));
         }
     }
 }
