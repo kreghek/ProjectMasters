@@ -139,7 +139,7 @@
                 for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex, textures);
                     container.id = personDtos[i].id;
-                    container.x = 100;
+                    container.x = 100 + (personDtos[i].lineId - 1) * 15;
                     container.y = (personDtos[i].lineId - 1) * 200 + 50;
 
                     container.sourceX = container.x;
@@ -219,7 +219,7 @@
         });
 
         connection.on("CreateUnitAsync", function (unitDto) {
-            let container = getUnitContainer(unitDto.type);
+            let container = getUnitContainer(unitDto.type, textures);
             container.id = unitDto.id;
             let personWidth = 200;
             container.x = 200 + personWidth + unitDto.queueIndex * 100;

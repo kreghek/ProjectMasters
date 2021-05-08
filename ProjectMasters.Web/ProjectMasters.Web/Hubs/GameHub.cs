@@ -45,7 +45,18 @@
 
         public void ChangeUnitPositionsServer(int lineId)
         {
-            var data = GameState._project.Lines.SingleOrDefault(x => x.Id == lineId)?.Units?.Select(x => new { UnitId = x.Id, QueueIndex = x.QueueIndex });
+            // Это делаем, потому что фактически с клиента нам приходит индекс линии, а не Id. Индекс на 1 меньше, т.к. начинается с 0.
+            // Внимание! Это может быть причиной бага.
+            var correctLineId = lineId + 1;
+            var lineToGetQueueIndecies = GameState._project.Lines.SingleOrDefault(x => x.Id == correctLineId);
+            if (lineToGetQueueIndecies is null)
+            {
+                // Не нашли линию проекта.
+                // Это значит, что убили последнего монстра и линия была удалена.
+                return;
+            }
+
+            var data = lineToGetQueueIndecies.Units.Select(x => new { UnitId = x.Id, QueueIndex = x.QueueIndex }).ToList();
             Clients.Caller.ChangeUnitPositionsAsync(data);
         }
     }
