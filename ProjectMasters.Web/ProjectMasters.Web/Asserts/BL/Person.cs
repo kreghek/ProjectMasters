@@ -63,7 +63,9 @@
         public int ErrorCompleteCount { get; set; }
         public int ErrorMadeCount { get; set; }
 
-        public int EyeIndex { get; set; }
+        public int EyesIndex { get; set; }
+        public int HairIndex { get; set; }
+        public int MouthIndex { get; set; }
         public int FaceDecorIndex { get; set; }
 
         public int FeatureCompleteCount { get; set; }

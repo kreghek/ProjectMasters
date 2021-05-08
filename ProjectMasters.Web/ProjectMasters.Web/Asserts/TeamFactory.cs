@@ -83,8 +83,9 @@ public class TeamFactory
                     },
                 },
 
-                EyeIndex = 0,
-                FaceDecorIndex = 1,
+                EyesIndex = 1,
+                HairIndex = 1,
+                MouthIndex = 1,
             },
 
             new Person
@@ -132,8 +133,10 @@ public class TeamFactory
                     },
                 },
 
-                EyeIndex = 1,
-                FaceDecorIndex = 2
+
+                EyesIndex = 2,
+                HairIndex = 2,
+                MouthIndex = 2,
             },
 
             new Person
@@ -169,8 +172,10 @@ public class TeamFactory
                             x.Sid == SkillCatalog.Sids.AspNetCoreFoundations + "-2")
                     },
                 },
-                EyeIndex = 2,
-                FaceDecorIndex = 0
+
+                EyesIndex = 3,
+                HairIndex = 3,
+                MouthIndex = 3,
             },
         };
     }
