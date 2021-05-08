@@ -13,7 +13,7 @@ namespace ProjectMasters.Games
         public static Team _team;
         public static TeamFactory _teamFactory;
 
-        public static bool Started { get; internal set; } = true;
+        public static bool Started { get; internal set; }
         public static void AddEffect(Effect effect)
         {
             EffectIsAdded?.Invoke(null, new EffectEventArgs(effect));

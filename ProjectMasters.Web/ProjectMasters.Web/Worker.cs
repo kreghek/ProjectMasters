@@ -1,6 +1,8 @@
 namespace ProjectMasters.Games
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -108,6 +110,28 @@ namespace ProjectMasters.Games
             _logger.LogError($"Line {e.Line.Id} is removed");
         }
 
+        private void Initialized()
+        {
+            var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
+            {
+                // Получаем линию, которая содержит персонажа.
+                LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+            }).ToArray();
+
+            var unitDots = new List<UnitDto>();
+            foreach (var line in GameState._project.Lines)
+            {
+                foreach (var unit in line.Units)
+                {
+                    var dto = new UnitDto(unit);
+                    unitDots.Add(dto);
+                }
+            }
+
+            _gameHub.Clients.All.SetupClientStateAsync(personDtos, unitDots);
+            _logger.LogError("Game is started");
+        }
+
         private void Initiate()
         {
             GameState._team = new Team();
@@ -126,7 +150,7 @@ namespace ProjectMasters.Games
             GameState.PersonIsTired += GameState_PersonIsTired;
             GameState.PersonIsRested += GameState_PersonIsRested;
             GameState.LineIsRemoved += GameState_LineIsRemoved;
-
+            Initialized();
         }
     }
 }
