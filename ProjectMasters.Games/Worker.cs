@@ -42,10 +42,8 @@ namespace ProjectMasters.Games
                 }
                 else
                 {
-                    DoLogic(deltaTime);
-
+                    DoLogic(deltaTime, project);
                 }
-
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);

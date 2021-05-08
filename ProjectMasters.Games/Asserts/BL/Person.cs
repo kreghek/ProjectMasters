@@ -255,7 +255,7 @@ namespace Assets.BL
             if (newEffectRoll < EFFECT_CHANCE_BASE)
             {
                 var effectTypeIndex = Random.Next(0, 3);
-                var effectDuration = Random.Next(Effect.MIN_DURATION, Effect.MAX_DURATION);
+                var effectDuration = Random.Next((int)Effect.MIN_DURATION, (int)Effect.MAX_DURATION);
                 var effect = new Effect
                 {
                     EffectType = (EffectType)effectTypeIndex,
