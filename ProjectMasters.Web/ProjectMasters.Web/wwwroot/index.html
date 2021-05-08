@@ -121,7 +121,6 @@
         connection.onclose(startSignalRConnection);
 
         let listPerson = new Map();
-
         var units = new Map();
 
         function gameLoop(delta) {
@@ -159,6 +158,16 @@
 
                     units.set(unitDtos[i].id, container);
                 }
+
+                var graphics = new PIXI.Graphics();
+                graphics.beginFill(0x3e494b);
+                graphics.lineStyle(4, 0x0, .3);
+                graphics.drawRoundedRect(0, app.screen.height-100, 150, 100, 40);
+                console.log("width", app.screen.width);
+                graphics.endFill();
+
+                app.stage.addChild(graphics);
+
             });
 
 
