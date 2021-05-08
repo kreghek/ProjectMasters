@@ -84,10 +84,9 @@
             function(personDtos, lineDtos, unitDtos) {
                 console.log("personDtos = ", personDtos);
                 for (var i = 0; i < personDtos.length; i++) {
-                    let container = getContainer();
+                    let container = getPersonContainer();
                     container.id = personDtos[i].id;
                     app.stage.addChild(container);
-                    console.log()
                     listPerson.set(personDtos[i].id, container);                }
 
                 for (var i = 0; i < unitDtos.length; i++) {
@@ -106,9 +105,7 @@
         connection.on("AssignPersonAsync",
             function (data) {
                 console.log(data);
-                console.log("listPerson= ",listPerson);
                 let personContainer = listPerson.get(data.personId);
-                console.log("personContainer = " ,personContainer);
                 personContainer.x = 100;
                 personContainer.y = (data.lineId - 1) * 200 + 50;
             });
