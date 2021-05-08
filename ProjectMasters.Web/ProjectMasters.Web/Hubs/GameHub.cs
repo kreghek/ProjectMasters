@@ -4,21 +4,22 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace ProjectMasters.Web.Hubs
 {
-    public class GameHub: Hub
+    public class GameHub : Hub
     {
-        private readonly GameService _gameService;
+        //private readonly GameService _gameService;
 
-        public GameHub(GameService gameService)
-        {
-            _gameService = gameService;
-        }
+        //public GameHub(GameService gameService)
+        //{
+        //    _gameService = gameService;
+        //}
 
-        public Task StartGameAsync(string user)
+        public async Task StartGameAsync(string message)
         {
-            return Task.Run(() =>
-            {
-                _gameService.AddGame(user);
-            });
+            await this.Clients.All.SendAsync("update", message);
+            //return Task.Run(() =>
+            //{
+            //    _gameService.AddGame(user);
+            //});
         }
     }
 }
