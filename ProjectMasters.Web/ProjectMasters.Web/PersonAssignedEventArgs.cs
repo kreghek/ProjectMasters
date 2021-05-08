@@ -15,4 +15,36 @@
         public Person Person { get; }
         public ProjectLine Line { get; }
     }
+
+    public class PersonAttackedEventArgs : EventArgs
+    {
+        public PersonAttackedEventArgs(ProjectUnitBase unit, Person person)
+        {
+            Person = person ?? throw new ArgumentNullException(nameof(person));
+            Unit = unit ?? throw new ArgumentNullException(nameof(unit));
+        }
+
+        public Person Person { get; }
+        public ProjectUnitBase Unit { get; }
+    }
+
+    public class UnitIsDeadEventArgs : EventArgs
+    {
+        public UnitIsDeadEventArgs(ProjectUnitBase unit)
+        {
+            Unit = unit ?? throw new ArgumentNullException(nameof(unit));
+        }
+
+        public ProjectUnitBase Unit { get; }
+    }
+
+    public class UnitIsCreatedEventArgs : EventArgs
+    {
+        public UnitIsCreatedEventArgs(ProjectUnitBase unit)
+        {
+            Unit = unit ?? throw new ArgumentNullException(nameof(unit));
+        }
+
+        public ProjectUnitBase Unit { get; }
+    }
 }

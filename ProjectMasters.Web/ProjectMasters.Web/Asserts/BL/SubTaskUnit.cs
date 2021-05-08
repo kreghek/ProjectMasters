@@ -144,6 +144,7 @@ namespace Assets.BL
         {
             var subTask = new ErrorUnit
             {
+                Id = IdGenerator.GetId(),
                 Cost = Random.Next(MIN_ERROR_COST, MAX_ERROR_COST + 1),
                 RequiredMasteryItems = RequiredMasteryItems
             };

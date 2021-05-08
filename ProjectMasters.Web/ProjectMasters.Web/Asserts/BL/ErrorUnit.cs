@@ -1,5 +1,7 @@
 ﻿namespace Assets.BL
 {
+    using ProjectMasters.Games;
+
     public sealed class ErrorUnit : ProjectUnitBase
     {
         public override ProjectUnitType Type => ProjectUnitType.Error;
