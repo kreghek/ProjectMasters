@@ -141,7 +141,19 @@
                 for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex, textures);
                     container.id = personDtos[i].id;
-                    container.x = 100 + (personDtos[i].lineId - 1) * 15;
+                   
+                    switch (+personDtos[i].id) {
+                        case 2:
+                            container.x = 200;
+                            break;
+                        case 3:
+                            container.x = 230;
+                            break;
+                        default:
+                            container.x = 170;
+                            break;
+                 }
+
                     container.y = (personDtos[i].lineId - 1) * 200 + 50;
 
                     container.sourceX = container.x;
@@ -155,7 +167,20 @@
                     let container = getUnitContainer(unitDtos[i].type, textures);
                     container.id = unitDtos[i].id;
                     let personWidth = 200;
-                    container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
+                    let offset;
+                    console.log(+unitDtos[i].lineId);
+                    switch (+unitDtos[i].lineId) {
+                    case 0:
+                        offset = 90;
+                            break;
+                    case 1:
+                        offset = 140;
+                        break;
+                    default:
+                        offset = 190;
+                        break;
+                    }
+                    container.x = offset + personWidth + unitDtos[i].queueIndex * 100;
                     container.y = 100 + (unitDtos[i].lineId) * 200 - 25;
                     app.stage.addChild(container);
 
