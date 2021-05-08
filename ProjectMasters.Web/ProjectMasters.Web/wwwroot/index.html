@@ -55,6 +55,7 @@
         function setup() {
 
             let background = new PIXI.Sprite(PIXI.loader.resources["images/Background.png"].texture);
+            background.scale = new PIXI.Point(0.2, 0.2);
 
             app.stage.addChild(background);
 
