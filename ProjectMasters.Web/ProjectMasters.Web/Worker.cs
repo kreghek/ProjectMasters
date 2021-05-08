@@ -1,6 +1,8 @@
 namespace ProjectMasters.Games
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -31,6 +33,12 @@ namespace ProjectMasters.Games
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                if (!GameState.Started)
+                {
+                    await Task.Yield();
+                    continue;
+                }
+
                 var deltaTime = DateTime.Now - _currentTime;
                 _currentTime = DateTime.Now;
 
@@ -66,24 +74,24 @@ namespace ProjectMasters.Games
         private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
         {
             _gameHub.Clients.All.AssignPersonAsync(new PersonDto(e.Person), new LineDto { Id = e.Line.Id });
-            _logger.LogInformation($"Person {e.Person.Id} assigned to line {e.Line.Id}");
+            _logger.LogInformation($"Line {e.Person.Id} assigned to line {e.Line.Id}");
         }
 
         private void GameState_PersonAttacked(object sender, PersonAttackedEventArgs e)
         {
             _gameHub.Clients.All.AttackPersonAsync(new PersonDto(e.Person), new UnitDto(e.Unit));
-            _logger.LogInformation($"Person {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
+            _logger.LogInformation($"Line {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
         }
 
         private void GameState_PersonIsRested(object sender, PersonEventArgs e)
         {
-            _gameHub.Clients.All.RestPerson(new PersonDto(e.Person));
+            _gameHub.Clients.All.RestPersonAsync(new PersonDto(e.Person));
             _logger.LogError($"{e.Person.Id} is rested");
         }
 
         private void GameState_PersonIsTired(object sender, PersonEventArgs e)
         {
-            _gameHub.Clients.All.TirePerson(new PersonDto(e.Person));
+            _gameHub.Clients.All.TirePersonAsync(new PersonDto(e.Person));
             _logger.LogError($"{e.Person.Id} is tired");
         }
 
@@ -97,6 +105,34 @@ namespace ProjectMasters.Games
         {
             _gameHub.Clients.All.KillUnitAsync(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
+        }
+
+        private void GameState_LineIsRemoved(object sender, LineEventArgs e)
+        {
+            _gameHub.Clients.All.RemoveLineAsync(new LineDto { Id = e.Line.Id });
+            _logger.LogError($"Line {e.Line.Id} is removed");
+        }
+
+        private void Initialized()
+        {
+            var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
+            {
+                // Получаем линию, которая содержит персонажа.
+                LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+            }).ToArray();
+
+            var unitDots = new List<UnitDto>();
+            foreach (var line in GameState._project.Lines)
+            {
+                foreach (var unit in line.Units)
+                {
+                    var dto = new UnitDto(unit);
+                    unitDots.Add(dto);
+                }
+            }
+
+            _gameHub.Clients.All.SetupClientStateAsync(personDtos, unitDots);
+            _logger.LogError("Game is started");
         }
 
         private void Initiate()
@@ -116,6 +152,8 @@ namespace ProjectMasters.Games
             GameState.EffectIsRemoved += GameState_EffectIsRemoved;
             GameState.PersonIsTired += GameState_PersonIsTired;
             GameState.PersonIsRested += GameState_PersonIsRested;
+            GameState.LineIsRemoved += GameState_LineIsRemoved;
+            Initialized();
         }
     }
 }

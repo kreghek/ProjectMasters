@@ -14,7 +14,6 @@ namespace Assets.BL
             set
             {
                 _id = value;
-                GameState.CreateUnit(this);
             }
         }
 

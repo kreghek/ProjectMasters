@@ -10,14 +10,14 @@ namespace Assets.BL
         public override void Apply()
         {
             throw new NotImplementedException();
-            //Person selectedPerson = GetRandomPerson();
+            //Line selectedPerson = GetRandomPerson();
 
             //var dismoraleEffect = CreateEffect();
 
             //selectedPerson.Effects.Add(dismoraleEffect);
         }
 
-        //private static Person GetRandomPerson()
+        //private static Line GetRandomPerson()
         //{
         //    var persons = Team.Persons;
         //    var personIndex = Random.Next(0, persons.Length - 1);
