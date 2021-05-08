@@ -34,7 +34,10 @@ namespace ProjectMasters.Games
             while (!stoppingToken.IsCancellationRequested)
             {
                 if (!GameState.Started)
+                {
+                    await Task.Yield();
                     continue;
+                }
 
                 var deltaTime = DateTime.Now - _currentTime;
                 _currentTime = DateTime.Now;
