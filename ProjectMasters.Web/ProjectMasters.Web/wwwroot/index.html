@@ -134,7 +134,7 @@
             });
 
         connection.on("KillUnitAsync", function (data) {
-            let unitContainer = units.get(data.unitId);
+            let unitContainer = units.get(data.id);
             units.delete(data.unitId);
             app.stage.removeChild(unitContainer);
 
