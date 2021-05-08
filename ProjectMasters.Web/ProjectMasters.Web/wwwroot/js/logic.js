@@ -35,7 +35,7 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
 
 function getUnitContainer(type, textures) {
 
-    let body = getContainerByType(type, textures);
+    let body = getSpriteByType(type, textures);
 
     body.pivot = new PIXI.Point(0.5, 1);
 
@@ -47,9 +47,9 @@ function getUnitContainer(type, textures) {
     return container;
 }
 
-function getContainerByType(type, textures) {
+function getSpriteByType(type, textures) {
     if (type == "Feature") {
-        return  new PIXI.Sprite(textures.feature.texture);
+        return new PIXI.Sprite(textures.feature.texture);
     }
 
     if (type == "Error") {
