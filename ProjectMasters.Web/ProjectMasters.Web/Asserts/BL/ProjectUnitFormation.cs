@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Assets.BL
 {
+    using ProjectMasters.Games;
+
     public class ProjectUnitFormation
     {
         public int ProjectMoneyEarning = 1000;
@@ -162,6 +164,7 @@ namespace Assets.BL
 
             if (!Lines[lineIndex].Units.Any())
             {
+                GameState.RemoveLine(Lines[lineIndex]);
                 Lines.RemoveAt(lineIndex);
             }
 

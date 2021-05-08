@@ -15,13 +15,12 @@
 </head>
 <body>
     <div style="width:100%; height: 786px; position: relative" id="main">
-        
-            <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px;">START</button>
+        <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display:none">START</button>
     </div>
 
     <script type="text/javascript">
         function startGame() {
-            startSignalRConnection();
+            connection.invoke("InitServerState");
             app.stage.removeChild(titleBackground);
             var startButton = document.getElementById("startButton");
             startButton.remove();
@@ -99,6 +98,8 @@
             app.stage.addChild(titleBackground);
 
             app.ticker.add(delta => gameLoop(delta));
+
+            startSignalRConnection();
         }
     </script>
 
@@ -111,7 +112,7 @@
             try {
                 await connection.start();
                 console.log("SignalR Connected.");
-                connection.invoke("InitServerState");
+                connection.invoke("PreInitServerState");
             } catch (err) {
                 console.log("err", err);
                 setTimeout(startSignalRConnection, 5000);
@@ -228,6 +229,17 @@
             units.set(unitDto.id, container);
 
             connection.invoke("ChangeUnitPositionsServer", data.lineId);
+        });
+
+        connection.on("PreSetupClientAsync", function (isGameStarted) {
+            if (isGameStarted) {
+                document.getElementById("startButton").remove();
+                app.stage.removeChild(titleBackground);
+                connection.invoke("InitServerState");
+            }
+            else {
+                document.getElementById("startButton").setAttribute("style", "position: absolute; bottom: 500px; left: 500px; display:block");
+            }
         });
     </script>
 
