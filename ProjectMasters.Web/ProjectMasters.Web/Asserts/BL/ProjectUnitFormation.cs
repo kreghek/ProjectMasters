@@ -149,9 +149,9 @@ namespace Assets.BL
             }
 
             // reindex
-            for (int i = 0; i < Lines[lineIndex].Units.Count; i++)
+            for (var i = 0; i < Lines[lineIndex].Units.Count; i++)
             {
-                ProjectUnitBase unit1 = Lines[lineIndex].Units[i];
+                var unit1 = Lines[lineIndex].Units[i];
                 unit1.QueueIndex = i;
             }
 
@@ -160,6 +160,7 @@ namespace Assets.BL
 
         public void ResolveUnit(int lineIndex, ProjectUnitBase unit)
         {
+            unit.LineIndex = lineIndex;
             Lines[lineIndex].Units.Remove(unit);
 
             if (!Lines[lineIndex].Units.Any())

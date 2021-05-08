@@ -15,6 +15,8 @@
 
         public Skill[] Skills { get; set; }
 
+        public string Name { get; set; }
+
         public PersonDto(Person person)
         {
             Id = person.Id;
@@ -23,6 +25,7 @@
             MouthIndex = person.MouthIndex;
             HairIndex = person.HairIndex;
             EyesIndex = person.EyesIndex;
+            Name = person.Name;
         }
     }
 }

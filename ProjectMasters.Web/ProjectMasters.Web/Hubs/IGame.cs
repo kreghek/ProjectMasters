@@ -22,6 +22,8 @@ namespace ProjectMasters.Web.Hubs
         Task TirePersonAsync(PersonDto person);
         Task RestPersonAsync(PersonDto person);
         Task RemoveLineAsync(LineDto lineDto);
+
+        Task PreSetupClientAsync(bool isGameStarted);
         Task StartDecision(Decision decision);
     }
 }

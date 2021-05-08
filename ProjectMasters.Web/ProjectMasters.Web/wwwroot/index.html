@@ -7,6 +7,37 @@
         table, tr, td {
             border: 1px solid black;
         }
+        input {
+            border-top-style: hidden;
+            border-right-style: hidden;
+            border-left-style: hidden;
+            border-bottom-style: hidden;
+        }
+
+        #decisionDialog {
+            width: 500px;
+            top: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            font-size: 17px;
+        }
+
+        #decisionDialog .description {
+            font-size: 13px;
+            text-align: right;
+            color: dimgray;
+        }
+
+        #decisionDialog #leftDecision, #decisionDialog #rightDecision {
+            border: 1px solid #000;
+            margin: 10px;
+            padding: 15px;
+        }
+
+            #decisionDialog #leftDecision:hover, #decisionDialog #rightDecision:hover {
+                background: rgba(255, 106, 0, 0.3);
+            }
     </style>
     <script src="js/pixi.min.js"></script>
     <script src="js/signalr/dist/browser/signalr.min.js"></script>
@@ -15,9 +46,47 @@
 </head>
 <body>
     <div style="width:100%; height: 786px; position: relative" id="main">
+        <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display:none">START</button>
 
-        <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px;">START</button>
-        <dialog id="decisionDialog" style="background: rgba(255, 255, 255, 0.7); width: 300px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); border-radius: 5px;">
+        <div class="person-panels" style="position: absolute; bottom: 0; height: 100px; background: rgba(255,255,255,0.5)">
+            <div style="display: inline-block" id="firstForm">
+
+                <p class="name" disabled="true"></p>
+                <div class="mastery-items">
+
+                </div>
+                <br />
+                <input type="text" id="skill1" name="skil" disabled="true">
+                <br />
+                <input type="text" id="skill2" name="skil" disabled="true">
+
+            </div>
+            <div style="display: inline-block" id="secondForm">
+
+                <p class="name"></p>
+                <div class="mastery-items">
+
+                </div>
+                <br />
+                <input type="text" id="skill1" name="skil" disabled="true">
+                <br />
+                <input type="text" id="skill2" name="skil" disabled="true">
+
+            </div>
+            <div style="display: inline-block" id="thirdForm">
+
+                <p class="name"></p>
+                <div class="mastery-items">
+
+                </div>
+                <br />
+                <input type="text" id="skill1" name="skil" disabled="true">
+                <br />
+                <input type="text" id="skill2" name="skil" disabled="true">
+
+            </div>
+        </div>
+        <dialog id="decisionDialog">
             <div>
                 <p id="decisionTitle">
 
@@ -52,14 +121,16 @@
         dialog.close();
         sendDecision(1);
     }
-    function startGame() {
-        startSignalRConnection();
-        app.stage.removeChild(titleBackground);
-        var startButton = document.getElementById("startButton");
-        startButton.remove();
-        
-    }
+
 </script>
+    <script type="text/javascript">
+        function startGame() {
+            connection.invoke("InitServerState");
+            app.stage.removeChild(titleBackground);
+            var startButton = document.getElementById("startButton");
+            startButton.remove();
+        }
+    </script>
     <script type="text/javascript">
         let type = "WebGL"
         if (!PIXI.utils.isWebGLSupported()) {
@@ -84,7 +155,8 @@
             .add("images/Background.png")
             .add("images/empty_body.png")
             .add("images/shirt.png")
-            .add("images/bug.png")
+            .add("images/bug1.png")
+            .add("images/bug2.png")
             .add("images/eyes.png")
             .add("images/eyes2.png")
             .add("images/eyes3.png")
@@ -111,27 +183,30 @@
             let background = new PIXI.Sprite(PIXI.loader.resources["images/Background.png"].texture);
             background.scale = new PIXI.Point(0.2, 0.2);
 
-            textures.empty_body = PIXI.loader.resources["images/empty_body.png"];
-            textures.shirt = PIXI.loader.resources["images/shirt.png"];
-            textures.bug = PIXI.loader.resources["images/bug.png"];
-            textures.feature = PIXI.loader.resources["images/feature.png"];
+            textures.empty_body = PIXI.loader.resources["images/empty_body.png"].texture;
+            textures.shirt = PIXI.loader.resources["images/shirt.png"].texture;
+            textures.bug1 = PIXI.loader.resources["images/bug1.png"].texture;
+            textures.bug2 = PIXI.loader.resources["images/bug2.png"].texture;
+            textures.feature = PIXI.loader.resources["images/feature.png"].texture;
 
-            textures.eyes1 = PIXI.loader.resources["images/eyes.png"];
-            textures.eyes2 = PIXI.loader.resources["images/eyes2.png"];
-            textures.eyes3 = PIXI.loader.resources["images/eyes3.png"];
+            textures.eyes1 = PIXI.loader.resources["images/eyes.png"].texture;
+            textures.eyes2 = PIXI.loader.resources["images/eyes2.png"].texture;
+            textures.eyes3 = PIXI.loader.resources["images/eyes3.png"].texture;
 
-            textures.hair1 = PIXI.loader.resources["images/hair1.png"];
-            textures.hair2 = PIXI.loader.resources["images/hair2.png"];
-            textures.hair3 = PIXI.loader.resources["images/hair3.png"];
+            textures.hair1 = PIXI.loader.resources["images/hair1.png"].texture;
+            textures.hair2 = PIXI.loader.resources["images/hair2.png"].texture;
+            textures.hair3 = PIXI.loader.resources["images/hair3.png"].texture;
 
-            textures.mouth1 = PIXI.loader.resources["images/mouth1.png"];
-            textures.mouth2 = PIXI.loader.resources["images/mouth2.png"];
-            textures.mouth3 = PIXI.loader.resources["images/mouth3.png"];
+            textures.mouth1 = PIXI.loader.resources["images/mouth1.png"].texture;
+            textures.mouth2 = PIXI.loader.resources["images/mouth2.png"].texture;
+            textures.mouth3 = PIXI.loader.resources["images/mouth3.png"].texture;
 
             app.stage.addChild(background);
             app.stage.addChild(titleBackground);
 
             app.ticker.add(delta => gameLoop(delta));
+
+            startSignalRConnection();
         }
     </script>
 
@@ -148,7 +223,7 @@
             try {
                 await connection.start();
                 console.log("SignalR Connected.");
-                connection.invoke("InitServerState");
+                connection.invoke("PreInitServerState");
             } catch (err) {
                 console.log("err", err);
                 setTimeout(startSignalRConnection, 5000);
@@ -158,7 +233,6 @@
         connection.onclose(startSignalRConnection);
 
         let listPerson = new Map();
-
         var units = new Map();
 
         function gameLoop(delta) {
@@ -171,12 +245,49 @@
             }
         }
 
+        function setPeopleInfo(personId, personName, skills) {
+            let formId;
+ 
+            switch (personId) {
+            case 1:
+                formId = "firstForm";
+                break;
+            case 2:
+                formId = "secondForm";
+                break;
+            case 3:
+                formId = "thirdForm";
+                break;
+            default:
+                return;
+            }
+
+            let formElement = document.getElementById(formId);
+            let nameTextbox = formElement.getElementsByClassName("name")[0];
+            nameTextbox.innerHTML = personName;
+
+            var masteryItems = formElement.getElementsByClassName("mastery-items")[0];
+            masteryItems.innerHTML = "";
+            for (let i = 0; i < skills.length; i++) {
+                let masteryItem = document.createElement("p");
+                masteryItem.innerHTML = `${skills[i].sid} ${skills[i].level}`;
+                masteryItems.appendChild(masteryItem);
+            }
+
+            //for (let i = 1; i < skills.length + 1; i++) {
+            //    skillInput = inputs[`skill${i}`].value = `${skills[i - 1].sid} : ${skills[i-1].level}`;
+            //}
+        };
+
         connection.on("SetupClientStateAsync",
-            function(personDtos, unitDtos) {
+            function (personDtos, unitDtos) {
                 for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex, textures);
                     container.id = personDtos[i].id;
-                    container.x = 100;
+                   
+                    let offset = 170;
+                    container.x = offset + (personDtos[i].lineId - 1) * 30;
+
                     container.y = (personDtos[i].lineId - 1) * 200 + 50;
 
                     container.sourceX = container.x;
@@ -184,13 +295,17 @@
 
                     app.stage.addChild(container);
                     listPerson.set(personDtos[i].id, container);
+
+                    setPeopleInfo(personDtos[i].id, personDtos[i].name, personDtos[i].masteryLevels);
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
                     let container = getUnitContainer(unitDtos[i].type, textures);
                     container.id = unitDtos[i].id;
                     let personWidth = 200;
-                    container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
+                    let offset = 90 + unitDtos[i].lineId * 50;
+
+                    container.x = offset + personWidth + unitDtos[i].queueIndex * 100;
                     container.y = 100 + (unitDtos[i].lineId) * 200 - 25;
                     app.stage.addChild(container);
 
@@ -202,7 +317,10 @@
         connection.on("AssignPersonAsync",
             function (personDto, lineDto) {
                 let personContainer = listPerson.get(personDto.id);
-                personContainer.x = 100;
+
+                let offset = 170;
+                personContainer.x = offset + (lineDto.id - 1) * 30;
+
                 personContainer.y = (lineDto.id - 1) * 200 + 50;
 
                 personContainer.sourceX = personContainer.x;
@@ -218,6 +336,7 @@
         });
 
         connection.on("AttackPersonAsync", function (data) {
+            setPeopleInfo(data.id, data.name, data.masteryLevels);
             let personContainer = listPerson.get(data.id);
             let attackMoveEngine = {
                 counter: 0.5,
@@ -239,9 +358,13 @@
         connection.on("ChangeUnitPositionsAsync", function (data) {
 
             for (let i = 0; i < data.length; i++) {
-                let unitContainer = units.get(data[i].unitId);
+                let unitDto = data[i];
+                let unitContainer = units.get(unitDto.unitId);
                 let personWidth = 200;
-                unitContainer.x = 200 + personWidth + data[i].queueIndex * 100;
+
+                let offset = 90 + unitDto.lineId * 50;
+
+                unitContainer.x = offset + personWidth + unitDto.queueIndex * 100;
             }
         });
 
@@ -265,16 +388,27 @@
         });
 
         connection.on("CreateUnitAsync", function (unitDto) {
-            let container = getUnitContainer(unitDto.type);
+            let container = getUnitContainer(unitDto.type, textures);
             container.id = unitDto.id;
-            let personWidth = 200;
-            container.x = 200 + personWidth + unitDto.queueIndex * 100;
+            /*let personWidth = 200;
+            container.x = 200 + personWidth + unitDto.queueIndex * 100;*/
             container.y = 100 + (unitDto.lineId) * 200 - 25;
             app.stage.addChild(container);
 
             units.set(unitDto.id, container);
 
             connection.invoke("ChangeUnitPositionsServer", data.lineId);
+        });
+
+        connection.on("PreSetupClientAsync", function (isGameStarted) {
+            if (isGameStarted) {
+                document.getElementById("startButton").remove();
+                app.stage.removeChild(titleBackground);
+                connection.invoke("InitServerState");
+            }
+            else {
+                document.getElementById("startButton").setAttribute("style", "position: absolute; bottom: 500px; left: 500px; display:block");
+            }
         });
     </script>
 
