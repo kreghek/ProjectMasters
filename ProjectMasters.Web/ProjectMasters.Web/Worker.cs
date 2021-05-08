@@ -107,7 +107,7 @@ namespace ProjectMasters.Games
 
         private void GameState_LineIsRemoved(object sender, LineEventArgs e)
         {
-            _gameHub.Clients.All.RemoveLineAsync(new LineDto { Id = e.Line.Id });
+            _gameHub.Clients.All.RemoveLineAsync(new LineDto { Id = e.Line.Id, Persons = e.Line.AssignedPersons });
             _logger.LogInformation($"Decision {e.Line.Id} is removed");
         }
 

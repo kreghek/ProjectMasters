@@ -397,7 +397,7 @@
 
             units.set(unitDto.id, container);
 
-            connection.invoke("ChangeUnitPositionsServer", data.lineId);
+            connection.invoke("ChangeUnitPositionsServer", unitDto.lineId);
         });
 
         connection.on("PreSetupClientAsync", function (isGameStarted) {

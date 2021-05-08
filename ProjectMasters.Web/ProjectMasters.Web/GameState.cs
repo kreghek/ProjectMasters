@@ -19,11 +19,6 @@ namespace ProjectMasters.Games
             EffectIsAdded?.Invoke(null, new EffectEventArgs(effect));
         }
 
-        public static void CreateUnit(ProjectUnitBase unit)
-        {
-            UnitIsCreated?.Invoke(null, new UnitEventArgs(unit));
-        }
-
         public static event EventHandler<EffectEventArgs> EffectIsAdded;
         public static event EventHandler<EffectEventArgs> EffectIsRemoved;
 
@@ -50,9 +45,6 @@ namespace ProjectMasters.Games
             PersonIsTired?.Invoke(null, new PersonEventArgs(person));
         }
 
-        public static event EventHandler<UnitEventArgs> UnitIsCreated;
-        public static event EventHandler<UnitEventArgs> UnitIsDead;
-
         internal static void AssignPerson(ProjectLine line, Person person)
         {
             PersonAssigned?.Invoke(null, new PersonAssignedEventArgs(line, person));
@@ -61,11 +53,6 @@ namespace ProjectMasters.Games
         internal static void AttackPerson(ProjectUnitBase unit, Person person)
         {
             PersonAttacked?.Invoke(null, new PersonAttackedEventArgs(unit, person));
-        }
-
-        internal static void KillUnit(ProjectUnitBase unit)
-        {
-            UnitIsDead?.Invoke(null, new UnitEventArgs(unit));
         }
 
         internal static void RemoveLine(ProjectLine line)
