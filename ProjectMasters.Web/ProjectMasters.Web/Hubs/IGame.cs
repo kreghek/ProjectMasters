@@ -11,5 +11,7 @@ namespace ProjectMasters.Web.Hubs
         Task AssignPersonAsync(object obj);
 
         Task SetupClientStateAsync(IEnumerable<PersonDto> personDto);
+        Task AttackPersonAsync(object obj);
+        Task KillUnit(object obj);
     }
 }

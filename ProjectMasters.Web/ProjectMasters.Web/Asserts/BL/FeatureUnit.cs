@@ -6,6 +6,8 @@ namespace Assets.BL
 {
     using System;
 
+    using ProjectMasters.Games;
+
     public sealed class FeatureUnit : ProjectUnitBase
     {
         private const float _minDecomposeCost = 1;
@@ -88,6 +90,7 @@ namespace Assets.BL
             {
                 var subTask = new SubTaskUnit
                 {
+                    Id = IdGenerator.GetId(),
                     Cost = Random.Next(MIN_SUBTASK_COST, MAX_SUBTASK_COST + 1)
                 };
 

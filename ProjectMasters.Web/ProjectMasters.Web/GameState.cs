@@ -18,6 +18,18 @@ namespace ProjectMasters.Games
             PersonAssigned?.Invoke(null, new PersonAssignedEventArgs(line, person));
         }
 
+        internal static void AttackPerson(ProjectUnitBase unit, Person person)
+        {
+            PersonAttacked?.Invoke(null, new PersonAttackedEventArgs(unit, person));
+        }
+
+        internal static void KillUnit(ProjectUnitBase unit)
+        {
+            UnitIsDead?.Invoke(null, new UnitIsDeadEventArgs(unit));
+        }
+
         public static event EventHandler<PersonAssignedEventArgs> PersonAssigned;
+        public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
+        public static event EventHandler<UnitIsDeadEventArgs> UnitIsDead;
     }
 }
