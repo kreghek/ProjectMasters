@@ -20,6 +20,9 @@
             Id = person.Id;
             MasteryLevels = person.MasteryLevels;
             Skills = person.Skills;
+            MouthIndex = person.MouthIndex;
+            HairIndex = person.HairIndex;
+            EyesIndex = person.EyesIndex;
         }
     }
 }

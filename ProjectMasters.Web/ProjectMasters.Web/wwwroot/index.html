@@ -130,6 +130,9 @@
                 let personContainer = listPerson.get(data.personId);
                 personContainer.x = 100;
                 personContainer.y = (data.lineId - 1) * 200 + 50;
+
+                personContainer.sourceX = personContainer.x;
+                personContainer.sourceY = personContainer.y;
             });
 
         connection.on("KillUnitAsync", function (data) {
