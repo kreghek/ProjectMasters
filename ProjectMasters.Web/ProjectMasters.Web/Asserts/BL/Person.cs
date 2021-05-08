@@ -163,11 +163,13 @@
                 var effectDuration = Random.Next((int)Effect.MIN_DURATION, (int)Effect.MAX_DURATION);
                 var effect = new Effect
                 {
+                    Id = EffectIdGenerator.GetId(),
                     EffectType = (EffectType)effectTypeIndex,
                     Lifetime = effectDuration
                 };
 
                 Effects.Add(effect);
+                GameState.AddEffect(effect);
             }
         }
 

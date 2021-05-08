@@ -32,11 +32,17 @@ namespace ProjectMasters.Games
         public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
         public static event EventHandler<UnitIsDeadEventArgs> UnitIsDead;
         public static event EventHandler<UnitIsCreatedEventArgs> UnitIsCreated;
+        public static event EventHandler<EffectIsAddedEventArgs> EffectIsAdded;
 
 
         public static void CreateUnit(ProjectUnitBase unit)
         {
             UnitIsCreated?.Invoke(null, new UnitIsCreatedEventArgs(unit));
+        }
+
+        public static void AddEffect(Effect effect)
+        {
+            EffectIsAdded?.Invoke(null, new EffectIsAddedEventArgs(effect));
         }
     }
 }

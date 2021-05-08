@@ -4,6 +4,8 @@ namespace ProjectMasters.Web.Hubs
 {
     using System.Collections.Generic;
 
+    using Assets.BL;
+
     using ProjectMasters.Web.DTOs;
 
     public interface IGame
@@ -14,5 +16,6 @@ namespace ProjectMasters.Web.Hubs
         Task AttackPersonAsync(PersonDto person, UnitDto unit);
         Task KillUnit(UnitDto unit);
         Task CreateUnitAsync(UnitDto unit);
+        Task AddEffectAsync(Effect effect);
     }
 }

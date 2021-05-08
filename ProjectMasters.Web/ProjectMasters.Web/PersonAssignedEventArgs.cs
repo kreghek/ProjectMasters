@@ -47,4 +47,14 @@
 
         public ProjectUnitBase Unit { get; }
     }
+
+    public class EffectIsAddedEventArgs : EventArgs
+    {
+        public EffectIsAddedEventArgs(Effect effect)
+        {
+            Effect = effect ?? throw new ArgumentNullException(nameof(effect));
+        }
+
+        public Effect Effect { get; }
+    }
 }

@@ -47,7 +47,7 @@ namespace Assets.BL
                 Id = 1,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
-                        Id = IdGenerator.GetId(),
+                        Id = UnitIdGenerator.GetId(),
                         Cost = 2,
                         LineIndex = 0,
                         QueueIndex = 0
@@ -60,7 +60,7 @@ namespace Assets.BL
                 Id = 2,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
-                        Id = IdGenerator.GetId(),
+                        Id = UnitIdGenerator.GetId(),
                         Cost = 1,
                         LineIndex = 1,
                         QueueIndex = 0
@@ -73,7 +73,7 @@ namespace Assets.BL
                 Id = 3,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
-                        Id = IdGenerator.GetId(),
+                        Id = UnitIdGenerator.GetId(),
                         Cost = 0.8f,
                         LineIndex = 2,
                         QueueIndex = 0
