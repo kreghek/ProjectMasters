@@ -31,6 +31,9 @@ namespace ProjectMasters.Games
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                if (!GameState.Started)
+                    continue;
+
                 var deltaTime = DateTime.Now - _currentTime;
                 _currentTime = DateTime.Now;
 
@@ -66,24 +69,24 @@ namespace ProjectMasters.Games
         private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
         {
             _gameHub.Clients.All.AssignPersonAsync(new PersonDto(e.Person), new LineDto { Id = e.Line.Id });
-            _logger.LogInformation($"Person {e.Person.Id} assigned to line {e.Line.Id}");
+            _logger.LogInformation($"Line {e.Person.Id} assigned to line {e.Line.Id}");
         }
 
         private void GameState_PersonAttacked(object sender, PersonAttackedEventArgs e)
         {
             _gameHub.Clients.All.AttackPersonAsync(new PersonDto(e.Person), new UnitDto(e.Unit));
-            _logger.LogInformation($"Person {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
+            _logger.LogInformation($"Line {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
         }
 
         private void GameState_PersonIsRested(object sender, PersonEventArgs e)
         {
-            _gameHub.Clients.All.RestPerson(new PersonDto(e.Person));
+            _gameHub.Clients.All.RestPersonAsync(new PersonDto(e.Person));
             _logger.LogError($"{e.Person.Id} is rested");
         }
 
         private void GameState_PersonIsTired(object sender, PersonEventArgs e)
         {
-            _gameHub.Clients.All.TirePerson(new PersonDto(e.Person));
+            _gameHub.Clients.All.TirePersonAsync(new PersonDto(e.Person));
             _logger.LogError($"{e.Person.Id} is tired");
         }
 
@@ -95,8 +98,14 @@ namespace ProjectMasters.Games
 
         private void GameState_UnitIsDead(object sender, UnitEventArgs e)
         {
-            _gameHub.Clients.All.KillUnit(new UnitDto(e.Unit));
+            _gameHub.Clients.All.KillUnitAsync(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
+        }
+
+        private void GameState_LineIsRemoved(object sender, LineEventArgs e)
+        {
+            _gameHub.Clients.All.RemoveLineAsync(new LineDto { Id = e.Line.Id });
+            _logger.LogError($"Line {e.Line.Id} is removed");
         }
 
         private void Initiate()
@@ -116,6 +125,8 @@ namespace ProjectMasters.Games
             GameState.EffectIsRemoved += GameState_EffectIsRemoved;
             GameState.PersonIsTired += GameState_PersonIsTired;
             GameState.PersonIsRested += GameState_PersonIsRested;
+            GameState.LineIsRemoved += GameState_LineIsRemoved;
+
         }
     }
 }

@@ -19,7 +19,8 @@ namespace ProjectMasters.Web.Hubs
         Task CreateUnitAsync(UnitDto unit);
         Task AddEffectAsync(Effect effect);
         Task RemoveEffectAsync(Effect effect);
-        Task TirePerson(PersonDto person);
-        Task RestPerson(PersonDto person);
+        Task TirePersonAsync(PersonDto person);
+        Task RestPersonAsync(PersonDto person);
+        Task RemoveLineAsync(LineDto lineDto);
     }
 }

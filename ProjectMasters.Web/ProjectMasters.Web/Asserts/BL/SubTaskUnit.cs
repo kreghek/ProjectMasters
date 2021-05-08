@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Assets.BL
 {
+    using ProjectMasters.Games;
+
     public sealed class SubTaskUnit : ProjectUnitBase
     {
         private Random Random => new Random(DateTime.Now.Millisecond);
@@ -47,6 +49,7 @@ namespace Assets.BL
                     {
                         formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
                     }
+                    GameState.CreateUnit(this);
                 }
 
                 person.ErrorMadeCount += errorCount;

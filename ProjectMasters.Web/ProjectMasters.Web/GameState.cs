@@ -13,6 +13,8 @@ namespace ProjectMasters.Games
         public static Team _team;
         public static TeamFactory _teamFactory;
 
+        public static bool Started { get; internal set; } = true;
+
         public static void AddEffect(Effect effect)
         {
             EffectIsAdded?.Invoke(null, new EffectEventArgs(effect));
@@ -30,6 +32,8 @@ namespace ProjectMasters.Games
         public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
         public static event EventHandler<PersonEventArgs> PersonIsRested;
         public static event EventHandler<PersonEventArgs> PersonIsTired;
+        public static event EventHandler<LineEventArgs> LineIsRemoved;
+
 
         public static void RemoveEffect(Effect effect)
         {
@@ -62,6 +66,11 @@ namespace ProjectMasters.Games
         internal static void KillUnit(ProjectUnitBase unit)
         {
             UnitIsDead?.Invoke(null, new UnitEventArgs(unit));
+        }
+
+        internal static void RemoveLine(ProjectLine line)
+        {
+            LineIsRemoved?.Invoke(null, new LineEventArgs(line));
         }
     }
 }
