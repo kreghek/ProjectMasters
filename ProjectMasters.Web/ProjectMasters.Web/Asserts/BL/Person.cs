@@ -179,7 +179,10 @@
             {
                 effect.Lifetime -= commitDeltaTime;
                 if (effect.Lifetime <= 0)
+                {
                     Effects.Remove(effect);
+                    GameState.RemoveEffect(effect);
+                }
                 else
                     switch (effect.EffectType)
                     {
@@ -221,6 +224,7 @@
                 if (RecoveryCounter == null)
                 {
                     RecoveryCounter = RECOVERY_TIME_BASE;
+                    GameState.TirePerson(this);
                 }
                 else
                 {
@@ -229,6 +233,7 @@
                     {
                         RecoveryCounter = null;
                         EnergyCurrent = Energy;
+                        GameState.RestPerson(this);
                     }
                 }
             }

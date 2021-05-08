@@ -11,7 +11,6 @@ namespace ProjectMasters.Games
     using Microsoft.Extensions.Logging;
 
     using ProjectMasters.Games.Asserts;
-    using ProjectMasters.Web;
     using ProjectMasters.Web.DTOs;
     using ProjectMasters.Web.Hubs;
 
@@ -52,9 +51,21 @@ namespace ProjectMasters.Games
             GameState._teamFactory.Update(time);
         }
 
+        private void GameState_EffectIsAdded(object sender, EffectEventArgs e)
+        {
+            _gameHub.Clients.All.AddEffectAsync(e.Effect);
+            _logger.LogError($"{e.Effect.EffectType} {e.Effect.Id} is added");
+        }
+
+        private void GameState_EffectIsRemoved(object sender, EffectEventArgs e)
+        {
+            _gameHub.Clients.All.RemoveEffectAsync(e.Effect);
+            _logger.LogError($"{e.Effect.EffectType} {e.Effect.Id} is removed");
+        }
+
         private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
         {
-            _gameHub.Clients.All.AssignPersonAsync(new PersonDto(e.Person), new LineDto{Id=e.Line.Id});
+            _gameHub.Clients.All.AssignPersonAsync(new PersonDto(e.Person), new LineDto { Id = e.Line.Id });
             _logger.LogInformation($"Person {e.Person.Id} assigned to line {e.Line.Id}");
         }
 
@@ -64,22 +75,28 @@ namespace ProjectMasters.Games
             _logger.LogInformation($"Person {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
         }
 
-        private void GameState_UnitIsCreated(object sender, UnitIsCreatedEventArgs e)
+        private void GameState_PersonIsRested(object sender, PersonEventArgs e)
+        {
+            _gameHub.Clients.All.RestPerson(new PersonDto(e.Person));
+            _logger.LogError($"{e.Person.Id} is rested");
+        }
+
+        private void GameState_PersonIsTired(object sender, PersonEventArgs e)
+        {
+            _gameHub.Clients.All.TirePerson(new PersonDto(e.Person));
+            _logger.LogError($"{e.Person.Id} is tired");
+        }
+
+        private void GameState_UnitIsCreated(object sender, UnitEventArgs e)
         {
             _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
         }
 
-        private void GameState_UnitIsDead(object sender, UnitIsDeadEventArgs e)
+        private void GameState_UnitIsDead(object sender, UnitEventArgs e)
         {
             _gameHub.Clients.All.KillUnit(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
-        }
-
-        private void GameState_EffectIsAdded(object sender, EffectIsAddedEventArgs e)
-        {
-            _gameHub.Clients.All.AddEffectAsync(e.Effect);
-            _logger.LogError($"{e.Effect.EffectType} {e.Effect.Id} is added");
         }
 
         private void Initiate()
@@ -96,6 +113,9 @@ namespace ProjectMasters.Games
             GameState.UnitIsDead += GameState_UnitIsDead;
             GameState.UnitIsCreated += GameState_UnitIsCreated;
             GameState.EffectIsAdded += GameState_EffectIsAdded;
+            GameState.EffectIsRemoved += GameState_EffectIsRemoved;
+            GameState.PersonIsTired += GameState_PersonIsTired;
+            GameState.PersonIsRested += GameState_PersonIsRested;
         }
     }
 }
