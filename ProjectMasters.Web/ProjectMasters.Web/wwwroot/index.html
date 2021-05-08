@@ -22,34 +22,45 @@
 <body>
     <div style="width:100%; height: 786px; position: relative" id="main">
         <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display:none">START</button>
-    </div>
 
-    <div style="position: relative" id="main">
-        <form id="firstForm">
-            <input type="text" id="name" name="name" disabled="true">
-            <br/>
-            <input type="text" id="skill1" name="skil" disabled="true">            
-            <br/>
-            <input type="text" id="skill2" name="skil" disabled="true">
-        </form>
-    </div>    
-    <div style="position: relative" id="main">
-        <form id="secondForm">
-            <input type="text" id="name" name="name" disabled="true">
-            <br/>
-            <input type="text" id="skill1" name="skil" disabled="true">            
-            <br/>
-            <input type="text" id="skill2" name="skil" disabled="true">
-        </form>
-    </div>    
-    <div style=" position: relative" id="main">
-        <form id="thirdForm">
-            <input type="text" id="name" name="name" disabled="true">
-            <br/>
-            <input type="text" id="skill1" name="skil" disabled="true">            
-            <br/>
-            <input type="text" id="skill2" name="skil" disabled="true">
-        </form>
+        <div class="person-panels" style="position: absolute; bottom: 0; height: 100px; background: rgba(255,255,255,0.5)">
+            <div style="display: inline-block" id="firstForm">
+
+                <p class="name" disabled="true"></p>
+                <div class="mastery-items">
+
+                </div>
+                <br />
+                <input type="text" id="skill1" name="skil" disabled="true">
+                <br />
+                <input type="text" id="skill2" name="skil" disabled="true">
+
+            </div>
+            <div style="display: inline-block" id="secondForm">
+
+                <p class="name"></p>
+                <div class="mastery-items">
+
+                </div>
+                <br />
+                <input type="text" id="skill1" name="skil" disabled="true">
+                <br />
+                <input type="text" id="skill2" name="skil" disabled="true">
+
+            </div>
+            <div style="display: inline-block" id="thirdForm">
+
+                <p class="name"></p>
+                <div class="mastery-items">
+
+                </div>
+                <br />
+                <input type="text" id="skill1" name="skil" disabled="true">
+                <br />
+                <input type="text" id="skill2" name="skil" disabled="true">
+
+            </div>
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -187,12 +198,21 @@
                 return;
             }
 
-            let inputs = document.getElementById(formId).elements;
-            nameInput = inputs["name"].value = personName;
+            let formElement = document.getElementById(formId);
+            let nameTextbox = formElement.getElementsByClassName("name")[0];
+            nameTextbox.innerHTML = personName;
 
-            for (let i = 1; i < skills.length + 1; i++) {
-                skillInput = inputs[`skill${i}`].value = `${skills[i - 1].sid} : ${skills[i-1].level}`;
+            var masteryItems = formElement.getElementsByClassName("mastery-items")[0];
+            masteryItems.innerHTML = "";
+            for (let i = 0; i < skills.length; i++) {
+                let masteryItem = document.createElement("p");
+                masteryItem.innerHTML = `${skills[i].sid} ${skills[i].level}`;
+                masteryItems.appendChild(masteryItem);
             }
+
+            //for (let i = 1; i < skills.length + 1; i++) {
+            //    skillInput = inputs[`skill${i}`].value = `${skills[i - 1].sid} : ${skills[i-1].level}`;
+            //}
         };
 
         connection.on("SetupClientStateAsync",
