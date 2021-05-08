@@ -46,11 +46,13 @@
         function setup() {
 
             //Create the cat sprite
-            let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
+            //let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
 
             
             //Add the cat to the stage
-            app.stage.addChild(background);
+            //app.stage.addChild(background);
+
+            app.ticker.add(delta => gameLoop(delta));
         }
 
 
@@ -59,7 +61,6 @@
     <script>
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/game")
-            .configureLogging(signalR.LogLevel.Information)
             .build();
 
         async function start() {
@@ -77,43 +78,88 @@
 
         // Start the connection.
         start();
+        let listPerson = new Map();
 
-        var units = [];
+        var units = new Map();
+
+        function gameLoop(delta) {
+            listPerson.forEach((person) => {
+                if (person.moveEngine) {
+                    person.moveEngine.update(delta);
+                }
+            });
+        }
 
         connection.on("SetupClientStateAsync",
-            function(personDtos, lineDtos, unitDtos) {
-                for (var i = 0; i < personDtos.length; i++) {
+            function(personDtos, unitDtos) {
+                console.log("personDtos = ", personDtos);
+                for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer();
                     container.id = personDtos[i].id;
-                    container.x = 200;
-                    container.y = 100 + i * 200;
+                    container.x = 100;
+                    container.y = (personDtos[i].lineId - 1) * 200 + 50;
+
+                    container.sourceX = container.x;
+                    container.sourceY = container.y;
+
                     app.stage.addChild(container);
+                    listPerson.set(personDtos[i].id, container);
                 }
 
-                for (var i = 0; i < unitDtos.length; i++) {
-                    let container = getUnitContainer();
+                for (let i = 0; i < unitDtos.length; i++) {
+                    let container = getUnitContainer(unitDtos[i].type);
                     container.id = unitDtos[i].id;
-                    var personWidth = 200;
+                    let personWidth = 200;
                     container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
                     container.y = 100 + (unitDtos[i].lineId - 1) * 200;
                     app.stage.addChild(container);
 
-                    units.push(container);
+                    units.set(unitDtos[i].id, container);
                 }
             });
 
 
         connection.on("AssignPersonAsync",
             function (data) {
-               
+                console.log(data);
+                let personContainer = listPerson.get(data.personId);
+                personContainer.x = 100;
+                personContainer.y = (data.lineId - 1) * 200 + 50;
             });
 
-        connection.on("KillUnit", function (data) {
-            for (var i = 0; i < units.length; i++) {
-                if (units[i].id === data.unitId) {
-                    units.splice(i, 1);
-                    app.stage.removeChild(units[i]);
-                }
+        connection.on("KillUnitAsync", function (data) {
+            let unitContainer = units.get(data.unitId);
+            units.delete(data.unitId);
+            app.stage.removeChild(unitContainer);
+
+            connection.invoke("ChangeUnitPositionsServer", data.lineId);
+        });
+
+        connection.on("AttackPersonAsync", function (data) {
+            let personContainer = listPerson.get(data.personId);
+            let attackMoveEngine = {
+                counter: 0.5,
+                graphics: personContainer,
+                update: function (delta) {
+                    this.counter -= 0.1;
+                    if (this.counter <= 0) {
+                        this.graphics.moveEngine = null;
+                        this.graphics.x = this.graphics.sourceX;
+                    }
+                    else {
+                        this.graphics.x += 10 * delta;
+                    }
+                },
+            };
+            personContainer.moveEngine = attackMoveEngine;
+        });
+
+        connection.on("ChangeUnitPositionsAsync", function (data) {
+
+            for (let i = 0; i < data.length; i++) {
+                let unitContainer = units.get(data[i].unitId);
+                let personWidth = 200;
+                unitContainer.x = 200 + personWidth + data[i].queueIndex * 100;
             }
         })
 

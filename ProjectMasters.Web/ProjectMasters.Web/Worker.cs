@@ -82,7 +82,7 @@ namespace ProjectMasters.Games
 
         private void GameState_UnitIsDead(object sender, UnitIsDeadEventArgs e)
         {
-            _gameHub.Clients.All.KillUnit(new { UnitId = e.Unit.Id });
+            _gameHub.Clients.All.KillUnitAsync(new { UnitId = e.Unit.Id, LineId = e.Unit.LineIndex });
             _logger.LogError($"{e.Unit.Type} {e.Unit.Id} is dead");
         }
 
