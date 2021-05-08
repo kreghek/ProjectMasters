@@ -7,20 +7,24 @@ namespace ProjectMasters.Games
 
     using Assets.BL;
 
+    using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
     using ProjectMasters.Games.Asserts;
+    using ProjectMasters.Web.Hubs;
 
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IHubContext<GameHub, IGame> _gameHub;
         private DateTime _currentTime;
 
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
             _logger = logger;
+            _gameHub = gameHub;
             _currentTime = DateTime.Now;
         }
 
@@ -56,6 +60,13 @@ namespace ProjectMasters.Games
             GameState._project = ProjectUnitFormation.Instance;
 
             GameState._isLoaded = true;
+
+            GameState.PersonAssigned += GameState_PersonAssigned;
+        }
+
+        private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
+        {
+            _gameHub.Clients.All.AssignPersonAsync(new { PersonId = e.Person.Id, LineId = e.Line.Id });
         }
     }
 }
