@@ -72,16 +72,8 @@
         // Start the connection.
         start();
 
-        async function invc() {
-            try {
-                await connection.invoke("StartGameAsync");
-            } catch (err) {
-                console.error(err);
-            }
-        }
 
-
-        connection.on("personAssigned",
+        connection.on("AssignPersonAsync",
             function (data) {
                 alert(data);
             });

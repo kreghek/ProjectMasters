@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using ProjectMasters.Games;
+
     public class Person : ISpeechSource
     {
         private const float COMMIT_POWER_BASE = 0.25f;
@@ -363,6 +365,7 @@
                         if (isCritical)
                             commitPower *= CritCommitMultiplicator;
 
+                        GameState.AttackPerson(unit,this);
                         unit.ProcessCommit(commitPower, isCritical, this);
                         actTouse.Reset();
 

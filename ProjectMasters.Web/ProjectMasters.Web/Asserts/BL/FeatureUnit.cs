@@ -6,6 +6,8 @@ namespace Assets.BL
 {
     using System;
 
+    using ProjectMasters.Games;
+
     public sealed class FeatureUnit : ProjectUnitBase
     {
         private const float _minDecomposeCost = 1;

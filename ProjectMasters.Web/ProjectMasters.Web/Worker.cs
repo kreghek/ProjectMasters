@@ -1,24 +1,31 @@
 namespace ProjectMasters.Games
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
     using Assets.BL;
 
+    using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
     using ProjectMasters.Games.Asserts;
+    using ProjectMasters.Web.Hubs;
 
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IHubContext<GameHub, IGame> _gameHub;
         private DateTime _currentTime;
 
-        public Worker(ILogger<Worker> logger)
+
+        public Worker(ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
             _logger = logger;
+            _gameHub = gameHub;
             _currentTime = DateTime.Now;
         }
 
@@ -44,10 +51,6 @@ namespace ProjectMasters.Games
             var time = (float)deltaTime.TotalSeconds;
 
             GameState._teamFactory.Update(time);
-            //foreach (var line in ProjectUnitFormation.Instance.Lines)
-            //{
-            //    _logger.LogError(line.Units.Count.ToString());
-            //}
         }
 
         private void Initiate()
@@ -58,6 +61,21 @@ namespace ProjectMasters.Games
             GameState._project = ProjectUnitFormation.Instance;
 
             GameState._isLoaded = true;
+
+            GameState.PersonAssigned += GameState_PersonAssigned;
+            GameState.PersonAttacked += GameState_PersonAttacked;
+        }
+
+        private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
+        {
+            _gameHub.Clients.All.AssignPersonAsync(new { PersonId = e.Person.Id, LineId = e.Line.Id });
+            _logger.LogInformation($"Person {e.Person.Id} assigned to line {e.Line.Id}");
+        }
+
+        private void GameState_PersonAttacked(object sender, PersonAttackedEventArgs e)
+        {
+            _gameHub.Clients.All.AttackPersonAsync(new { PersonId = e.Person.Id, UnitId = e.Unit.Id});
+            _logger.LogInformation($"Person {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
         }
     }
 }
