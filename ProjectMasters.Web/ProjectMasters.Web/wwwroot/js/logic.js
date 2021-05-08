@@ -42,7 +42,7 @@ function getUnitContainer(type, textures, masteryItems) {
     let container = new PIXI.Container();
     container.addChild(sprite);
     container.scale = new PIXI.Point(0.12, 0.12);
-    container.sourceScale = container.scale;
+    container.sourceScale = new PIXI.Point(container.scale.x, container.scale.y);
     container.pivot = new PIXI.Point(0.5, 1);
 
     var animator = {
@@ -52,10 +52,11 @@ function getUnitContainer(type, textures, masteryItems) {
         targetScale: null,
         graphics: container,
         update: function () {
-            this.shapeCounter--;
+            this.shapeCounter -= this.getRandomInt(3);
             if (this.shapeCounter <= 0) {
-                let scaleX = (this.getRandomInt(8) - 4) * 0.01 + this.graphics.sourceScale.x;
-                let scaleY = (this.getRandomInt(8) - 4) * 0.01 + this.graphics.sourceScale.y;
+                let sizeDiff = 4;
+                let scaleX = (this.getRandomInt(sizeDiff) - sizeDiff / 2) * 0.01 + this.graphics.sourceScale.x;
+                let scaleY = (this.getRandomInt(sizeDiff) - sizeDiff / 2) * 0.01 + this.graphics.sourceScale.y;
                 this.targetScale = new PIXI.Point(scaleX, scaleY);
                 this.shapeCounter = this.shapeDuration;
                 this.startScale = this.graphics.scale;
