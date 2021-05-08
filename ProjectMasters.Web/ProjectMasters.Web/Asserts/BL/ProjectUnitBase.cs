@@ -35,7 +35,6 @@ namespace Assets.BL
             set
             {
                 _isDead = value;
-                GameState.KillUnit(this);
             }
         }
 

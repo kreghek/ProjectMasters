@@ -60,8 +60,6 @@ namespace Assets.BL
                         {
                             formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, subTask);
                         }
-
-                        GameState.CreateUnit(subTask);
                     }
 
                     person.FeatureCompleteCount++;

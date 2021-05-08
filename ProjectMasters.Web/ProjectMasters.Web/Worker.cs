@@ -153,7 +153,20 @@ namespace ProjectMasters.Games
             GameState.PersonIsTired += GameState_PersonIsTired;
             GameState.PersonIsRested += GameState_PersonIsRested;
             GameState.LineIsRemoved += GameState_LineIsRemoved;
+
+            GameState._project.Added += Project_UnitAdded;
+            GameState._project.Removed += Project_UnitRemoved;
             Initialized();
+        }
+
+        private void Project_UnitRemoved(object sender, Assets.BL.UnitEventArgs e)
+        {
+            GameState.KillUnit(e.ProjectUnit);
+        }
+
+        private void Project_UnitAdded(object sender, Assets.BL.UnitEventArgs e)
+        {
+            GameState.CreateUnit(e.ProjectUnit);
         }
     }
 }
