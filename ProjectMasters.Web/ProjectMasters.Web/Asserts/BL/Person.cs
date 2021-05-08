@@ -165,11 +165,13 @@
                 var effectDuration = Random.Next((int)Effect.MIN_DURATION, (int)Effect.MAX_DURATION);
                 var effect = new Effect
                 {
+                    Id = EffectIdGenerator.GetId(),
                     EffectType = (EffectType)effectTypeIndex,
                     Lifetime = effectDuration
                 };
 
                 Effects.Add(effect);
+                GameState.AddEffect(effect);
             }
         }
 
@@ -179,7 +181,10 @@
             {
                 effect.Lifetime -= commitDeltaTime;
                 if (effect.Lifetime <= 0)
+                {
                     Effects.Remove(effect);
+                    GameState.RemoveEffect(effect);
+                }
                 else
                     switch (effect.EffectType)
                     {
@@ -221,6 +226,7 @@
                 if (RecoveryCounter == null)
                 {
                     RecoveryCounter = RECOVERY_TIME_BASE;
+                    GameState.TirePerson(this);
                 }
                 else
                 {
@@ -229,6 +235,7 @@
                     {
                         RecoveryCounter = null;
                         EnergyCurrent = Energy;
+                        GameState.RestPerson(this);
                     }
                 }
             }

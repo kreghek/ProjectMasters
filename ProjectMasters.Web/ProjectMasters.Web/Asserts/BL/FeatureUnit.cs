@@ -90,7 +90,7 @@ namespace Assets.BL
             {
                 var subTask = new SubTaskUnit
                 {
-                    Id = IdGenerator.GetId(),
+                    Id = UnitIdGenerator.GetId(),
                     Cost = Random.Next(MIN_SUBTASK_COST, MAX_SUBTASK_COST + 1)
                 };
 

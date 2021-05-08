@@ -28,9 +28,9 @@
         public ProjectUnitBase Unit { get; }
     }
 
-    public class UnitIsDeadEventArgs : EventArgs
+    public class UnitEventArgs : EventArgs
     {
-        public UnitIsDeadEventArgs(ProjectUnitBase unit)
+        public UnitEventArgs(ProjectUnitBase unit)
         {
             Unit = unit ?? throw new ArgumentNullException(nameof(unit));
         }
@@ -38,13 +38,24 @@
         public ProjectUnitBase Unit { get; }
     }
 
-    public class UnitIsCreatedEventArgs : EventArgs
+    public class EffectEventArgs : EventArgs
     {
-        public UnitIsCreatedEventArgs(ProjectUnitBase unit)
+        public EffectEventArgs(Effect effect)
         {
-            Unit = unit ?? throw new ArgumentNullException(nameof(unit));
+            Effect = effect ?? throw new ArgumentNullException(nameof(effect));
         }
 
-        public ProjectUnitBase Unit { get; }
+        public Effect Effect { get; }
     }
+
+    public class PersonEventArgs : EventArgs
+    {
+        public PersonEventArgs(Person person)
+        {
+            Person = person ?? throw new ArgumentNullException(nameof(person));
+        }
+
+        public Person Person { get; }
+    }
+    
 }
