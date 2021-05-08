@@ -23,8 +23,6 @@ namespace Zilon.Tournament.ApiGate
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseMvc();
-
             var options = new DefaultFilesOptions();
             options.DefaultFileNames.Clear();
             options.DefaultFileNames.Add("index.html");
@@ -36,7 +34,6 @@ namespace Zilon.Tournament.ApiGate
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
     }
 }
