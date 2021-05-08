@@ -15,5 +15,6 @@ namespace ProjectMasters.Web.Hubs
         Task AttackPersonAsync(object obj);
         Task KillUnitAsync(object obj);
         Task ChangeUnitPositionsAsync(IEnumerable<object> enumerable);
+        Task CreateUnitAsync(object obj);
     }
 }
