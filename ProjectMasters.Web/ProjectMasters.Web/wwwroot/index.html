@@ -294,7 +294,6 @@
                 for (let i = 0; i < unitDtos.length; i++) {
                     let container = getUnitContainer(unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
                     container.id = unitDtos[i].id;
-                    let personWidth = 200;
                     let offset = 90 + unitDtos[i].lineId * 50;
 
                     container.x = offset + personWidth + unitDtos[i].queueIndex * 100;
@@ -312,7 +311,6 @@
 
                 let offset = 170;
                 personContainer.x = offset + (lineDto.id - 1) * 30;
-
                 personContainer.y = (lineDto.id - 1) * 200 + 50;
 
                 personContainer.sourceX = personContainer.x;
@@ -382,7 +380,7 @@
             let container = getUnitContainer(unitDto.type, textures, unitDto.requiredMasteryItems);
             container.id = unitDto.id;
 
-            container.x = 200 + personWidth + unitDto.queueIndex * 100;
+            //container.x = 200 + personWidth + unitDto.queueIndex * 100;
             container.y = 100 + (unitDto.lineId) * 200 - 25;
             app.stage.addChild(container);
 
@@ -404,11 +402,15 @@
 
         connection.on("TirePersonAsync", 
             function (personDto) {
-                let personContainer = listPerson.get(personDto.id);
+                //let personContainer = listPerson.get(personDto.id);
 
-                personContainer.x = 150;
-                personContainer.y = 150;
-                //personContainer.y = (lineDto.id - 1) * 50 + 50;
+                //personContainer.x = 100;
+                //personContainer.y = 100;
+                ////personContainer.y = (lineDto.id - 1) * 50 + 50;
+
+                //personContainer.sourceX = personContainer.x;
+                //personContainer.sourceY = personContainer.y;
+
             });
 
         connection.on("RemoveLineAsync", 
