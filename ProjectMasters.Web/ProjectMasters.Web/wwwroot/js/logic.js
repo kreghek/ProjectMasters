@@ -53,8 +53,8 @@ function getSpriteByType(type, textures) {
     }
 
     if (type == "Error") {
-        return new PIXI.Sprite(textures.bug);
+        return new PIXI.Sprite(textures.bug2);
     }
 
-    return new PIXI.Sprite(textures.bug);
+    return new PIXI.Sprite(textures.bug1);
 }

@@ -50,7 +50,8 @@
             .add("images/Background.png")
             .add("images/empty_body.png")
             .add("images/shirt.png")
-            .add("images/bug.png")
+            .add("images/bug1.png")
+            .add("images/bug2.png")
             .add("images/eyes.png")
             .add("images/eyes2.png")
             .add("images/eyes3.png")
@@ -79,7 +80,8 @@
 
             textures.empty_body = PIXI.loader.resources["images/empty_body.png"].texture;
             textures.shirt = PIXI.loader.resources["images/shirt.png"].texture;
-            textures.bug = PIXI.loader.resources["images/bug.png"].texture;
+            textures.bug1 = PIXI.loader.resources["images/bug1.png"].texture;
+            textures.bug2 = PIXI.loader.resources["images/bug2.png"].texture;
             textures.feature = PIXI.loader.resources["images/feature.png"].texture;
 
             textures.eyes1 = PIXI.loader.resources["images/eyes.png"].texture;
@@ -159,16 +161,6 @@
 
                     units.set(unitDtos[i].id, container);
                 }
-
-                var graphics = new PIXI.Graphics();
-                graphics.beginFill(0x3e494b);
-                graphics.lineStyle(4, 0x0, .3);
-                graphics.drawRoundedRect(0, app.screen.height-100, 150, 100, 40);
-                console.log("width", app.screen.width);
-                graphics.endFill();
-
-                app.stage.addChild(graphics);
-
             });
 
 
