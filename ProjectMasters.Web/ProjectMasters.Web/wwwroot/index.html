@@ -7,6 +7,12 @@
         table, tr, td {
             border: 1px solid black;
         }
+        input {
+            border-top-style: hidden;
+            border-right-style: hidden;
+            border-left-style: hidden;
+            border-bottom-style: hidden;
+        }
     </style>
     <script src="js/pixi.min.js"></script>
     <script src="js/signalr/dist/browser/signalr.min.js"></script>
@@ -16,6 +22,34 @@
 <body>
     <div style="width:100%; height: 786px; position: relative" id="main">
         <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display:none">START</button>
+    </div>
+
+    <div style="position: relative" id="main">
+        <form id="firstForm">
+            <input type="text" id="name" name="name" disabled="true">
+            <br/>
+            <input type="text" id="skill1" name="skil" disabled="true">            
+            <br/>
+            <input type="text" id="skill2" name="skil" disabled="true">
+        </form>
+    </div>    
+    <div style="position: relative" id="main">
+        <form id="secondForm">
+            <input type="text" id="name" name="name" disabled="true">
+            <br/>
+            <input type="text" id="skill1" name="skil" disabled="true">            
+            <br/>
+            <input type="text" id="skill2" name="skil" disabled="true">
+        </form>
+    </div>    
+    <div style=" position: relative" id="main">
+        <form id="thirdForm">
+            <input type="text" id="name" name="name" disabled="true">
+            <br/>
+            <input type="text" id="skill1" name="skil" disabled="true">            
+            <br/>
+            <input type="text" id="skill2" name="skil" disabled="true">
+        </form>
     </div>
 
     <script type="text/javascript">
@@ -63,7 +97,7 @@
             .add("images/mouth3.png")
             .add("images/title.jpg")
             .add("images/feature.png")
-        .load(setup);
+            .load(setup);
 
 
         var titleBackground;
@@ -136,8 +170,33 @@
             }
         }
 
+        function setPeopleInfo(personId, personName, skills) {
+            let formId;
+ 
+            switch (personId) {
+            case 1:
+                formId = "firstForm";
+                break;
+            case 2:
+                formId = "secondForm";
+                break;
+            case 3:
+                formId = "thirdForm";
+                break;
+            default:
+                return;
+            }
+
+            let inputs = document.getElementById(formId).elements;
+            nameInput = inputs["name"].value = personName;
+
+            for (let i = 1; i < skills.length + 1; i++) {
+                skillInput = inputs[`skill${i}`].value = `${skills[i - 1].sid} : ${skills[i-1].level}`;
+            }
+        };
+
         connection.on("SetupClientStateAsync",
-            function(personDtos, unitDtos) {
+            function (personDtos, unitDtos) {
                 for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex, textures);
                     container.id = personDtos[i].id;
@@ -152,6 +211,8 @@
 
                     app.stage.addChild(container);
                     listPerson.set(personDtos[i].id, container);
+
+                    setPeopleInfo(personDtos[i].id, personDtos[i].name, personDtos[i].masteryLevels);
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
@@ -191,6 +252,7 @@
         });
 
         connection.on("AttackPersonAsync", function (data) {
+            setPeopleInfo(data.id, data.name, data.masteryLevels);
             let personContainer = listPerson.get(data.id);
             let attackMoveEngine = {
                 counter: 0.5,
