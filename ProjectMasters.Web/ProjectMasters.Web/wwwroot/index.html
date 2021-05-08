@@ -224,6 +224,8 @@
         let listPerson = new Map();
         var units = new Map();
 
+        let personWidth = 200;
+
         function gameLoop(delta) {
             if (listPerson) {
                 listPerson.forEach((person) => {
@@ -345,7 +347,6 @@
             for (let i = 0; i < data.length; i++) {
                 let unitDto = data[i];
                 let unitContainer = units.get(unitDto.unitId);
-                let personWidth = 200;
 
                 let offset = 90 + unitDto.lineId * 50;
 
@@ -375,14 +376,14 @@
         connection.on("CreateUnitAsync", function (unitDto) {
             let container = getUnitContainer(unitDto.type, textures);
             container.id = unitDto.id;
-            /*let personWidth = 200;
-            container.x = 200 + personWidth + unitDto.queueIndex * 100;*/
+
+            container.x = 200 + personWidth + unitDto.queueIndex * 100;
             container.y = 100 + (unitDto.lineId) * 200 - 25;
             app.stage.addChild(container);
 
             units.set(unitDto.id, container);
 
-            connection.invoke("ChangeUnitPositionsServer", data.lineId);
+            connection.invoke("ChangeUnitPositionsServer", unitDto.lineId);
         });
 
         connection.on("PreSetupClientAsync", function (isGameStarted) {
@@ -400,14 +401,15 @@
             function (personDto) {
                 let personContainer = listPerson.get(personDto.id);
 
-                personContainer.x = offset + (lineDto.id - 1) * 30;
-
-                personContainer.y = (lineDto.id - 1) * 200 + 50;
-
-                personContainer.sourceX = personContainer.x;
-                personContainer.sourceY = personContainer.y;
+                personContainer.x = 150;
+                personContainer.y = 150;
+                //personContainer.y = (lineDto.id - 1) * 50 + 50;
             });
 
+        connection.on("RemoveLineAsync", 
+            function (lineDto) {
+                
+            });
 
 
     </script>
