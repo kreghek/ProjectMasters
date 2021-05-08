@@ -213,8 +213,8 @@
         connection.on("CreateUnitAsync", function (unitDto) {
             let container = getUnitContainer(unitDto.type, textures);
             container.id = unitDto.id;
-            let personWidth = 200;
-            container.x = 200 + personWidth + unitDto.queueIndex * 100;
+            /*let personWidth = 200;
+            container.x = 200 + personWidth + unitDto.queueIndex * 100;*/
             container.y = 100 + (unitDto.lineId) * 200 - 25;
             app.stage.addChild(container);
 

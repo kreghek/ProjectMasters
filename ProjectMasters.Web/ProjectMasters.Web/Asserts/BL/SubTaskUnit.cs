@@ -49,7 +49,7 @@ namespace Assets.BL
                     {
                         formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
                     }
-                    GameState.CreateUnit(this);
+                    GameState.CreateUnit(errorUnit);
                 }
 
                 person.ErrorMadeCount += errorCount;
