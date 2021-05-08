@@ -12,10 +12,8 @@
     {
         public void InitServerState()
         {
-            var personDtos = GameState._team.Persons.Select(person => new PersonDto
-            {
-                Id = person.Id
-            });
+            var personDtos = 
+                GameState._team.Persons.Select(person => new PersonDto(person));
 
             var lineDtos = GameState._project.Lines.Select(x=> new LineDto {
                 Id = x.Id
@@ -26,14 +24,7 @@
             {
                 foreach (var unit in line.Units)
                 {
-                    var dto = new UnitDto
-                    {
-                        Id = unit.Id,
-                        LineId = line.Id,
-                        Type = unit.Type.ToString(),
-                        QueueIndex = unit.QueueIndex
-                    };
-
+                    var dto = new UnitDto(unit);
                     unitDots.Add(dto);
                 }
             }

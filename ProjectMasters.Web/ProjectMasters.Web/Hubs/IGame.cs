@@ -8,11 +8,11 @@ namespace ProjectMasters.Web.Hubs
 
     public interface IGame
     {
-        Task AssignPersonAsync(object obj);
+        Task AssignPersonAsync(PersonDto person, LineDto line);
 
         Task SetupClientStateAsync(IEnumerable<PersonDto> personDto, IEnumerable<LineDto> lines, IEnumerable<UnitDto> units);
-        Task AttackPersonAsync(object obj);
-        Task KillUnit(object obj);
-        Task CreateUnitAsync(object obj);
+        Task AttackPersonAsync(PersonDto person, UnitDto unit);
+        Task KillUnit(UnitDto unit);
+        Task CreateUnitAsync(UnitDto unit);
     }
 }
