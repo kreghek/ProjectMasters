@@ -77,17 +77,17 @@
         <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display: none">START</button>
 
         <div class="person-panels">
-            <div id="firstForm" class="person-panel" onclick="document.getElementById('personDialog').show();">
+            <div id="firstForm" class="person-panel" onclick="showPersonDialog(listPerson.get(1));">
                 <p class="name"></p>
                 <div class="mastery-items"></div>
             </div>
 
-            <div id="secondForm" class="person-panel">
+            <div id="secondForm" class="person-panel" onclick="showPersonDialog(listPerson.get(2));">
                 <p class="name"></p>
                 <div class="mastery-items"></div>
             </div>
 
-            <div id="thirdForm" class="person-panel">
+            <div id="thirdForm" class="person-panel" onclick="showPersonDialog(listPerson.get(3));">
                 <p class="name"></p>
                 <div class="mastery-items"></div>
             </div>
@@ -118,7 +118,7 @@
                 <button onclick="assignPersonToLine(1)">Line 2</button>
                 <button onclick="assignPersonToLine(2)">Line 3</button>
             </div>
-            <button onclick="closePersonDialog()"></button>
+            <button onclick="closePersonDialog()">Close</button>
         </dialog>
     </div>
 
@@ -304,11 +304,31 @@
             }
         };
 
+        function showPersonDialog(personContainer) {
+            let dialog = document.getElementById("personDialog");
+
+            let personNameTextbox = document.getElementsByClassName("person-name")[0];
+            personNameTextbox.innerHTML = personContainer.personName;
+
+            dialog.show();
+        }
+
+        function closePersonDialog() {
+            let dialog = document.getElementById("personDialog");
+            dialog.close();
+        }
+
+        function assignPersonToLine(personId) {
+            connection.invoke("assignPersonToLine", personId);
+        }
+
         connection.on("SetupClientStateAsync",
             function (personDtos, unitDtos) {
                 for (let i = 0; i < personDtos.length; i++) {
-                    let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex, textures);
-                    container.id = personDtos[i].id;
+                    let personDto = personDtos[i];
+                    let container = getPersonContainer(personDto.eyesIndex, personDto.hairIndex, personDto.mouthIndex, textures);
+                    container.id = personDto.id;
+                    container.personName = personDto.name;
                    
                     let offset = 170;
 
@@ -317,17 +337,17 @@
                         container.y = 0;
                     }
                     else {
-                        container.x = offset + (personDtos[i].lineId) * 30;
-                        container.y = (personDtos[i].lineId) * 200 + 50;
+                        container.x = offset + (personDto.lineId) * 30;
+                        container.y = (personDto.lineId) * 200 + 50;
                     }
 
                     container.sourceX = container.x;
                     container.sourceY = container.y;
 
                     app.stage.addChild(container);
-                    listPerson.set(personDtos[i].id, container);
+                    listPerson.set(personDto.id, container);
 
-                    setPeopleInfo(personDtos[i].id, personDtos[i].name, personDtos[i].masteryLevels);
+                    setPeopleInfo(personDto.id, personDto.name, personDto.masteryLevels);
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
