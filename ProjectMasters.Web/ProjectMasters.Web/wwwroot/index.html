@@ -60,10 +60,13 @@
             .add("images/mouth2.png")
             .add("images/mouth3.png")
             .add("images/title.jpg")
+            .add("images/feature.png")
         .load(setup);
 
 
         var titleBackground;
+
+        var textures = {};
 
         //This `setup` function will run when the image has loaded
         function setup() {
@@ -73,10 +76,29 @@
             let background = new PIXI.Sprite(PIXI.loader.resources["images/Background.png"].texture);
             background.scale = new PIXI.Point(0.2, 0.2);
 
+            textures.empty_body = PIXI.loader.resources["images/empty_body.png"];
+            textures.shirt = PIXI.loader.resources["images/shirt.png"];
+            textures.bug = PIXI.loader.resources["images/bug.png"];
+            textures.feature = PIXI.loader.resources["images/feature.png"];
+
+            textures.eyes1 = PIXI.loader.resources["images/eyes.png"];
+            textures.eyes2 = PIXI.loader.resources["images/eyes2.png"];
+            textures.eyes3 = PIXI.loader.resources["images/eyes3.png"];
+
+            textures.hair1 = PIXI.loader.resources["images/hair1.png"];
+            textures.hair2 = PIXI.loader.resources["images/hair2.png"];
+            textures.hair3 = PIXI.loader.resources["images/hair3.png"];
+
+            textures.mouth1 = PIXI.loader.resources["images/mouth1.png"];
+            textures.mouth2 = PIXI.loader.resources["images/mouth2.png"];
+            textures.mouth3 = PIXI.loader.resources["images/mouth3.png"];
+
             app.stage.addChild(background);
             app.stage.addChild(titleBackground);
 
             app.ticker.add(delta => gameLoop(delta));
+
+            start();
         }
     </script>
 
@@ -115,7 +137,7 @@
         connection.on("SetupClientStateAsync",
             function(personDtos, unitDtos) {
                 for (let i = 0; i < personDtos.length; i++) {
-                    let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex);
+                    let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex, textures);
                     container.id = personDtos[i].id;
                     container.x = 100;
                     container.y = (personDtos[i].lineId - 1) * 200 + 50;
@@ -128,7 +150,7 @@
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
-                    let container = getUnitContainer(unitDtos[i].type);
+                    let container = getUnitContainer(unitDtos[i].type, textures);
                     container.id = unitDtos[i].id;
                     let personWidth = 200;
                     container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
