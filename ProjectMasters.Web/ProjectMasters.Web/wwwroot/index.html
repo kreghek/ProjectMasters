@@ -420,8 +420,7 @@
             function (personDto) {
                 let personContainer = listPerson.get(personDto.id);
 
-                personContainer.x = 0;
-                personContainer.y = 0;
+                movePersonOutOfWork(personContainer);
 
             });
 
@@ -438,11 +437,14 @@
                 for (let i = 0; i < lineDto.persons.length; i++) {
                     let personContainer = listPerson.get(lineDto.persons[i].id);
 
-                    personContainer.x = 0;
-                    personContainer.y = 0;
+                    movePersonOutOfWork(personContainer);
                 }
-
             });
+
+        function movePersonOutOfWork(personContainer) {
+            personContainer.x = 0;
+            personContainer.y = 0;
+        }
 
 
     </script>
