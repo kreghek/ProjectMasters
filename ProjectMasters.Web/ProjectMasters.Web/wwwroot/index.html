@@ -81,8 +81,8 @@
             function(personDtos) {
                 for (var i = 0; i < personDtos.length; i++) {
                     let container = getContainer();
-                    container.x = app.screen.width / 2;
-                    container.y = app.screen.height + i*150 ;
+                    container.x = app.screen.width / 2 - 500;
+                    container.y = 100 + i*200 ;
                     app.stage.addChild(container);
                     }
 
