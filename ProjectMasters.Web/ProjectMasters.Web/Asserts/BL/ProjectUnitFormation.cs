@@ -25,25 +25,29 @@ namespace Assets.BL
         private void Recreate()
         {
             Lines = new List<ProjectLine>();
+            FillLines1();
 
-            switch (Player.ProjectLevel)
-            {
-                case 0:
-                    FillLines1();
-                    break;
 
-                case 1:
-                    FillLines2();
-                    break;
-            }
+            //switch (Player.ProjectLevel)
+            //{
+            //    case 0:
+            //        FillLines1();
+            //        break;
+
+            //    case 1:
+            //        FillLines2();
+            //        break;
+            //}
         }
 
         private void FillLines1()
         {
             Lines.Add(new ProjectLine
             {
+                Id = 1,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
+                        Id = IdGenerator.GetId(),
                         Cost = 2,
                         LineIndex = 0,
                         QueueIndex = 0
@@ -53,8 +57,10 @@ namespace Assets.BL
 
             Lines.Add(new ProjectLine
             {
+                Id = 2,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
+                        Id = IdGenerator.GetId(),
                         Cost = 1,
                         LineIndex = 1,
                         QueueIndex = 0
@@ -64,8 +70,10 @@ namespace Assets.BL
 
             Lines.Add(new ProjectLine
             {
+                Id = 3,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
+                        Id = IdGenerator.GetId(),
                         Cost = 0.8f,
                         LineIndex = 2,
                         QueueIndex = 0

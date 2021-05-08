@@ -3,7 +3,5 @@
     public class PersonDto
     {
         public int Id { get; set; }
-
-
     }
 }

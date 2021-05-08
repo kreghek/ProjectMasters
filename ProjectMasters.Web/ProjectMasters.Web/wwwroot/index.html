@@ -58,7 +58,6 @@
     <script>
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/game")
-            .configureLogging(signalR.LogLevel.Information)
             .build();
 
         async function start() {
@@ -76,22 +75,27 @@
 
         // Start the connection.
         start();
+        let listPerson = new Map();
 
         connection.on("SetupClientStateAsync",
-            function(personDtos) {
-                for (var i = 0; i < personDtos.length; i++) {
+            function (personDtos) {
+                console.log("personDtos = ", personDtos);
+                personDtos.forEach(el => {
                     let container = getContainer();
-                    container.x = app.screen.width / 2 - 500;
-                    container.y = 100 + i*200 ;
-                    app.stage.addChild(container);
-                    }
-
+                    console.log(el.id);
+                    listPerson.set(el.id, container);
+                });
             });
 
 
         connection.on("AssignPersonAsync",
             function (data) {
-                alert(data);
+                console.log(data);
+                let personContainer = listPerson.get(data.personId);
+                console.log("personContainer" ,personContainer);
+                personContainer.x = 100;
+                personContainer.y = (data.lineId - 1) * 200 + 50;
+                app.stage.addChild(personContainer);
             });
 
     </script>

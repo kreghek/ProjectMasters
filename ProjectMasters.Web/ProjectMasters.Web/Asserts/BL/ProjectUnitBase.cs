@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Assets.BL
 {
-
     public abstract class ProjectUnitBase: ISpeechSource
     {
+        public int Id { get; set; }
         private Random Random => new Random(DateTime.Now.Millisecond);
 
         protected float _speechCounter;

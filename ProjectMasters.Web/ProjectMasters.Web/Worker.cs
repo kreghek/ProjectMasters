@@ -2,6 +2,7 @@ namespace ProjectMasters.Games
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -62,11 +63,19 @@ namespace ProjectMasters.Games
             GameState._isLoaded = true;
 
             GameState.PersonAssigned += GameState_PersonAssigned;
+            GameState.PersonAttacked += GameState_PersonAttacked;
         }
 
         private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
         {
             _gameHub.Clients.All.AssignPersonAsync(new { PersonId = e.Person.Id, LineId = e.Line.Id });
+            _logger.LogInformation($"Person {e.Person.Id} assigned to line {e.Line.Id}");
+        }
+
+        private void GameState_PersonAttacked(object sender, PersonAttackedEventArgs e)
+        {
+            _gameHub.Clients.All.AttackPersonAsync(new { PersonId = e.Person.Id, UnitId = e.Unit.Id});
+            _logger.LogInformation($"Person {e.Person.Id} attacked {e.Unit.GetType()} {e.Unit.Id}");
         }
     }
 }
