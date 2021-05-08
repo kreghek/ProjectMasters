@@ -59,7 +59,7 @@
     <div style="width: 100%; height: 786px; position: relative" id="main">
         <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display: none">START</button>
 
-        <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5)">
+        <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 / 50%);">
             <div id="firstForm" class="person-panel">
                 <p class="name"></p>
                 <div class="mastery-items"></div>
@@ -286,9 +286,15 @@
                     container.id = personDtos[i].id;
                    
                     let offset = 170;
-                    container.x = offset + (personDtos[i].lineId - 1) * 30;
 
-                    container.y = (personDtos[i].lineId - 1) * 200 + 50;
+                    if (personDtos[i].lineId === null) {
+                        container.x = 0;
+                        container.y = 0;
+                    }
+                    else {
+                        container.x = offset + (personDtos[i].lineId) * 30;
+                        container.y = (personDtos[i].lineId) * 200 + 50;
+                    }
 
                     container.sourceX = container.x;
                     container.sourceY = container.y;
@@ -410,15 +416,19 @@
 
         connection.on("TirePersonAsync", 
             function (personDto) {
-                //let personContainer = listPerson.get(personDto.id);
+                let personContainer = listPerson.get(personDto.id);
 
-                //personContainer.x = 100;
-                //personContainer.y = 100;
-                ////personContainer.y = (lineDto.id - 1) * 50 + 50;
+                personContainer.x = 0;
+                personContainer.y = 0;
 
-                //personContainer.sourceX = personContainer.x;
-                //personContainer.sourceY = personContainer.y;
+            });
 
+        connection.on("RestPersonAsync",
+            function (personDto) {
+                let personContainer = listPerson.get(personDto.id);
+
+                personContainer.x = personContainer.sourceX;
+                personContainer.y = personContainer.sourceY;
             });
 
         connection.on("RemoveLineAsync", 

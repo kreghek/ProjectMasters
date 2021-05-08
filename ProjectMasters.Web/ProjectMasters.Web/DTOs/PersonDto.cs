@@ -1,6 +1,7 @@
 ﻿namespace ProjectMasters.Web.DTOs
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using Assets.BL;
 
@@ -16,6 +17,7 @@
         public Skill[] Skills { get; set; }
 
         public string Name { get; set; }
+        public string[] Traits { get; set; }
 
         public PersonDto(Person person)
         {
@@ -26,6 +28,7 @@
             HairIndex = person.HairIndex;
             EyesIndex = person.EyesIndex;
             Name = person.Name;
+            Traits = person.Traits.Select(x => x.ToString()).ToArray();
         }
     }
 }
