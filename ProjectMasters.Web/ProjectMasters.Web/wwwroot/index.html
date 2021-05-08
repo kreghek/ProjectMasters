@@ -35,17 +35,29 @@
 
         //load an image and run the `setup` function when it's done
         PIXI.loader
-            .add("images/PlayerBody.png")
-            .load(setup);
+        .add("images/empty_body.png")
+        .add("images/shirt.png")
+        .add("images/eyes.png")
+        .load(setup);
 
         //This `setup` function will run when the image has loaded
         function setup() {
 
             //Create the cat sprite
-            let cat = new PIXI.Sprite(PIXI.loader.resources["images/PlayerBody.png"].texture);
+            
+            let body = new PIXI.Sprite(PIXI.loader.resources["images/empty_body.png"].texture);
+            let shirt = new PIXI.Sprite(PIXI.loader.resources["images/shirt.png"].texture);
+            let eyes = new PIXI.Sprite(PIXI.loader.resources["images/eyes.png"].texture);
+            
+            let container  = new PIXI.Container();
+            container.addChild(body);
+            container.addChild(shirt);
+            container.addChild(eyes);
+            container.scale = new PIXI.Point(0.1,0.1);
+
 
             //Add the cat to the stage
-            app.stage.addChild(cat);
+            app.stage.addChild(container);
         }
 
 
