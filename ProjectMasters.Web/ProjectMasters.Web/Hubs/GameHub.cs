@@ -14,7 +14,7 @@ namespace ProjectMasters.Web.Hubs
 
         private async void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
         {
-            await Clients.All.SendAsync("assignPerson", new { PersonId = e.Person.Id, LineId = e.Line.Id });
+           // await Clients.All.SendAsync("assignPerson", new { PersonId = e.Person.Id, LineId = e.Line.Id });
         }
     }
 }

@@ -1,7 +1,6 @@
 namespace ProjectMasters.Games
 {
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -16,7 +15,6 @@ namespace ProjectMasters.Games
     {
         private readonly ILogger<Worker> _logger;
         private DateTime _currentTime;
-
 
         public Worker(ILogger<Worker> logger)
         {
@@ -46,6 +44,10 @@ namespace ProjectMasters.Games
             var time = (float)deltaTime.TotalSeconds;
 
             GameState._teamFactory.Update(time);
+            //foreach (var line in ProjectUnitFormation.Instance.Lines)
+            //{
+            //    _logger.LogError(line.Units.Count.ToString());
+            //}
         }
 
         private void Initiate()
