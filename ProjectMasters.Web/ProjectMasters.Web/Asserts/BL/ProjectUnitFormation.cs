@@ -46,7 +46,7 @@ namespace Assets.BL
         {
             Lines.Add(new ProjectLine
             {
-                Id = 1,
+                Id = 0,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
                         Id = UnitIdGenerator.GetId(),
@@ -59,7 +59,7 @@ namespace Assets.BL
 
             Lines.Add(new ProjectLine
             {
-                Id = 2,
+                Id = 1,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
                         Id = UnitIdGenerator.GetId(),
@@ -72,7 +72,7 @@ namespace Assets.BL
 
             Lines.Add(new ProjectLine
             {
-                Id = 3,
+                Id = 2,
                 Units = new List<ProjectUnitBase> {
                     new FeatureUnit{
                         Id = UnitIdGenerator.GetId(),
@@ -155,7 +155,7 @@ namespace Assets.BL
                 unit1.QueueIndex = i;
             }
 
-            Added?.Invoke(this, new UnitEventArgs { ProjectUnit = unit });
+            Added?.Invoke(this, new UnitEventArgs (unit) );
         }
 
         public void ResolveUnit(int lineIndex, ProjectUnitBase unit)
@@ -182,7 +182,7 @@ namespace Assets.BL
                 SolvedUnits.Add(new SolvedUnitInfo { Cost = unit.Cost, TimeLog = unit.TimeLog });
             }
 
-            Removed?.Invoke(this, new UnitEventArgs { ProjectUnit = unit });
+            Removed?.Invoke(this, new UnitEventArgs (unit));
         }
     }
 }
