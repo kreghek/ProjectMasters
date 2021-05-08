@@ -14,7 +14,17 @@
 
 </head>
 <body>
+    <div style="width:100%; height: 786px; position: relative" id="main">
+        
+            <button onclick="startGame()" style="position: absolute; bottom: 500px; right: 500px;">START</button>
+    </div>
 
+    <script type="text/javascript">
+        function startGame() {
+            startSignalRConnection();
+            app.stage.removeChild(titleBackground);
+        }
+    </script>
     <script type="text/javascript">
         let type = "WebGL"
         if (!PIXI.utils.isWebGLSupported()) {
@@ -32,7 +42,7 @@
         );
 
         //Add the canvas that Pixi automatically created for you to the HTML document
-        document.body.appendChild(app.view);
+        document.getElementById("main").appendChild(app.view);
 
         //load an image and run the `setup` function when it's done
         PIXI.loader
@@ -49,15 +59,22 @@
             .add("images/mouth1.png")
             .add("images/mouth2.png")
             .add("images/mouth3.png")
+            .add("images/title.jpg")
         .load(setup);
+
+
+        var titleBackground;
 
         //This `setup` function will run when the image has loaded
         function setup() {
+            titleBackground = new PIXI.Sprite(PIXI.loader.resources["images/title.jpg"].texture);
+            titleBackground.scale = new PIXI.Point(2, 2);
 
             let background = new PIXI.Sprite(PIXI.loader.resources["images/Background.png"].texture);
             background.scale = new PIXI.Point(0.2, 0.2);
 
             app.stage.addChild(background);
+            app.stage.addChild(titleBackground);
 
             app.ticker.add(delta => gameLoop(delta));
         }
@@ -68,31 +85,31 @@
             .withUrl("/game")
             .build();
 
-        async function start() {
+        async function startSignalRConnection() {
             try {
                 await connection.start();
                 console.log("SignalR Connected.");
                 connection.invoke("InitServerState");
             } catch (err) {
                 console.log("err", err);
-                setTimeout(start, 5000);
+                setTimeout(startSignalRConnection, 5000);
             }
         };
 
-        connection.onclose(start);
+        connection.onclose(startSignalRConnection);
 
-        // Start the connection.
-        start();
         let listPerson = new Map();
 
         var units = new Map();
 
         function gameLoop(delta) {
-            listPerson.forEach((person) => {
-                if (person.moveEngine) {
-                    person.moveEngine.update(delta);
-                }
-            });
+            if (listPerson) {
+                listPerson.forEach((person) => {
+                    if (person.moveEngine) {
+                        person.moveEngine.update(delta);
+                    }
+                });
+            }
         }
 
         connection.on("SetupClientStateAsync",
