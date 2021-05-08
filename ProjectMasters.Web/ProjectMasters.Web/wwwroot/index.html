@@ -13,6 +13,31 @@
             border-left-style: hidden;
             border-bottom-style: hidden;
         }
+
+        #decisionDialog {
+            width: 500px;
+            top: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            font-size: 17px;
+        }
+
+        #decisionDialog .description {
+            font-size: 13px;
+            text-align: right;
+            color: dimgray;
+        }
+
+        #decisionDialog #leftDecision, #decisionDialog #rightDecision {
+            border: 1px solid #000;
+            margin: 10px;
+            padding: 15px;
+        }
+
+            #decisionDialog #leftDecision:hover, #decisionDialog #rightDecision:hover {
+                background: rgba(255, 106, 0, 0.3);
+            }
     </style>
     <script src="js/pixi.min.js"></script>
     <script src="js/signalr/dist/browser/signalr.min.js"></script>
@@ -61,7 +86,7 @@
 
             </div>
         </div>
-        <dialog id="decisionDialog" style="background: rgba(255, 255, 255, 0.7); width: 300px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); border-radius: 5px;">
+        <dialog id="decisionDialog">
             <div>
                 <p id="decisionTitle">
 
