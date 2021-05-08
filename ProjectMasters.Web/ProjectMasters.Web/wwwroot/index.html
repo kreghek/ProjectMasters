@@ -97,7 +97,6 @@
 
         connection.on("SetupClientStateAsync",
             function(personDtos, unitDtos) {
-                console.log("personDtos = ", personDtos);
                 for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex);
                     container.id = personDtos[i].id;
@@ -126,7 +125,6 @@
 
         connection.on("AssignPersonAsync",
             function (data) {
-                console.log(data);
                 let personContainer = listPerson.get(data.personId);
                 personContainer.x = 100;
                 personContainer.y = (data.lineId - 1) * 200 + 50;
