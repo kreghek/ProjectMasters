@@ -16,11 +16,7 @@
             {
                 // Получаем линию, которая содержит персонажа.
                 LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
-            });
-
-            var lineDtos = GameState._project.Lines.Select(x=> new LineDto {
-                Id = x.Id
-            });
+            }).ToArray();
 
             var unitDots = new List<UnitDto>();
             foreach (var line in GameState._project.Lines)
