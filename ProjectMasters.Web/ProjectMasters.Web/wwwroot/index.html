@@ -433,7 +433,13 @@
 
         connection.on("RemoveLineAsync", 
             function (lineDto) {
-                
+                for (let i = 0; i < lineDto.persons.length; i++) {
+                    let personContainer = listPerson.get(lineDto.persons[i].id);
+
+                    personContainer.x = 0;
+                    personContainer.y = 0;
+                }
+
             });
 
 
