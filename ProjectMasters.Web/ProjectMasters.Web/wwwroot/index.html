@@ -13,7 +13,6 @@
             border-left-style: hidden;
             border-bottom-style: hidden;
         }
-
         .person-panel {
             display: inline-block;
             width: 200px;
@@ -25,6 +24,30 @@
         .person-panel .name {
             font-size: larger;
             border-bottom: 1px solid #000000;
+        }
+        #decisionDialog {
+            width: 500px;
+            top: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            font-size: 17px;
+        }
+
+        #decisionDialog .description {
+            font-size: 13px;
+            text-align: right;
+            color: dimgray;
+        }
+
+        #decisionDialog #leftDecision, #decisionDialog #rightDecision {
+            border: 1px solid #000;
+            margin: 10px;
+            padding: 15px;
+        }
+
+        #decisionDialog #leftDecision:hover, #decisionDialog #rightDecision:hover {
+            background: rgba(255, 106, 0, 0.3);
         }
     </style>
     <script src="js/pixi.min.js"></script>
@@ -52,8 +75,43 @@
                 <div class="mastery-items"></div>
             </div>
         </div>
+        <dialog id="decisionDialog">
+            <div>
+                <p id="decisionTitle">
+
+                </p>
+            </div>
+            <div id="leftDecision" onclick="leftDecisionPicked()">
+                <p class="title">
+                    
+                </p>
+                <p class="description"></p>
+            </div>
+            <div id="rightDecision" onclick="rightDecisionPicked()">
+                <p class="title">
+
+                </p>
+                <p class="description"></p>
+            </div>
+
+        </dialog>
     </div>
 
+<script type="text/javascript">
+
+    function leftDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(0);
+    }
+
+    function rightDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(1);
+    }
+
+</script>
     <script type="text/javascript">
         function startGame() {
             connection.invoke("InitServerState");
@@ -70,12 +128,12 @@
 
         //Create a Pixi Application
         let app = new PIXI.Application({
-            width: 1024,
-            height: 768,
-            antialias: true,
-            transparent: false,
-            resolution: 1
-        }
+                width: 1024,
+                height: 768,
+                antialias: true,
+                transparent: false,
+                resolution: 1
+            }
         );
 
         //Add the canvas that Pixi automatically created for you to the HTML document
@@ -145,6 +203,10 @@
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/game")
             .build();
+
+        function sendDecision(number) {
+            connection.invoke("SendDecision", number);
+        }
 
         async function startSignalRConnection() {
             try {
@@ -289,6 +351,25 @@
 
                 unitContainer.x = offset + personWidth + unitDto.queueIndex * 100;
             }
+        });
+
+        connection.on("StartDecision", function (data) {
+            let dialog = document.getElementById("decisionDialog");
+            let title = document.getElementById("decisionTitle");
+            let leftDecision = document.getElementById("leftDecision");
+            title.innerHTML = data.text;
+            let leftTitle = leftDecision.getElementsByClassName("title")[0];
+            leftTitle.innerHTML = data.choises[0].text;
+            let leftDescription = leftDecision.getElementsByClassName("description")[0];
+            leftDescription.innerHTML = data.choises[0].description;
+
+            let rightDecision = document.getElementById("rightDecision");
+            let rightTitle = rightDecision.getElementsByClassName("title")[0];
+            rightTitle.innerHTML = data.choises[1].text;
+            let rightDescription = rightDecision.getElementsByClassName("description")[0];
+            rightDescription.innerHTML = data.choises[1].description;
+            
+            dialog.show();
         });
 
         connection.on("CreateUnitAsync", function (unitDto) {

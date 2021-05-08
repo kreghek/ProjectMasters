@@ -35,10 +35,11 @@ public class TeamFactory
 
     public void Update(float deltaTime)
     {
-        //if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
-        //{
-        //    return;
-        //}
+        if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
+        {
+            GameState.StartDecision(Player.WaitForDecision);
+            return;
+        }
 
         UpdateProjectLineSolving(deltaTime);
 
@@ -200,7 +201,9 @@ public class TeamFactory
             person.DaylyUpdate();
         }
 
-        //HandleDecision();
+        HandleDecision();
+
+        Player.WaitKeyDayReport = true;
     }
 
     private void UpdateProjectLineSolving(float deltaTime)
