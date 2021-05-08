@@ -92,9 +92,7 @@ public class TeamFactory
             person.DaylyUpdate();
         }
 
-        HandleDecision();
-
-        Player.WaitKeyDayReport = true;
+        //HandleDecision();
     }
 
     private void UpdateProjectLineSolving(float deltaTime)
