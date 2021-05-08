@@ -50,7 +50,7 @@
             // Это делаем, потому что фактически с клиента нам приходит индекс линии, а не Id. Индекс на 1 меньше, т.к. начинается с 0.
             // Внимание! Это может быть причиной бага.
             var correctLineId = lineId + 1;
-            var lineToGetQueueIndecies = GameState._project.Lines.SingleOrDefault(x => x.Id == correctLineId);
+            var lineToGetQueueIndecies = GameState._project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
             {
                 // Не нашли линию проекта.
