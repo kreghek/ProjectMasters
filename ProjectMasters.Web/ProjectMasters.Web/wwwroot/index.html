@@ -39,6 +39,7 @@
         .add("images/empty_body.png")
         .add("images/shirt.png")
         .add("images/eyes.png")
+        .add("images/unit.png")
         .load(setup);
 
         //This `setup` function will run when the image has loaded
@@ -77,14 +78,29 @@
         start();
         let listPerson = new Map();
 
+        var units = [];
+
         connection.on("SetupClientStateAsync",
-            function (personDtos) {
+            function(personDtos, lineDtos, unitDtos) {
                 console.log("personDtos = ", personDtos);
                 personDtos.forEach(el => {
                     let container = getContainer();
-                    console.log(el.id);
-                    listPerson.set(el.id, container);
-                });
+                    container.id = personDtos[i].id;
+                    container.x = 200;
+                    container.y = 100 + i * 200;
+                    app.stage.addChild(container);
+                }
+
+                for (var i = 0; i < unitDtos.length; i++) {
+                    let container = getUnitContainer();
+                    container.id = unitDtos[i].id;
+                    var personWidth = 200;
+                    container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
+                    container.y = 100 + (unitDtos[i].lineId - 1) * 200;
+                    app.stage.addChild(container);
+
+                    units.push(container);
+                }
             });
 
 
@@ -97,6 +113,15 @@
                 personContainer.y = (data.lineId - 1) * 200 + 50;
                 app.stage.addChild(personContainer);
             });
+
+        connection.on("KillUnit", function (data) {
+            for (var i = 0; i < units.length; i++) {
+                if (units[i].id === data.unitId) {
+                    units.splice(i, 1);
+                    app.stage.removeChild(units[i]);
+                }
+            }
+        })
 
     </script>
 
