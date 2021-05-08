@@ -3,27 +3,28 @@ namespace Assets.BL
 {
     using System;
 
+    using ProjectMasters.Games;
+
     public sealed class AddDismoraleEffectToOneDecisionAftermath : DecisionAftermathBase
     {
         public override string Description => "The one of eployees gain negative morale effect. It reduces effecient of employee.";
         private static Random Random => new Random(DateTime.Now.Millisecond);
         public override void Apply()
         {
-            throw new NotImplementedException();
-            //Decision selectedPerson = GetRandomPerson();
+            var selectedPerson = GetRandomPerson();
 
-            //var dismoraleEffect = CreateEffect();
+            var dismoraleEffect = CreateEffect();
 
-            //selectedPerson.Effects.Add(dismoraleEffect);
+            selectedPerson.Effects.Add(dismoraleEffect);
         }
 
-        //private static Decision GetRandomPerson()
-        //{
-        //    var persons = Team.Persons;
-        //    var personIndex = Random.Next(0, persons.Length - 1);
-        //    var selectedPerson = persons[personIndex];
-        //    return selectedPerson;
-        //}
+        private static Person GetRandomPerson()
+        {
+            var persons = GameState._team.Persons;
+            var personIndex = Random.Next(0, persons.Length - 1);
+            var selectedPerson = persons[personIndex];
+            return selectedPerson;
+        }
 
         private Effect CreateEffect()
         {

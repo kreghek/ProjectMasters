@@ -18,8 +18,24 @@
 
         <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px;">START</button>
         <dialog id="decisionDialog" style="background: rgba(255, 255, 255, 0.7); width: 300px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); border-radius: 5px;">
-            <p><button id="leftDecision" onclick="leftDecisionPicked()">Выбрать решение</button></p>
-            <p><button id="rightDecision" onclick="rightDecisionPicked()">Выбрать решение</button></p>
+            <div>
+                <p id="decisionTitle">
+
+                </p>
+            </div>
+            <div id="leftDecision" onclick="leftDecisionPicked()">
+                <p class="title">
+                    
+                </p>
+                <p class="description"></p>
+            </div>
+            <div id="rightDecision" onclick="rightDecisionPicked()">
+                <p class="title">
+
+                </p>
+                <p class="description"></p>
+            </div>
+
         </dialog>
     </div>
 
@@ -230,11 +246,21 @@
         });
 
         connection.on("StartDecision", function (data) {
-            var dialog = document.getElementById("decisionDialog");
-            dialog.title = data.text;
-            for (let i = 0; i < data.choises.length; i++) {
-                dialog. += data.choises[i].text;
-            }
+            let dialog = document.getElementById("decisionDialog");
+            let title = document.getElementById("decisionTitle");
+            let leftDecision = document.getElementById("leftDecision");
+            title.innerHTML = data.text;
+            let leftTitle = leftDecision.getElementsByClassName("title")[0];
+            leftTitle.innerHTML = data.choises[0].text;
+            let leftDescription = leftDecision.getElementsByClassName("description")[0];
+            leftDescription.innerHTML = data.choises[0].description;
+
+            let rightDecision = document.getElementById("rightDecision");
+            let rightTitle = rightDecision.getElementsByClassName("title")[0];
+            rightTitle.innerHTML = data.choises[1].text;
+            let rightDescription = rightDecision.getElementsByClassName("description")[0];
+            rightDescription.innerHTML = data.choises[1].description;
+            
             dialog.show();
         });
 

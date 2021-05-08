@@ -35,10 +35,11 @@ public class TeamFactory
 
     public void Update(float deltaTime)
     {
-        //if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
-        //{
-        //    return;
-        //}
+        if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
+        {
+            GameState.StartDecision(Player.WaitForDecision);
+            return;
+        }
 
         UpdateProjectLineSolving(deltaTime);
 
@@ -191,7 +192,6 @@ public class TeamFactory
         }
 
         Player.WaitForDecision = Player.ActiveDecisions[0];
-        GameState.StartDecision(Player.WaitForDecision);
     }
 
     private void UpdateDayly()
@@ -246,8 +246,8 @@ public class TeamFactory
     {
         Player.DayCounter -= deltaTime;
 
-        //if (Player.DayCounter > 0)
-        //    return;
+        if (Player.DayCounter > 0)
+            return;
 
         Player.DayCounter = Player.DAY_COUNTER_BASE;
         Player.DayNumber++;
