@@ -13,6 +13,42 @@
             border-left-style: hidden;
             border-bottom-style: hidden;
         }
+        .person-panel {
+            display: inline-block;
+            width: 200px;
+            float: left;
+            padding-left: 15px;
+            margin: 5px;
+        }
+
+        .person-panel .name {
+            font-size: larger;
+            border-bottom: 1px solid #000000;
+        }
+        #decisionDialog {
+            width: 500px;
+            top: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            font-size: 17px;
+        }
+
+        #decisionDialog .description {
+            font-size: 13px;
+            text-align: right;
+            color: dimgray;
+        }
+
+        #decisionDialog #leftDecision, #decisionDialog #rightDecision {
+            border: 1px solid #000;
+            margin: 10px;
+            padding: 15px;
+        }
+
+        #decisionDialog #leftDecision:hover, #decisionDialog #rightDecision:hover {
+            background: rgba(255, 106, 0, 0.3);
+        }
     </style>
     <script src="js/pixi.min.js"></script>
     <script src="js/signalr/dist/browser/signalr.min.js"></script>
@@ -20,49 +56,62 @@
 
 </head>
 <body>
-    <div style="width:100%; height: 786px; position: relative" id="main">
-        <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display:none">START</button>
+    <div style="width: 100%; height: 786px; position: relative" id="main">
+        <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display: none">START</button>
 
-        <div class="person-panels" style="position: absolute; bottom: 0; height: 100px; background: rgba(255,255,255,0.5)">
-            <div style="display: inline-block" id="firstForm">
-
-                <p class="name" disabled="true"></p>
-                <div class="mastery-items">
-
-                </div>
-                <br />
-                <input type="text" id="skill1" name="skil" disabled="true">
-                <br />
-                <input type="text" id="skill2" name="skil" disabled="true">
-
-            </div>
-            <div style="display: inline-block" id="secondForm">
-
+        <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 / 50%);">
+            <div id="firstForm" class="person-panel">
                 <p class="name"></p>
-                <div class="mastery-items">
-
-                </div>
-                <br />
-                <input type="text" id="skill1" name="skil" disabled="true">
-                <br />
-                <input type="text" id="skill2" name="skil" disabled="true">
-
+                <div class="mastery-items"></div>
             </div>
-            <div style="display: inline-block" id="thirdForm">
 
+            <div id="secondForm" class="person-panel">
                 <p class="name"></p>
-                <div class="mastery-items">
+                <div class="mastery-items"></div>
+            </div>
 
-                </div>
-                <br />
-                <input type="text" id="skill1" name="skil" disabled="true">
-                <br />
-                <input type="text" id="skill2" name="skil" disabled="true">
-
+            <div id="thirdForm" class="person-panel">
+                <p class="name"></p>
+                <div class="mastery-items"></div>
             </div>
         </div>
+        <dialog id="decisionDialog">
+            <div>
+                <p id="decisionTitle">
+
+                </p>
+            </div>
+            <div id="leftDecision" onclick="leftDecisionPicked()">
+                <p class="title">
+                    
+                </p>
+                <p class="description"></p>
+            </div>
+            <div id="rightDecision" onclick="rightDecisionPicked()">
+                <p class="title">
+
+                </p>
+                <p class="description"></p>
+            </div>
+
+        </dialog>
     </div>
 
+<script type="text/javascript">
+
+    function leftDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(0);
+    }
+
+    function rightDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(1);
+    }
+
+</script>
     <script type="text/javascript">
         function startGame() {
             connection.invoke("InitServerState");
@@ -72,19 +121,19 @@
         }
     </script>
     <script type="text/javascript">
-        let type = "WebGL"
+        let type = "WebGL";
         if (!PIXI.utils.isWebGLSupported()) {
-            type = "canvas"
+            type = "canvas";
         }
 
         //Create a Pixi Application
         let app = new PIXI.Application({
-            width: 1024,
-            height: 768,
-            antialias: true,
-            transparent: false,
-            resolution: 1
-        }
+                width: 1024,
+                height: 768,
+                antialias: true,
+                transparent: false,
+                resolution: 1
+            }
         );
 
         //Add the canvas that Pixi automatically created for you to the HTML document
@@ -160,6 +209,10 @@
             .withUrl("/game")
             .build();
 
+        function sendDecision(number) {
+            connection.invoke("SendDecision", number);
+        }
+
         async function startSignalRConnection() {
             try {
                 await connection.start();
@@ -176,11 +229,21 @@
         let listPerson = new Map();
         var units = new Map();
 
+        let personWidth = 200;
+
         function gameLoop(delta) {
             if (listPerson) {
                 listPerson.forEach((person) => {
                     if (person.moveEngine) {
                         person.moveEngine.update(delta);
+                    }
+                });
+            }
+
+            if (units) {
+                units.forEach((unit) => {
+                    if (unit.animator) {
+                        unit.animator.update(delta);
                     }
                 });
             }
@@ -211,13 +274,9 @@
             masteryItems.innerHTML = "";
             for (let i = 0; i < skills.length; i++) {
                 let masteryItem = document.createElement("p");
-                masteryItem.innerHTML = `${skills[i].sid} ${skills[i].level}`;
+                masteryItem.innerHTML = `${skills[i].sid} : ${skills[i].level}`;
                 masteryItems.appendChild(masteryItem);
             }
-
-            //for (let i = 1; i < skills.length + 1; i++) {
-            //    skillInput = inputs[`skill${i}`].value = `${skills[i - 1].sid} : ${skills[i-1].level}`;
-            //}
         };
 
         connection.on("SetupClientStateAsync",
@@ -227,9 +286,15 @@
                     container.id = personDtos[i].id;
                    
                     let offset = 170;
-                    container.x = offset + (personDtos[i].lineId - 1) * 30;
 
-                    container.y = (personDtos[i].lineId - 1) * 200 + 50;
+                    if (personDtos[i].lineId === null) {
+                        container.x = 0;
+                        container.y = 0;
+                    }
+                    else {
+                        container.x = offset + (personDtos[i].lineId) * 30;
+                        container.y = (personDtos[i].lineId) * 200 + 50;
+                    }
 
                     container.sourceX = container.x;
                     container.sourceY = container.y;
@@ -243,7 +308,6 @@
                 for (let i = 0; i < unitDtos.length; i++) {
                     let container = getUnitContainer(unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
                     container.id = unitDtos[i].id;
-                    let personWidth = 200;
                     let offset = 90 + unitDtos[i].lineId * 50;
 
                     container.x = offset + personWidth + unitDtos[i].queueIndex * 100;
@@ -260,9 +324,8 @@
                 let personContainer = listPerson.get(personDto.id);
 
                 let offset = 170;
-                personContainer.x = offset + (lineDto.id - 1) * 30;
-
-                personContainer.y = (lineDto.id - 1) * 200 + 50;
+                personContainer.x = offset + lineDto.id * 30;
+                personContainer.y = lineDto.id * 200 + 50;
 
                 personContainer.sourceX = personContainer.x;
                 personContainer.sourceY = personContainer.y;
@@ -300,8 +363,7 @@
 
             for (let i = 0; i < data.length; i++) {
                 let unitDto = data[i];
-                let unitContainer = units.get(unitDto.unitId);
-                let personWidth = 200;
+                let unitContainer = units.get(unitDto.id);
 
                 let offset = 90 + unitDto.lineId * 50;
 
@@ -309,17 +371,36 @@
             }
         });
 
+        connection.on("StartDecision", function (data) {
+            let dialog = document.getElementById("decisionDialog");
+            let title = document.getElementById("decisionTitle");
+            let leftDecision = document.getElementById("leftDecision");
+            title.innerHTML = data.text;
+            let leftTitle = leftDecision.getElementsByClassName("title")[0];
+            leftTitle.innerHTML = data.choises[0].text;
+            let leftDescription = leftDecision.getElementsByClassName("description")[0];
+            leftDescription.innerHTML = data.choises[0].description;
+
+            let rightDecision = document.getElementById("rightDecision");
+            let rightTitle = rightDecision.getElementsByClassName("title")[0];
+            rightTitle.innerHTML = data.choises[1].text;
+            let rightDescription = rightDecision.getElementsByClassName("description")[0];
+            rightDescription.innerHTML = data.choises[1].description;
+            
+            dialog.show();
+        });
+
         connection.on("CreateUnitAsync", function (unitDto) {
             let container = getUnitContainer(unitDto.type, textures, unitDto.requiredMasteryItems);
             container.id = unitDto.id;
-            /*let personWidth = 200;
-            container.x = 200 + personWidth + unitDto.queueIndex * 100;*/
+
+            //container.x = 200 + personWidth + unitDto.queueIndex * 100;
             container.y = 100 + (unitDto.lineId) * 200 - 25;
             app.stage.addChild(container);
 
             units.set(unitDto.id, container);
 
-            connection.invoke("ChangeUnitPositionsServer", data.lineId);
+            connection.invoke("ChangeUnitPositionsServer", unitDto.lineId);
         });
 
         connection.on("PreSetupClientAsync", function (isGameStarted) {
@@ -332,6 +413,30 @@
                 document.getElementById("startButton").setAttribute("style", "position: absolute; bottom: 500px; left: 500px; display:block");
             }
         });
+
+        connection.on("TirePersonAsync", 
+            function (personDto) {
+                let personContainer = listPerson.get(personDto.id);
+
+                personContainer.x = 0;
+                personContainer.y = 0;
+
+            });
+
+        connection.on("RestPersonAsync",
+            function (personDto) {
+                let personContainer = listPerson.get(personDto.id);
+
+                personContainer.x = personContainer.sourceX;
+                personContainer.y = personContainer.sourceY;
+            });
+
+        connection.on("RemoveLineAsync", 
+            function (lineDto) {
+                
+            });
+
+
     </script>
 
 

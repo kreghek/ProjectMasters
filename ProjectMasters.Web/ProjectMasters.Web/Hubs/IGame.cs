@@ -15,7 +15,7 @@ namespace ProjectMasters.Web.Hubs
         Task SetupClientStateAsync(IEnumerable<PersonDto> personDto, IEnumerable<UnitDto> units);
         Task AttackPersonAsync(PersonDto person, UnitDto unit);
         Task KillUnitAsync(UnitDto unit);
-        Task ChangeUnitPositionsAsync(IEnumerable<object> enumerable);
+        Task ChangeUnitPositionsAsync(IEnumerable<UnitDto> unit);
         Task CreateUnitAsync(UnitDto unit);
         Task AddEffectAsync(Effect effect);
         Task RemoveEffectAsync(Effect effect);
@@ -24,5 +24,6 @@ namespace ProjectMasters.Web.Hubs
         Task RemoveLineAsync(LineDto lineDto);
 
         Task PreSetupClientAsync(bool isGameStarted);
+        Task StartDecision(Decision decision);
     }
 }
