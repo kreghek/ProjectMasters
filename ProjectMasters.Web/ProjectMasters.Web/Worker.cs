@@ -95,11 +95,7 @@ namespace ProjectMasters.Games
             _logger.LogInformation($"{e.Person.Id} is tired");
         }
 
-        private void GameState_UnitIsCreated(object sender, UnitEventArgs e)
-        {
-            _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
-            _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
-        }
+
 
         private void GameState_DecisionIsStarted(object sender, DecisionEventArgs e)
         {
@@ -107,11 +103,7 @@ namespace ProjectMasters.Games
             _logger.LogInformation($"{e.Decision.Text} is started");
         }
 
-        private void GameState_UnitIsDead(object sender, UnitEventArgs e)
-        {
-            _gameHub.Clients.All.KillUnitAsync(new UnitDto(e.Unit));
-            _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
-        }
+
 
         private void GameState_LineIsRemoved(object sender, LineEventArgs e)
         {
@@ -152,8 +144,6 @@ namespace ProjectMasters.Games
 
             GameState.PersonAssigned += GameState_PersonAssigned;
             GameState.PersonAttacked += GameState_PersonAttacked;
-            GameState.UnitIsDead += GameState_UnitIsDead;
-            GameState.UnitIsCreated += GameState_UnitIsCreated;
             GameState.EffectIsAdded += GameState_EffectIsAdded;
             GameState.EffectIsRemoved += GameState_EffectIsRemoved;
             GameState.PersonIsTired += GameState_PersonIsTired;
@@ -166,14 +156,16 @@ namespace ProjectMasters.Games
             Initialized();
         }
 
-        private void Project_UnitRemoved(object sender, Assets.BL.UnitEventArgs e)
+        private void Project_UnitRemoved(object sender, UnitEventArgs e)
         {
-            GameState.KillUnit(e.ProjectUnit);
+            _gameHub.Clients.All.KillUnitAsync(new UnitDto(e.Unit));
+            _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
         }
 
-        private void Project_UnitAdded(object sender, Assets.BL.UnitEventArgs e)
+        private void Project_UnitAdded(object sender, UnitEventArgs e)
         {
-            GameState.CreateUnit(e.ProjectUnit);
+            _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
+            _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
         }
     }
 }
