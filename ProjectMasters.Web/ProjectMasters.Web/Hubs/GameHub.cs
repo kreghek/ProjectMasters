@@ -56,8 +56,8 @@
                 return;
             }
 
-            var data = lineToGetQueueIndecies.Units.Select(x => new { UnitId = x.Id, QueueIndex = x.QueueIndex }).ToList();
-            Clients.Caller.ChangeUnitPositionsAsync(data);
+            var unitPositionInfos = lineToGetQueueIndecies.Units.Select(x => new { UnitId = x.Id, QueueIndex = x.QueueIndex, LineId = lineId }).ToList();
+            Clients.Caller.ChangeUnitPositionsAsync(unitPositionInfos);
         }
     }
 }
