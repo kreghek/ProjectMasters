@@ -290,8 +290,7 @@
                     let offset = 170;
 
                     if (personDtos[i].lineId === null) {
-                        container.x = 0;
-                        container.y = 0;
+                        movePersonOutOfWork(container);
                     }
                     else {
                         container.x = offset + (personDtos[i].lineId) * 30;
@@ -421,7 +420,6 @@
                 let personContainer = listPerson.get(personDto.id);
 
                 movePersonOutOfWork(personContainer);
-
             });
 
         connection.on("RestPersonAsync",
@@ -442,8 +440,37 @@
             });
 
         function movePersonOutOfWork(personContainer) {
-            personContainer.x = 0;
-            personContainer.y = 0;
+            personContainer.moveEngine = {
+                graphics: personContainer,
+                counter: null,
+                duration: 100,
+                targetPoint: null,
+                startPoint: null,
+                update: function (delta) {
+                    if (this.counter === null) {
+                        this.counter = this.duration;
+                        this.startPoint = new PIXI.Point(this.graphics.sourceX, this.graphics.sourceY);
+                        this.targetPoint = new PIXI.Point(-10 + this.getRandomInt(20) - 10, 350 + this.getRandomInt(150) - 50);
+                    }
+                    else {
+                        this.counter--;
+                        if (this.counter <= 0) {
+                            this.counter = this.duration;
+                            this.startPoint = new PIXI.Point(this.graphics.x, this.graphics.y);
+                            this.targetPoint = new PIXI.Point(-10 + this.getRandomInt(20) - 10, 350 + this.getRandomInt(150) - 50);
+                        }
+                        else {
+                            let t = (this.duration - this.counter) / this.duration;
+                            this.graphics.x = this.lerp(this.startPoint.x, this.targetPoint.x, t);
+                            this.graphics.y = this.lerp(this.startPoint.y, this.targetPoint.y, t);
+                        }
+                    }
+                },
+                getRandomInt: function (max) {
+                    return Math.floor(Math.random() * max);
+                },
+                lerp: (a, b, c) => a * (1 - c) + b * c
+            }
         }
 
 
