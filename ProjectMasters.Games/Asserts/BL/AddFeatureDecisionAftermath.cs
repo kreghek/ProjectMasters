@@ -15,7 +15,7 @@ namespace Assets.BL
             var lines = ProjectUnitFormation.Instance.Lines;
             var rollNewFeatureLineIndex = Random.Next(0, lines.Count);
 
-            var randomizedMasteries = new[] { SkillCatalog.MasterySids.BackendMastery, SkillCatalog.MasterySids.FrontendMastery }.OrderBy(x1 => Random.Range(1, 100));
+            var randomizedMasteries = new[] { SkillCatalog.MasterySids.BackendMastery, SkillCatalog.MasterySids.FrontendMastery }.OrderBy(x1 => Random.Next(1, 100));
             var requiredMasteryCount = Random.Next(1, randomizedMasteries.Count() + 1);
             var requiredMasteries = randomizedMasteries.Take(requiredMasteryCount);
 

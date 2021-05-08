@@ -9,20 +9,21 @@ namespace Assets.BL
         private static Random Random => new Random(DateTime.Now.Millisecond);
         public override void Apply()
         {
-            Person selectedPerson = GetRandomPerson();
+            throw new NotImplementedException();
+            //Person selectedPerson = GetRandomPerson();
 
-            var dismoraleEffect = CreateEffect();
+            //var dismoraleEffect = CreateEffect();
 
-            selectedPerson.Effects.Add(dismoraleEffect);
+            //selectedPerson.Effects.Add(dismoraleEffect);
         }
 
-        private static Person GetRandomPerson()
-        {
-            var persons = Team.Persons;
-            var personIndex = Random.Next(0, persons.Length - 1);
-            var selectedPerson = persons[personIndex];
-            return selectedPerson;
-        }
+        //private static Person GetRandomPerson()
+        //{
+        //    var persons = Team.Persons;
+        //    var personIndex = Random.Next(0, persons.Length - 1);
+        //    var selectedPerson = persons[personIndex];
+        //    return selectedPerson;
+        //}
 
         private Effect CreateEffect()
         {
