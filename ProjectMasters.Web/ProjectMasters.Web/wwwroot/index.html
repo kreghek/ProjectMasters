@@ -14,7 +14,19 @@
 
 </head>
 <body>
+    <div style="width:100%; height: 786px; position: relative" id="main">
+        
+            <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px;">START</button>
+    </div>
 
+    <script type="text/javascript">
+        function startGame() {
+            startSignalRConnection();
+            app.stage.removeChild(titleBackground);
+            var startButton = document.getElementById("startButton");
+            startButton.remove();
+        }
+    </script>
     <script type="text/javascript">
         let type = "WebGL"
         if (!PIXI.utils.isWebGLSupported()) {
@@ -32,14 +44,14 @@
         );
 
         //Add the canvas that Pixi automatically created for you to the HTML document
-        document.body.appendChild(app.view);
+        document.getElementById("main").appendChild(app.view);
 
         //load an image and run the `setup` function when it's done
         PIXI.loader
             .add("images/Background.png")
             .add("images/empty_body.png")
             .add("images/shirt.png")
-            .add("images/unit.png")
+            .add("images/bug.png")
             .add("images/eyes.png")
             .add("images/eyes2.png")
             .add("images/eyes3.png")
@@ -49,15 +61,42 @@
             .add("images/mouth1.png")
             .add("images/mouth2.png")
             .add("images/mouth3.png")
+            .add("images/title.jpg")
+            .add("images/feature.png")
         .load(setup);
+
+
+        var titleBackground;
+
+        var textures = {};
 
         //This `setup` function will run when the image has loaded
         function setup() {
+            titleBackground = new PIXI.Sprite(PIXI.loader.resources["images/title.jpg"].texture);
+            titleBackground.scale = new PIXI.Point(2, 2);
 
             let background = new PIXI.Sprite(PIXI.loader.resources["images/Background.png"].texture);
             background.scale = new PIXI.Point(0.2, 0.2);
 
+            textures.empty_body = PIXI.loader.resources["images/empty_body.png"];
+            textures.shirt = PIXI.loader.resources["images/shirt.png"];
+            textures.bug = PIXI.loader.resources["images/bug.png"];
+            textures.feature = PIXI.loader.resources["images/feature.png"];
+
+            textures.eyes1 = PIXI.loader.resources["images/eyes.png"];
+            textures.eyes2 = PIXI.loader.resources["images/eyes2.png"];
+            textures.eyes3 = PIXI.loader.resources["images/eyes3.png"];
+
+            textures.hair1 = PIXI.loader.resources["images/hair1.png"];
+            textures.hair2 = PIXI.loader.resources["images/hair2.png"];
+            textures.hair3 = PIXI.loader.resources["images/hair3.png"];
+
+            textures.mouth1 = PIXI.loader.resources["images/mouth1.png"];
+            textures.mouth2 = PIXI.loader.resources["images/mouth2.png"];
+            textures.mouth3 = PIXI.loader.resources["images/mouth3.png"];
+
             app.stage.addChild(background);
+            app.stage.addChild(titleBackground);
 
             app.ticker.add(delta => gameLoop(delta));
         }
@@ -68,37 +107,37 @@
             .withUrl("/game")
             .build();
 
-        async function start() {
+        async function startSignalRConnection() {
             try {
                 await connection.start();
                 console.log("SignalR Connected.");
                 connection.invoke("InitServerState");
             } catch (err) {
                 console.log("err", err);
-                setTimeout(start, 5000);
+                setTimeout(startSignalRConnection, 5000);
             }
         };
 
-        connection.onclose(start);
+        connection.onclose(startSignalRConnection);
 
-        // Start the connection.
-        start();
         let listPerson = new Map();
 
         var units = new Map();
 
         function gameLoop(delta) {
-            listPerson.forEach((person) => {
-                if (person.moveEngine) {
-                    person.moveEngine.update(delta);
-                }
-            });
+            if (listPerson) {
+                listPerson.forEach((person) => {
+                    if (person.moveEngine) {
+                        person.moveEngine.update(delta);
+                    }
+                });
+            }
         }
 
         connection.on("SetupClientStateAsync",
             function(personDtos, unitDtos) {
                 for (let i = 0; i < personDtos.length; i++) {
-                    let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex);
+                    let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex, textures);
                     container.id = personDtos[i].id;
                     container.x = 100;
                     container.y = (personDtos[i].lineId - 1) * 200 + 50;
@@ -111,11 +150,11 @@
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
-                    let container = getUnitContainer(unitDtos[i].type);
+                    let container = getUnitContainer(unitDtos[i].type, textures);
                     container.id = unitDtos[i].id;
                     let personWidth = 200;
                     container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
-                    container.y = 100 + (unitDtos[i].lineId) * 200;
+                    container.y = 100 + (unitDtos[i].lineId) * 200 - 25;
                     app.stage.addChild(container);
 
                     units.set(unitDtos[i].id, container);
@@ -167,8 +206,20 @@
                 let personWidth = 200;
                 unitContainer.x = 200 + personWidth + data[i].queueIndex * 100;
             }
-        })
+        });
 
+        connection.on("CreateUnitAsync", function (unitDto) {
+            let container = getUnitContainer(unitDto.type);
+            container.id = unitDto.id;
+            let personWidth = 200;
+            container.x = 200 + personWidth + unitDto.queueIndex * 100;
+            container.y = 100 + (unitDto.lineId) * 200 - 25;
+            app.stage.addChild(container);
+
+            units.set(unitDto.id, container);
+
+            connection.invoke("ChangeUnitPositionsServer", data.lineId);
+        });
     </script>
 
 
