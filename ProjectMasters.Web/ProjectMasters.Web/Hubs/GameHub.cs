@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Assets.BL;
+
     using Microsoft.AspNetCore.SignalR;
 
     using ProjectMasters.Games;
@@ -58,6 +60,18 @@
 
             var unitPositionInfos = lineToGetQueueIndecies.Units.Select(x => new { UnitId = x.Id, QueueIndex = x.QueueIndex, LineId = lineId }).ToList();
             Clients.Caller.ChangeUnitPositionsAsync(unitPositionInfos);
+        }
+
+        public void SendDecision(int number)
+        {
+            Player.WaitKeyDayReport = false;
+            Player.WaitForDecision.Choises[number].Apply();
+
+            Player.ActiveDecisions = Player.ActiveDecisions.Skip(1).ToArray();
+            if (!Player.ActiveDecisions.Any())
+                Player.ActiveDecisions = null;
+
+            Player.WaitForDecision = Player.ActiveDecisions == null ? null : Player.ActiveDecisions[0];
         }
     }
 }
