@@ -190,7 +190,7 @@ namespace Assets.BL
         public int SubTasksCompleteCount { get; set; }
         public int ErrorCompleteCount { get; set; }
         public int ErrorMadeCount { get; set; }
-        public object Id { get; internal set; }
+        public int Id { get; internal set; }
 
         private void HandleSpeechs(float commitDeltaTime)
         {

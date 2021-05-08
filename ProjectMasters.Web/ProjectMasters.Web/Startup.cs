@@ -22,7 +22,6 @@ namespace ProjectMasters.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<GameHub>("/game");
-                endpoints.MapHub<ChatHub>("/chat");
 
             });
         }
