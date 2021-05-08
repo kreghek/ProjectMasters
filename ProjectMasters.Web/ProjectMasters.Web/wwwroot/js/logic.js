@@ -33,21 +33,52 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
     return container;
 }
 
-function getUnitContainer(type, textures) {
+function getUnitContainer(type, textures, masteryItems) {
 
-    let sprite = getSpriteByType(type, textures);
+    let sprite = getSpriteByType(type, textures, masteryItems);
 
     sprite.pivot = new PIXI.Point(0.5, 1);
 
     let container = new PIXI.Container();
     container.addChild(sprite);
     container.scale = new PIXI.Point(0.12, 0.12);
+    container.sourceScale = new PIXI.Point(container.scale.x, container.scale.y);
     container.pivot = new PIXI.Point(0.5, 1);
+
+    var animator = {
+        shapeDuration: 100,
+        shapeCounter: 0,
+        startScale: container.sourceScale,
+        targetScale: null,
+        graphics: container,
+        update: function () {
+            this.shapeCounter -= this.getRandomInt(3);
+            if (this.shapeCounter <= 0) {
+                let sizeDiff = 4;
+                let scaleX = (this.getRandomInt(sizeDiff) - sizeDiff / 2) * 0.01 + this.graphics.sourceScale.x;
+                let scaleY = (this.getRandomInt(sizeDiff) - sizeDiff / 2) * 0.01 + this.graphics.sourceScale.y;
+                this.targetScale = new PIXI.Point(scaleX, scaleY);
+                this.shapeCounter = this.shapeDuration;
+                this.startScale = this.graphics.scale;
+            }
+            else {
+                let t = (this.shapeDuration - this.shapeCounter) / this.shapeDuration;
+                let currentScale = new PIXI.Point(this.lerp(this.startScale.x, this.targetScale.x, t),
+                    this.lerp(this.startScale.y, this.targetScale.y, t));
+                this.graphics.scale = currentScale;
+            }
+        },
+        getRandomInt: function (max) {
+            return Math.floor(Math.random() * max);
+        },
+        lerp: (a, b, c) => a * (1 - c) + b * c,
+    };
+    container.animator = animator;
 
     return container;
 }
 
-function getSpriteByType(type, textures) {
+function getSpriteByType(type, textures, masteryItems) {
     if (type == "Feature") {
         return new PIXI.Sprite(textures.feature);
     }
@@ -55,6 +86,18 @@ function getSpriteByType(type, textures) {
     if (type == "Error") {
         return new PIXI.Sprite(textures.bug2);
     }
+    if (type == "SubTask") {
+        if (masteryItems.includes("backend") && !masteryItems.includes("frontend")) {
+            return new PIXI.Sprite(textures.backendTask);
+        }
+        if (masteryItems.includes("frontend") && !masteryItems.includes("backend")) {
+            return new PIXI.Sprite(textures.frontendTask);
+        }
+        if (masteryItems.includes("frontend") && masteryItems.includes("backend")) {
+            return new PIXI.Sprite(textures.frontendTask);//TODO подставить fullstack task
+        }
+    }
+
 
     return new PIXI.Sprite(textures.bug1);
 }

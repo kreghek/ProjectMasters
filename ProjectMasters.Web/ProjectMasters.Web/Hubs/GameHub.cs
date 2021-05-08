@@ -49,7 +49,7 @@
         public void ChangeUnitPositionsServer(int lineId)
         {
             var correctLineId = lineId;
-            var lineToGetQueueIndecies = GameState._project.Lines.SingleOrDefault(x => x.Id == correctLineId);
+            var lineToGetQueueIndecies = GameState._project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
             {
                 // Не нашли линию проекта.
