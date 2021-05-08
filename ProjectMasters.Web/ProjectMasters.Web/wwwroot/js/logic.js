@@ -42,7 +42,37 @@ function getUnitContainer(type, textures) {
     let container = new PIXI.Container();
     container.addChild(sprite);
     container.scale = new PIXI.Point(0.12, 0.12);
+    container.sourceScale = container.scale;
     container.pivot = new PIXI.Point(0.5, 1);
+
+    var animator = {
+        shapeDuration: 100,
+        shapeCounter: 0,
+        startScale: container.sourceScale,
+        targetScale: null,
+        graphics: container,
+        update: function () {
+            this.shapeCounter--;
+            if (this.shapeCounter <= 0) {
+                let scaleX = (this.getRandomInt(8) - 4) * 0.01 + this.graphics.sourceScale.x;
+                let scaleY = (this.getRandomInt(8) - 4) * 0.01 + this.graphics.sourceScale.y;
+                this.targetScale = new PIXI.Point(scaleX, scaleY);
+                this.shapeCounter = this.shapeDuration;
+                this.startScale = this.graphics.scale;
+            }
+            else {
+                let t = (this.shapeDuration - this.shapeCounter) / this.shapeDuration;
+                let currentScale = new PIXI.Point(this.lerp(this.startScale.x, this.targetScale.x, t),
+                    this.lerp(this.startScale.y, this.targetScale.y, t));
+                this.graphics.scale = currentScale;
+            }
+        },
+        getRandomInt: function (max) {
+            return Math.floor(Math.random() * max);
+        },
+        lerp: (a, b, c) => a * (1 - c) + b * c,
+    };
+    container.animator = animator;
 
     return container;
 }
