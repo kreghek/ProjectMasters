@@ -31,14 +31,7 @@
             {
                 foreach (var unit in line.Units)
                 {
-                    var dto = new UnitDto
-                    {
-                        Id = unit.Id,
-                        LineId = line.Id,
-                        Type = unit.Type.ToString(),
-                        QueueIndex = unit.QueueIndex
-                    };
-
+                    var dto = new UnitDto(unit);
                     unitDots.Add(dto);
                 }
             }

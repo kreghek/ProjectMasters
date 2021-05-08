@@ -1,5 +1,7 @@
 ﻿namespace ProjectMasters.Web.DTOs
 {
+    using Assets.BL;
+
     public class UnitDto
     {
         public int Id { get; set; }
@@ -8,5 +10,15 @@
 
         public string Type { get; set; }
         public int QueueIndex { get; internal set; }
+        public string[] RequiredMasteryItems { get; set; }
+
+        public UnitDto(ProjectUnitBase unit)
+        {
+            Id = unit.Id;
+            LineId = unit.LineIndex;
+            Type = unit.Type.ToString();
+            QueueIndex = unit.QueueIndex;
+            RequiredMasteryItems = unit.RequiredMasteryItems;
+        }
     }
 }
