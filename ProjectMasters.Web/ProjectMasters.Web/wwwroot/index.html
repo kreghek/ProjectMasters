@@ -51,6 +51,8 @@
             
             //Add the cat to the stage
             //app.stage.addChild(background);
+
+            app.ticker.add(delta => gameLoop(delta));
         }
 
 
@@ -80,14 +82,26 @@
 
         var units = new Map();
 
+        function gameLoop(delta) {
+            listPerson.forEach((person) => {
+                if (person.moveEngine) {
+                    person.moveEngine.update(delta);
+                }
+            });
+        }
+
         connection.on("SetupClientStateAsync",
-            function(personDtos, lineDtos, unitDtos) {
+            function(personDtos, unitDtos) {
                 console.log("personDtos = ", personDtos);
                 for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer();
                     container.id = personDtos[i].id;
                     container.x = 100;
                     container.y = (personDtos[i].lineId - 1) * 200 + 50;
+
+                    container.sourceX = container.x;
+                    container.sourceY = container.y;
+
                     app.stage.addChild(container);
                     listPerson.set(personDtos[i].id, container);
                 }
@@ -123,7 +137,22 @@
 
         connection.on("AttackPersonAsync", function (data) {
             let personContainer = listPerson.get(data.personId);
-        })
+            let attackMoveEngine = {
+                counter: 0.5,
+                graphics: personContainer,
+                update: function (delta) {
+                    this.counter -= 0.1;
+                    if (this.counter <= 0) {
+                        this.graphics.moveEngine = null;
+                        this.graphics.x = this.graphics.sourceX;
+                    }
+                    else {
+                        this.graphics.x += 10 * delta;
+                    }
+                },
+            };
+            personContainer.moveEngine = attackMoveEngine;
+        });
 
         connection.on("ChangeUnitPositionsAsync", function (data) {
 

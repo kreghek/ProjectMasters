@@ -40,7 +40,7 @@
                 }
             }
 
-            Clients.Caller.SetupClientStateAsync(personDtos, lineDtos, unitDots);
+            Clients.Caller.SetupClientStateAsync(personDtos, unitDots);
         }
 
         public void ChangeUnitPositionsServer(int lineId)
