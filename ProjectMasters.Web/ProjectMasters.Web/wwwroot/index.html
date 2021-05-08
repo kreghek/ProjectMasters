@@ -248,6 +248,14 @@
                     }
                 });
             }
+
+            if (units) {
+                units.forEach((unit) => {
+                    if (unit.animator) {
+                        unit.animator.update(delta);
+                    }
+                });
+            }
         }
 
         function setPeopleInfo(personId, personName, skills) {
