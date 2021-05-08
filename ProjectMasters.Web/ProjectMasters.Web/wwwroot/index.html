@@ -319,9 +319,9 @@
                 let personContainer = listPerson.get(personDto.id);
 
                 let offset = 170;
-                personContainer.x = offset + (lineDto.id - 1) * 30;
+                personContainer.x = offset + lineDto.id * 30;
 
-                personContainer.y = (lineDto.id - 1) * 200 + 50;
+                personContainer.y = lineDto.id * 200 + 50;
 
                 personContainer.sourceX = personContainer.x;
                 personContainer.sourceY = personContainer.y;
@@ -359,7 +359,7 @@
 
             for (let i = 0; i < data.length; i++) {
                 let unitDto = data[i];
-                let unitContainer = units.get(unitDto.unitId);
+                let unitContainer = units.get(unitDto.id);
                 let personWidth = 200;
 
                 let offset = 90 + unitDto.lineId * 50;
