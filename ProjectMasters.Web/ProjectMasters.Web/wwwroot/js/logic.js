@@ -1,21 +1,21 @@
 function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
-    let body = new PIXI.Sprite(textures.empty_body.texture);
-    let shirt = new PIXI.Sprite(textures.shirt.texture);
+    let body = new PIXI.Sprite(textures.empty_body);
+    let shirt = new PIXI.Sprite(textures.shirt);
 
-    let eyes1 = new PIXI.Sprite(textures.eyes1.texture);
-    let eyes2 = new PIXI.Sprite(textures.eyes2.texture);
-    let eyes3 = new PIXI.Sprite(textures.eyes3.texture);
+    let eyes1 = new PIXI.Sprite(textures.eyes1);
+    let eyes2 = new PIXI.Sprite(textures.eyes2);
+    let eyes3 = new PIXI.Sprite(textures.eyes3);
     let eyes = [eyes1, eyes2, eyes3];
 
-    let hair1 = new PIXI.Sprite(textures.hair1.texture);
-    let hair2 = new PIXI.Sprite(textures.hair2.texture);
-    let hair3 = new PIXI.Sprite(textures.hair3.texture);
+    let hair1 = new PIXI.Sprite(textures.hair1);
+    let hair2 = new PIXI.Sprite(textures.hair2);
+    let hair3 = new PIXI.Sprite(textures.hair3);
     let hairs = [hair1, hair2, hair3];
 
 
-    let mouth1 = new PIXI.Sprite(textures.mouth1.texture);
-    let mouth2 = new PIXI.Sprite(textures.mouth2.texture);
-    let mouth3 = new PIXI.Sprite(textures.mouth3.texture);
+    let mouth1 = new PIXI.Sprite(textures.mouth1);
+    let mouth2 = new PIXI.Sprite(textures.mouth2);
+    let mouth3 = new PIXI.Sprite(textures.mouth3);
     let mouth = [mouth1, mouth2, mouth3];
 
 
@@ -33,28 +33,40 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
     return container;
 }
 
-function getUnitContainer(type, textures) {
+function getUnitContainer(type, textures, masteryItems) {
 
-    let body = getContainerByType(type, textures);
+    let sprite = getSpriteByType(type, textures, masteryItems);
 
-    body.pivot = new PIXI.Point(0.5, 1);
+    sprite.pivot = new PIXI.Point(0.5, 1);
 
     let container = new PIXI.Container();
-    container.addChild(body);
+    container.addChild(sprite);
     container.scale = new PIXI.Point(0.12, 0.12);
     container.pivot = new PIXI.Point(0.5, 1);
 
     return container;
 }
 
-function getContainerByType(type, textures) {
+function getSpriteByType(type, textures, masteryItems) {
     if (type == "Feature") {
-        return  new PIXI.Sprite(textures.feature.texture);
+        return new PIXI.Sprite(textures.feature);
     }
 
     if (type == "Error") {
-        return new PIXI.Sprite(textures.bug.texture);
+        return new PIXI.Sprite(textures.bug2);
+    }
+    if (type == "SubTask") {
+        if (masteryItems.includes("backend") && !masteryItems.includes("frontend")) {
+            return new PIXI.Sprite(textures.backendTask);
+        }
+        if (masteryItems.includes("frontend") && !masteryItems.includes("backend")) {
+            return new PIXI.Sprite(textures.frontendTask);
+        }
+        if (masteryItems.includes("frontend") && masteryItems.includes("backend")) {
+            return new PIXI.Sprite(textures.frontendTask);//TODO подставить fullstack task
+        }
     }
 
-    return new PIXI.Sprite(textures.bug.texture);
+
+    return new PIXI.Sprite(textures.bug1);
 }
