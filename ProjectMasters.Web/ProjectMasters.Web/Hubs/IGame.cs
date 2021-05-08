@@ -6,5 +6,6 @@ namespace ProjectMasters.Web.Hubs
     {
         Task AssignPersonAsync(object obj);
         Task AttackPersonAsync(object obj);
+        Task KillUnit(object obj);
     }
 }
