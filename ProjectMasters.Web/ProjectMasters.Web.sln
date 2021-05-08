@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31025.194
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectMasters.Web", "ProjectMasters.Web\ProjectMasters.Web.csproj", "{34885E97-0C75-4F08-93A9-C731CC0A539E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectMasters.Games", "..\ProjectMasters.Games\ProjectMasters.Games.csproj", "{FDC2A3C5-F07E-4285-8C98-245058C513D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34885E97-0C75-4F08-93A9-C731CC0A539E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34885E97-0C75-4F08-93A9-C731CC0A539E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34885E97-0C75-4F08-93A9-C731CC0A539E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34885E97-0C75-4F08-93A9-C731CC0A539E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDC2A3C5-F07E-4285-8C98-245058C513D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDC2A3C5-F07E-4285-8C98-245058C513D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDC2A3C5-F07E-4285-8C98-245058C513D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDC2A3C5-F07E-4285-8C98-245058C513D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DED7B3E2-E17D-4996-8696-A64D65F0D1B1}
+	EndGlobalSection
+EndGlobal
