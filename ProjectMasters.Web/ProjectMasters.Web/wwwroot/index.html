@@ -39,6 +39,7 @@
         .add("images/empty_body.png")
         .add("images/shirt.png")
         .add("images/eyes.png")
+        .add("images/unit.png")
         .load(setup);
 
         //This `setup` function will run when the image has loaded
@@ -77,22 +78,44 @@
         // Start the connection.
         start();
 
-        connection.on("SetupClientStateAsync",
-            function(personDtos) {
-                for (var i = 0; i < personDtos.length; i++) {
-                    let container = getContainer();
-                    container.x = app.screen.width / 2 - 500;
-                    container.y = 100 + i*200 ;
-                    app.stage.addChild(container);
-                    }
+        var units = [];
 
+        connection.on("SetupClientStateAsync",
+            function(personDtos, lineDtos, unitDtos) {
+                for (var i = 0; i < personDtos.length; i++) {
+                    let container = getPersonContainer();
+                    container.id = personDtos[i].id;
+                    container.x = 200;
+                    container.y = 100 + i * 200;
+                    app.stage.addChild(container);
+                }
+
+                for (var i = 0; i < unitDtos.length; i++) {
+                    let container = getUnitContainer();
+                    container.id = unitDtos[i].id;
+                    var personWidth = 200;
+                    container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
+                    container.y = 100 + (unitDtos[i].lineId - 1) * 200;
+                    app.stage.addChild(container);
+
+                    units.push(container);
+                }
             });
 
 
         connection.on("AssignPersonAsync",
             function (data) {
-                alert(data);
+               
             });
+
+        connection.on("KillUnit", function (data) {
+            for (var i = 0; i < units.length; i++) {
+                if (units[i].id === data.unitId) {
+                    units.splice(i, 1);
+                    app.stage.removeChild(units[i]);
+                }
+            }
+        })
 
     </script>
 
