@@ -1,31 +1,31 @@
 function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
     let body = new PIXI.Sprite(textures.empty_body.texture);
-    //let shirt = new PIXI.Sprite(PIXI.loader.resources["images/shirt.png"].texture);
+    let shirt = new PIXI.Sprite(textures.shirt.texture);
 
-    //let eyes1 = new PIXI.Sprite(PIXI.loader.resources["images/eyes.png"].texture);
-    //let eyes2 = new PIXI.Sprite(PIXI.loader.resources["images/eyes2.png"].texture);
-    //let eyes3 = new PIXI.Sprite(PIXI.loader.resources["images/eyes3.png"].texture);
-    //let eyes = [eyes1, eyes2, eyes3];
+    let eyes1 = new PIXI.Sprite(textures.eyes1.texture);
+    let eyes2 = new PIXI.Sprite(textures.eyes2.texture);
+    let eyes3 = new PIXI.Sprite(textures.eyes3.texture);
+    let eyes = [eyes1, eyes2, eyes3];
 
-    //let hair1 = new PIXI.Sprite(PIXI.loader.resources["images/hair1.png"].texture);
-    //let hair2 = new PIXI.Sprite(PIXI.loader.resources["images/hair2.png"].texture);
-    //let hair3 = new PIXI.Sprite(PIXI.loader.resources["images/hair3.png"].texture);
-    //let hairs = [hair1, hair2, hair3];
+    let hair1 = new PIXI.Sprite(textures.hair1.texture);
+    let hair2 = new PIXI.Sprite(textures.hair2.texture);
+    let hair3 = new PIXI.Sprite(textures.hair3.texture);
+    let hairs = [hair1, hair2, hair3];
 
 
-    //let mouth1 = new PIXI.Sprite(PIXI.loader.resources["images/mouth1.png"].texture);
-    //let mouth2 = new PIXI.Sprite(PIXI.loader.resources["images/mouth2.png"].texture);
-    //let mouth3 = new PIXI.Sprite(PIXI.loader.resources["images/mouth3.png"].texture);
-    //let mouth = [mouth1, mouth2, mouth3];
+    let mouth1 = new PIXI.Sprite(textures.mouth1.texture);
+    let mouth2 = new PIXI.Sprite(textures.mouth2.texture);
+    let mouth3 = new PIXI.Sprite(textures.mouth3.texture);
+    let mouth = [mouth1, mouth2, mouth3];
 
 
     let container = new PIXI.Container();
     container.addChild(body);
-    //container.addChild(shirt);
+    container.addChild(shirt);
 
-    //container.addChild(eyes[eyesIndex - 1]);
-    //container.addChild(hairs[hairIndex - 1]);
-    //container.addChild(mouth[mouthIndex - 1]);
+    container.addChild(eyes[eyesIndex - 1]);
+    container.addChild(hairs[hairIndex - 1]);
+    container.addChild(mouth[mouthIndex - 1]);
 
     container.scale = new PIXI.Point(0.1, 0.1);
     container.pivot = new PIXI.Point(0.5, 1);
@@ -33,17 +33,11 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
     return container;
 }
 
-function getUnitContainer(type) {
-    let body = new PIXI.Sprite(PIXI.loader.resources["images/bug.png"].texture);
+function getUnitContainer(type, textures) {
+
+    let body = getContainerByType(type, textures);
+
     body.pivot = new PIXI.Point(0.5, 1);
-
-    if (type == "Feature") {
-        body.tint = 16776960;
-    }
-
-    if (type == "Error") {
-        body.tint = 16711680;
-    }
 
     let container = new PIXI.Container();
     container.addChild(body);
@@ -51,5 +45,16 @@ function getUnitContainer(type) {
     container.pivot = new PIXI.Point(0.5, 1);
 
     return container;
+}
 
+function getContainerByType(type, textures) {
+    if (type == "Feature") {
+        return  new PIXI.Sprite(textures.feature.texture);
+    }
+
+    if (type == "Error") {
+        return new PIXI.Sprite(textures.bug.texture);
+    }
+
+    return new PIXI.Sprite(textures.bug.texture);
 }
