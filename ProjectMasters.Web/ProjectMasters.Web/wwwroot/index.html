@@ -117,10 +117,21 @@
             let unitContainer = units.get(data.unitId);
             units.delete(data.unitId);
             app.stage.removeChild(unitContainer);
+
+            connection.invoke("ChangeUnitPositionsServer", data.lineId);
         });
 
         connection.on("AttackPersonAsync", function (data) {
             let personContainer = listPerson.get(data.personId);
+        })
+
+        connection.on("ChangeUnitPositionsAsync", function (data) {
+
+            for (let i = 0; i < data.length; i++) {
+                let unitContainer = units.get(data[i].unitId);
+                let personWidth = 200;
+                unitContainer.x = 200 + personWidth + data[i].queueIndex * 100;
+            }
         })
 
     </script>

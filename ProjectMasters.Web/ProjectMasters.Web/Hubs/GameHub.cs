@@ -42,5 +42,11 @@
 
             Clients.Caller.SetupClientStateAsync(personDtos, lineDtos, unitDots);
         }
+
+        public void ChangeUnitPositionsServer(int lineId)
+        {
+            var data = GameState._project.Lines.SingleOrDefault(x => x.Id == lineId)?.Units?.Select(x => new { UnitId = x.Id, QueueIndex = x.QueueIndex });
+            Clients.Caller.ChangeUnitPositionsAsync(data);
+        }
     }
 }
