@@ -3,6 +3,7 @@
 namespace ProjectMasters.Web.Hubs
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using ProjectMasters.Web.DTOs;
 
