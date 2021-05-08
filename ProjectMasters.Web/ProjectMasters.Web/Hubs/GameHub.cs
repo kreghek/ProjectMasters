@@ -12,23 +12,35 @@
     {
         public void InitServerState()
         {
-            var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
+            if (GameState.Started)
             {
-                // Получаем линию, которая содержит персонажа.
-                LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
-            }).ToArray();
-
-            var unitDots = new List<UnitDto>();
-            foreach (var line in GameState._project.Lines)
-            {
-                foreach (var unit in line.Units)
+                var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
                 {
-                    var dto = new UnitDto(unit);
-                    unitDots.Add(dto);
-                }
-            }
+                    // Получаем линию, которая содержит персонажа.
+                    LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+                }).ToArray();
 
-            Clients.Caller.SetupClientStateAsync(personDtos, unitDots);
+                var unitDots = new List<UnitDto>();
+                foreach (var line in GameState._project.Lines)
+                {
+                    foreach (var unit in line.Units)
+                    {
+                        var dto = new UnitDto(unit);
+                        unitDots.Add(dto);
+                    }
+                }
+
+                Clients.Caller.SetupClientStateAsync(personDtos, unitDots);
+            }
+            else
+            {
+                GameState.Started = true;
+            }
+        }
+
+        public void PreInitServerState()
+        {
+            Clients.Caller.PreSetupClientAsync(GameState.Started);
         }
 
         public void ChangeUnitPositionsServer(int lineId)
