@@ -87,7 +87,8 @@
                     let container = getPersonContainer();
                     container.id = personDtos[i].id;
                     app.stage.addChild(container);
-                    listPerson.set(personDtos[i].id, container);                }
+                    listPerson.set(personDtos[i].id, container);
+                }
 
                 for (var i = 0; i < unitDtos.length; i++) {
                     let container = getUnitContainer();
@@ -110,7 +111,7 @@
                 personContainer.y = (data.lineId - 1) * 200 + 50;
             });
 
-        connection.on("KillUnit", function (data) {
+        connection.on("KillUnitAsync", function (data) {
             for (var i = 0; i < units.length; i++) {
                 if (units[i].id === data.unitId) {
                     units.splice(i, 1);
