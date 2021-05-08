@@ -97,7 +97,6 @@
 
         connection.on("SetupClientStateAsync",
             function(personDtos, unitDtos) {
-                console.log("personDtos = ", personDtos);
                 for (let i = 0; i < personDtos.length; i++) {
                     let container = getPersonContainer(personDtos[i].eyesIndex, personDtos[i].hairIndex, personDtos[i].mouthIndex);
                     container.id = personDtos[i].id;
@@ -116,7 +115,7 @@
                     container.id = unitDtos[i].id;
                     let personWidth = 200;
                     container.x = 200 + personWidth + unitDtos[i].queueIndex * 100;
-                    container.y = 100 + (unitDtos[i].lineId - 1) * 200;
+                    container.y = 100 + (unitDtos[i].lineId) * 200;
                     app.stage.addChild(container);
 
                     units.set(unitDtos[i].id, container);
@@ -125,15 +124,17 @@
 
 
         connection.on("AssignPersonAsync",
-            function (data) {
-                console.log(data);
-                let personContainer = listPerson.get(data.personId);
+            function (personDto, lineDto) {
+                let personContainer = listPerson.get(personDto.id);
                 personContainer.x = 100;
-                personContainer.y = (data.lineId - 1) * 200 + 50;
+                personContainer.y = (lineDto.id - 1) * 200 + 50;
+
+                personContainer.sourceX = personContainer.x;
+                personContainer.sourceY = personContainer.y;
             });
 
         connection.on("KillUnitAsync", function (data) {
-            let unitContainer = units.get(data.unitId);
+            let unitContainer = units.get(data.id);
             units.delete(data.unitId);
             app.stage.removeChild(unitContainer);
 
@@ -141,7 +142,7 @@
         });
 
         connection.on("AttackPersonAsync", function (data) {
-            let personContainer = listPerson.get(data.personId);
+            let personContainer = listPerson.get(data.id);
             let attackMoveEngine = {
                 counter: 0.5,
                 graphics: personContainer,

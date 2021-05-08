@@ -12,33 +12,18 @@
     {
         public void InitServerState()
         {
-            var personDtos = GameState._team.Persons.Select(person => new PersonDto
+            var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
             {
-                Id = person.Id,
                 // Получаем линию, которая содержит персонажа.
                 LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
-                MouthIndex = person.MouthIndex,
-                HairIndex = person.HairIndex,
-                EyesIndex = person.EyesIndex
-            });
-
-            var lineDtos = GameState._project.Lines.Select(x=> new LineDto {
-                Id = x.Id
-            });
+            }).ToArray();
 
             var unitDots = new List<UnitDto>();
             foreach (var line in GameState._project.Lines)
             {
                 foreach (var unit in line.Units)
                 {
-                    var dto = new UnitDto
-                    {
-                        Id = unit.Id,
-                        LineId = line.Id,
-                        Type = unit.Type.ToString(),
-                        QueueIndex = unit.QueueIndex
-                    };
-
+                    var dto = new UnitDto(unit);
                     unitDots.Add(dto);
                 }
             }
