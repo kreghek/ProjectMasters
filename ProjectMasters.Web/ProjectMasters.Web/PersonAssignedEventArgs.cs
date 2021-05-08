@@ -27,4 +27,14 @@
         public Person Person { get; }
         public ProjectUnitBase Unit { get; }
     }
+
+    public class UnitIsDeadEventArgs : EventArgs
+    {
+        public UnitIsDeadEventArgs(ProjectUnitBase unit)
+        {
+            Unit = unit ?? throw new ArgumentNullException(nameof(unit));
+        }
+
+        public ProjectUnitBase Unit { get; }
+    }
 }

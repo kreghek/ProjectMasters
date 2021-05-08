@@ -4,12 +4,15 @@ using System.Linq;
 
 namespace Assets.BL
 {
+    using ProjectMasters.Games;
+
     public abstract class ProjectUnitBase: ISpeechSource
     {
         public int Id { get; set; }
         private Random Random => new Random(DateTime.Now.Millisecond);
 
         protected float _speechCounter;
+        private bool _isDead;
         public abstract ProjectUnitType Type { get; }
         public float Cost { get; set; }
         public float TimeLog { get; set; }
@@ -17,7 +20,15 @@ namespace Assets.BL
 
         public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
 
-        public bool IsDead { get; set; }
+        public bool IsDead
+        {
+            get => _isDead;
+            set
+            {
+                _isDead = value;
+                GameState.KillUnit(this);
+            }
+        }
 
         public int LineIndex { get; set; }
 
