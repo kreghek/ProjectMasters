@@ -46,11 +46,11 @@
         function setup() {
 
             //Create the cat sprite
-            let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
+            //let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
 
             
             //Add the cat to the stage
-            app.stage.addChild(background);
+            //app.stage.addChild(background);
         }
 
 
@@ -83,13 +83,12 @@
         connection.on("SetupClientStateAsync",
             function(personDtos, lineDtos, unitDtos) {
                 console.log("personDtos = ", personDtos);
-                personDtos.forEach(el => {
+                for (var i = 0; i < personDtos.length; i++) {
                     let container = getContainer();
                     container.id = personDtos[i].id;
-                    container.x = 200;
-                    container.y = 100 + i * 200;
                     app.stage.addChild(container);
-                }
+                    console.log()
+                    listPerson.set(personDtos[i].id, container);                }
 
                 for (var i = 0; i < unitDtos.length; i++) {
                     let container = getUnitContainer();
@@ -107,11 +106,11 @@
         connection.on("AssignPersonAsync",
             function (data) {
                 console.log(data);
+                console.log("listPerson= ",listPerson);
                 let personContainer = listPerson.get(data.personId);
-                console.log("personContainer" ,personContainer);
+                console.log("personContainer = " ,personContainer);
                 personContainer.x = 100;
                 personContainer.y = (data.lineId - 1) * 200 + 50;
-                app.stage.addChild(personContainer);
             });
 
         connection.on("KillUnit", function (data) {
