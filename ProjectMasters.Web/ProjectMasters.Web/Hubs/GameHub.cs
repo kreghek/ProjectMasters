@@ -12,6 +12,7 @@
     {
         public void InitServerState()
         {
+            GameState.Started
             var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
             {
                 // Получаем линию, которая содержит персонажа.
