@@ -36,21 +36,27 @@
 
         //load an image and run the `setup` function when it's done
         PIXI.loader
-        .add("images/empty_body.png")
-        .add("images/shirt.png")
-        .add("images/eyes.png")
-        .add("images/unit.png")
+            .add("images/Background.png")
+            .add("images/empty_body.png")
+            .add("images/shirt.png")
+            .add("images/unit.png")
+            .add("images/eyes.png")
+            .add("images/eyes2.png")
+            .add("images/eyes3.png")
+            .add("images/hair1.png")
+            .add("images/hair2.png")
+            .add("images/hair3.png")
+            .add("images/mouth1.png")
+            .add("images/mouth2.png")
+            .add("images/mouth3.png")
         .load(setup);
 
         //This `setup` function will run when the image has loaded
         function setup() {
 
-            //Create the cat sprite
-            //let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
+            let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
 
-            
-            //Add the cat to the stage
-            //app.stage.addChild(background);
+            app.stage.addChild(background);
         }
 
 
