@@ -24,5 +24,6 @@ namespace ProjectMasters.Web.Hubs
         Task RemoveLineAsync(LineDto lineDto);
 
         Task PreSetupClientAsync(bool isGameStarted);
+        Task StartDecision(Decision decision);
     }
 }

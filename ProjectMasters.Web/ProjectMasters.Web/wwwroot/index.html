@@ -61,8 +61,43 @@
 
             </div>
         </div>
+        <dialog id="decisionDialog" style="background: rgba(255, 255, 255, 0.7); width: 300px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); border-radius: 5px;">
+            <div>
+                <p id="decisionTitle">
+
+                </p>
+            </div>
+            <div id="leftDecision" onclick="leftDecisionPicked()">
+                <p class="title">
+                    
+                </p>
+                <p class="description"></p>
+            </div>
+            <div id="rightDecision" onclick="rightDecisionPicked()">
+                <p class="title">
+
+                </p>
+                <p class="description"></p>
+            </div>
+
+        </dialog>
     </div>
 
+<script type="text/javascript">
+
+    function leftDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(0);
+    }
+
+    function rightDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(1);
+    }
+
+</script>
     <script type="text/javascript">
         function startGame() {
             connection.invoke("InitServerState");
@@ -79,12 +114,12 @@
 
         //Create a Pixi Application
         let app = new PIXI.Application({
-            width: 1024,
-            height: 768,
-            antialias: true,
-            transparent: false,
-            resolution: 1
-        }
+                width: 1024,
+                height: 768,
+                antialias: true,
+                transparent: false,
+                resolution: 1
+            }
         );
 
         //Add the canvas that Pixi automatically created for you to the HTML document
@@ -154,6 +189,10 @@
         const connection = new signalR.HubConnectionBuilder()
             .withUrl("/game")
             .build();
+
+        function sendDecision(number) {
+            connection.invoke("SendDecision", number);
+        }
 
         async function startSignalRConnection() {
             try {
@@ -302,6 +341,25 @@
 
                 unitContainer.x = offset + personWidth + unitDto.queueIndex * 100;
             }
+        });
+
+        connection.on("StartDecision", function (data) {
+            let dialog = document.getElementById("decisionDialog");
+            let title = document.getElementById("decisionTitle");
+            let leftDecision = document.getElementById("leftDecision");
+            title.innerHTML = data.text;
+            let leftTitle = leftDecision.getElementsByClassName("title")[0];
+            leftTitle.innerHTML = data.choises[0].text;
+            let leftDescription = leftDecision.getElementsByClassName("description")[0];
+            leftDescription.innerHTML = data.choises[0].description;
+
+            let rightDecision = document.getElementById("rightDecision");
+            let rightTitle = rightDecision.getElementsByClassName("title")[0];
+            rightTitle.innerHTML = data.choises[1].text;
+            let rightDescription = rightDecision.getElementsByClassName("description")[0];
+            rightDescription.innerHTML = data.choises[1].description;
+            
+            dialog.show();
         });
 
         connection.on("CreateUnitAsync", function (unitDto) {
