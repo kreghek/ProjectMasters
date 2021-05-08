@@ -10,6 +10,7 @@
     </style>
     <script src="js/pixi.min.js"></script>
     <script src="js/signalr/dist/browser/signalr.min.js"></script>
+    <script src="js/logic.js"></script>
 
 </head>
 <body>
@@ -35,17 +36,20 @@
 
         //load an image and run the `setup` function when it's done
         PIXI.loader
-            .add("images/PlayerBody.png")
-            .load(setup);
+        .add("images/empty_body.png")
+        .add("images/shirt.png")
+        .add("images/eyes.png")
+        .load(setup);
 
         //This `setup` function will run when the image has loaded
         function setup() {
 
             //Create the cat sprite
-            let cat = new PIXI.Sprite(PIXI.loader.resources["images/PlayerBody.png"].texture);
+            let background = new PIXI.Sprite(PIXI.loader.resources["images/background.png"].texture);
 
+            
             //Add the cat to the stage
-            app.stage.addChild(cat);
+            app.stage.addChild(background);
         }
 
 
@@ -61,6 +65,7 @@
             try {
                 await connection.start();
                 console.log("SignalR Connected.");
+                connection.invoke("InitServerState");
             } catch (err) {
                 console.log("err", err);
                 setTimeout(start, 5000);
@@ -71,6 +76,17 @@
 
         // Start the connection.
         start();
+
+        connection.on("SetupClientStateAsync",
+            function(personDtos) {
+                for (var i = 0; i < personDtos.length; i++) {
+                    let container = getContainer();
+                    container.x = app.screen.width / 2 - 500;
+                    container.y = 100 + i*200 ;
+                    app.stage.addChild(container);
+                    }
+
+            });
 
 
         connection.on("AssignPersonAsync",
