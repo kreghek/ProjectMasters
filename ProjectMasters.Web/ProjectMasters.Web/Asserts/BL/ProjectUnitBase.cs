@@ -8,11 +8,21 @@ namespace Assets.BL
 
     public abstract class ProjectUnitBase: ISpeechSource
     {
-        public int Id { get; set; }
+        public int Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                GameState.CreateUnit(this);
+            }
+        }
+
         private Random Random => new Random(DateTime.Now.Millisecond);
 
         protected float _speechCounter;
         private bool _isDead;
+        private int _id;
         public abstract ProjectUnitType Type { get; }
         public float Cost { get; set; }
         public float TimeLog { get; set; }

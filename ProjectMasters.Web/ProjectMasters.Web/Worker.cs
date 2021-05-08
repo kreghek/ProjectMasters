@@ -65,6 +65,7 @@ namespace ProjectMasters.Games
             GameState.PersonAssigned += GameState_PersonAssigned;
             GameState.PersonAttacked += GameState_PersonAttacked;
             GameState.UnitIsDead += GameState_UnitIsDead;
+            GameState.UnitIsCreated += GameState_UnitIsCreated;
         }
 
         private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
@@ -82,7 +83,14 @@ namespace ProjectMasters.Games
         private void GameState_UnitIsDead(object sender, UnitIsDeadEventArgs e)
         {
             _gameHub.Clients.All.KillUnit(new { UnitId = e.Unit.Id });
-            _logger.LogError($"{e.Unit.GetType()} {e.Unit.Id} is dead");
+            _logger.LogError($"{e.Unit.Type} {e.Unit.Id} is dead");
+        }
+
+        private void GameState_UnitIsCreated(object sender, UnitIsCreatedEventArgs e)
+        {
+            _gameHub.Clients.All.CreateUnitAsync(new { UnitId = e.Unit.Id, UnitType = e.Unit.Type, 
+                RequiredMasters = e.Unit.RequiredMasteryItems });
+            _logger.LogCritical($"{e.Unit.Type} {e.Unit.Id} is created");
         }
     }
 }

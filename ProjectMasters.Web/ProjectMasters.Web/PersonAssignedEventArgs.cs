@@ -37,4 +37,14 @@
 
         public ProjectUnitBase Unit { get; }
     }
+
+    public class UnitIsCreatedEventArgs : EventArgs
+    {
+        public UnitIsCreatedEventArgs(ProjectUnitBase unit)
+        {
+            Unit = unit ?? throw new ArgumentNullException(nameof(unit));
+        }
+
+        public ProjectUnitBase Unit { get; }
+    }
 }
