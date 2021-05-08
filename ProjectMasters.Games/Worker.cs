@@ -16,10 +16,7 @@ namespace ProjectMasters.Games
     {
         private readonly ILogger<Worker> _logger;
         private DateTime _currentTime;
-        private bool _isLoaded;
-        private ProjectUnitFormation _project;
-        private Team _team;
-        private TeamFactory _teamFactory;
+
 
         public Worker(ILogger<Worker> logger)
         {
@@ -34,7 +31,7 @@ namespace ProjectMasters.Games
                 var deltaTime = DateTime.Now - _currentTime;
                 _currentTime = DateTime.Now;
 
-                if (!_isLoaded)
+                if (!GameState._isLoaded)
                     Initiate();
                 else
                     DoLogic(deltaTime);
@@ -48,17 +45,17 @@ namespace ProjectMasters.Games
         {
             var time = (float)deltaTime.TotalSeconds;
 
-            _teamFactory.Update(time);
+            GameState._teamFactory.Update(time);
         }
 
         private void Initiate()
         {
-            _team = new Team();
-            _teamFactory = new TeamFactory(_team);
-            _teamFactory.Start();
-            _project = ProjectUnitFormation.Instance;
+            GameState._team = new Team();
+            GameState._teamFactory = new TeamFactory(GameState._team);
+            GameState._teamFactory.Start();
+            GameState._project = ProjectUnitFormation.Instance;
 
-            _isLoaded = true;
+            GameState._isLoaded = true;
         }
     }
 }

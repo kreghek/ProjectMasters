@@ -63,7 +63,7 @@ public class TeamFactory
     {
         Player.DayCounter -= deltaTime;
 
-        if (!(Player.DayCounter <= 0))
+        if (Player.DayCounter > 0)
             return;
 
         Player.DayCounter = Player.DAY_COUNTER_BASE;
