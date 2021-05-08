@@ -4,6 +4,7 @@ using System.Linq;
 
 using Assets.BL;
 
+using ProjectMasters.Games;
 using ProjectMasters.Games.Asserts;
 
 public class TeamFactory
@@ -92,9 +93,7 @@ public class TeamFactory
             person.DaylyUpdate();
         }
 
-        HandleDecision();
-
-        Player.WaitKeyDayReport = true;
+        //HandleDecision();
     }
 
     private void UpdateProjectLineSolving(float deltaTime)
@@ -112,6 +111,9 @@ public class TeamFactory
                     if (firstFreePerson != null)
                     {
                         line.AssignedPersons.Add(firstFreePerson);
+
+                        GameState.AssignPerson(line, firstFreePerson);
+
                         assignedPersons = line.AssignedPersons;
                     }
                 }

@@ -1,25 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.SignalR;
 
-using Microsoft.AspNetCore.SignalR;
+using ProjectMasters.Games;
 
 namespace ProjectMasters.Web.Hubs
 {
     public class GameHub : Hub
     {
-        //private readonly GameService _gameService;
 
-        //public GameHub(GameService gameService)
-        //{
-        //    _gameService = gameService;
-        //}
-
-        public async Task StartGameAsync(string message)
+        public GameHub()
         {
-            await this.Clients.All.SendAsync("update", message);
-            //return Task.Run(() =>
-            //{
-            //    _gameService.AddGame(user);
-            //});
+            GameState.PersonAssigned += GameState_PersonAssigned;
+        }
+
+        private async void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
+        {
+            await Clients.All.SendAsync("assignPerson", new { PersonId = e.Person.Id, LineId = e.Line.Id });
         }
     }
 }

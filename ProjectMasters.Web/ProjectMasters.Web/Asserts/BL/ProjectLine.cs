@@ -13,5 +13,6 @@ namespace Assets.BL
         public List<Person> AssignedPersons { get; set; }
 
         public List<ProjectUnitBase> Units { get; set; }
+        public object Id { get; internal set; }
     }
 }

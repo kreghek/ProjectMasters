@@ -14,12 +14,6 @@
 </head>
 <body>
 
-<div id="inputForm">
-    <input type="text" id="message" />
-    <input type="button" id="sendBtn" value="Отправить" />
-</div>
-<div id="chatroom"></div>
-
     <script type="text/javascript">
         let type = "WebGL"
         if (!PIXI.utils.isWebGLSupported()) {
@@ -87,24 +81,10 @@
         }
 
 
-        connection.on("update",
+        connection.on("personAssigned",
             function (data) {
-
-                let elem = document.createElement("p");
-                elem.appendChild(document.createTextNode(data));
-                let firstElem = document.getElementById("chatroom").firstChild;
-                document.getElementById("chatroom").insertBefore(elem, firstElem);
-
+                alert(data);
             });
-
-        document.getElementById("sendBtn").addEventListener("click",
-            function (e) {
-                let message = document.getElementById("message").value;
-                connection.invoke("StartGameAsync", message);
-            });
-
-
-        //invc();
 
     </script>
 
