@@ -33,9 +33,9 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
     return container;
 }
 
-function getUnitContainer(type, textures) {
+function getUnitContainer(type, textures, masteryItems) {
 
-    let sprite = getSpriteByType(type, textures);
+    let sprite = getSpriteByType(type, textures, masteryItems);
 
     sprite.pivot = new PIXI.Point(0.5, 1);
 
@@ -77,7 +77,7 @@ function getUnitContainer(type, textures) {
     return container;
 }
 
-function getSpriteByType(type, textures) {
+function getSpriteByType(type, textures, masteryItems) {
     if (type == "Feature") {
         return new PIXI.Sprite(textures.feature);
     }
@@ -85,6 +85,18 @@ function getSpriteByType(type, textures) {
     if (type == "Error") {
         return new PIXI.Sprite(textures.bug2);
     }
+    if (type == "SubTask") {
+        if (masteryItems.includes("backend") && !masteryItems.includes("frontend")) {
+            return new PIXI.Sprite(textures.backendTask);
+        }
+        if (masteryItems.includes("frontend") && !masteryItems.includes("backend")) {
+            return new PIXI.Sprite(textures.frontendTask);
+        }
+        if (masteryItems.includes("frontend") && masteryItems.includes("backend")) {
+            return new PIXI.Sprite(textures.frontendTask);//TODO подставить fullstack task
+        }
+    }
+
 
     return new PIXI.Sprite(textures.bug1);
 }

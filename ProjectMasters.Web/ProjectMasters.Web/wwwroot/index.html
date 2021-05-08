@@ -168,6 +168,8 @@
             .add("images/mouth3.png")
             .add("images/title.jpg")
             .add("images/feature.png")
+            .add("images/backendTask.png")
+            .add("images/frontendTask.png")
             .load(setup);
 
 
@@ -188,6 +190,9 @@
             textures.bug1 = PIXI.loader.resources["images/bug1.png"].texture;
             textures.bug2 = PIXI.loader.resources["images/bug2.png"].texture;
             textures.feature = PIXI.loader.resources["images/feature.png"].texture;
+
+            textures.backendTask = PIXI.loader.resources["images/backendTask.png"].texture;
+            textures.frontendTask = PIXI.loader.resources["images/frontendTask.png"].texture;
 
             textures.eyes1 = PIXI.loader.resources["images/eyes.png"].texture;
             textures.eyes2 = PIXI.loader.resources["images/eyes2.png"].texture;
@@ -308,7 +313,7 @@
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
-                    let container = getUnitContainer(unitDtos[i].type, textures);
+                    let container = getUnitContainer(unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
                     container.id = unitDtos[i].id;
                     let personWidth = 200;
                     let offset = 90 + unitDtos[i].lineId * 50;
@@ -396,7 +401,7 @@
         });
 
         connection.on("CreateUnitAsync", function (unitDto) {
-            let container = getUnitContainer(unitDto.type, textures);
+            let container = getUnitContainer(unitDto.type, textures, unitDto.requiredMasteryItems);
             container.id = unitDto.id;
             /*let personWidth = 200;
             container.x = 200 + personWidth + unitDto.queueIndex * 100;*/
