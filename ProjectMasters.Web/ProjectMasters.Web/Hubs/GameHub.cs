@@ -14,7 +14,9 @@
         {
             var personDtos = GameState._team.Persons.Select(person => new PersonDto
             {
-                Id = person.Id
+                Id = person.Id,
+                // Получаем линию, которая содержит персонажа.
+                LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
             });
 
             var lineDtos = GameState._project.Lines.Select(x=> new LineDto {
