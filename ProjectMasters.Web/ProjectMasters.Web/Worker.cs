@@ -1,7 +1,6 @@
 namespace ProjectMasters.Games
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -42,7 +41,7 @@ namespace ProjectMasters.Games
                 var deltaTime = DateTime.Now - _currentTime;
                 _currentTime = DateTime.Now;
 
-                if (!GameState._isLoaded)
+                if (!GameState.Initialized)
                     Initiate();
                 else
                     Update(deltaTime);
@@ -52,11 +51,10 @@ namespace ProjectMasters.Games
             }
         }
 
-        private void Update(TimeSpan deltaTime)
+        private void GameState_DecisionIsStarted(object sender, DecisionEventArgs e)
         {
-            var time = (float)deltaTime.TotalSeconds;
-
-            GameState._teamFactory.Update(time);
+            _gameHub.Clients.All.StartDecision(e.Decision);
+            _logger.LogInformation($"{e.Decision.Text} is started");
         }
 
         private void GameState_EffectIsAdded(object sender, EffectEventArgs e)
@@ -69,6 +67,12 @@ namespace ProjectMasters.Games
         {
             _gameHub.Clients.All.RemoveEffectAsync(e.Effect);
             _logger.LogInformation($"{e.Effect.EffectType} {e.Effect.Id} is removed");
+        }
+
+        private void GameState_LineIsRemoved(object sender, LineEventArgs e)
+        {
+            _gameHub.Clients.All.RemoveLineAsync(new LineDto { Id = e.Line.Id, Persons = e.Line.AssignedPersons });
+            _logger.LogInformation($"Decision {e.Line.Id} is removed");
         }
 
         private void GameState_PersonAssigned(object sender, PersonAssignedEventArgs e)
@@ -95,39 +99,16 @@ namespace ProjectMasters.Games
             _logger.LogInformation($"{e.Person.Id} is tired");
         }
 
-
-
-        private void GameState_DecisionIsStarted(object sender, DecisionEventArgs e)
-        {
-            _gameHub.Clients.All.StartDecision(e.Decision);
-            _logger.LogInformation($"{e.Decision.Text} is started");
-        }
-
-
-
-        private void GameState_LineIsRemoved(object sender, LineEventArgs e)
-        {
-            _gameHub.Clients.All.RemoveLineAsync(new LineDto { Id = e.Line.Id, Persons = e.Line.AssignedPersons });
-            _logger.LogInformation($"Decision {e.Line.Id} is removed");
-        }
-
         private void Initialized()
         {
-            var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
+            var personDtos = GameState.Team.Persons.Select(person => new PersonDto(person)
             {
                 // Получаем линию, которая содержит персонажа.
-                LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+                LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
             }).ToArray();
 
-            var unitDots = new List<UnitDto>();
-            foreach (var line in GameState._project.Lines)
-            {
-                foreach (var unit in line.Units)
-                {
-                    var dto = new UnitDto(unit);
-                    unitDots.Add(dto);
-                }
-            }
+            var unitDots = (from line in GameState.Project.Lines from unit in line.Units select new UnitDto(unit))
+                .ToList();
 
             _gameHub.Clients.All.SetupClientStateAsync(personDtos, unitDots);
             _logger.LogInformation("Game is started");
@@ -135,12 +116,11 @@ namespace ProjectMasters.Games
 
         private void Initiate()
         {
-            GameState._team = new Team();
-            GameState._teamFactory = new TeamFactory(GameState._team);
-            GameState._teamFactory.Start();
-            GameState._project = ProjectUnitFormation.Instance;
-
-            GameState._isLoaded = true;
+            GameState.Team = new Team();
+            GameState.TeamFactory = new TeamFactory(GameState.Team);
+            GameState.TeamFactory.Start();
+            GameState.Project = ProjectUnitFormation.Instance;
+            GameState.Initialized = true;
 
             GameState.PersonAssigned += GameState_PersonAssigned;
             GameState.PersonAttacked += GameState_PersonAttacked;
@@ -149,11 +129,16 @@ namespace ProjectMasters.Games
             GameState.PersonIsTired += GameState_PersonIsTired;
             GameState.PersonIsRested += GameState_PersonIsRested;
             GameState.LineIsRemoved += GameState_LineIsRemoved;
-
-            GameState._project.Added += Project_UnitAdded;
-            GameState._project.Removed += Project_UnitRemoved;
+            GameState.Project.Added += Project_UnitAdded;
+            GameState.Project.Removed += Project_UnitRemoved;
             GameState.DecisionIsStarted += GameState_DecisionIsStarted;
             Initialized();
+        }
+
+        private void Project_UnitAdded(object sender, UnitEventArgs e)
+        {
+            _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
+            _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
         }
 
         private void Project_UnitRemoved(object sender, UnitEventArgs e)
@@ -162,10 +147,10 @@ namespace ProjectMasters.Games
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
         }
 
-        private void Project_UnitAdded(object sender, UnitEventArgs e)
+        private void Update(TimeSpan deltaTime)
         {
-            _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
-            _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
+            var time = (float)deltaTime.TotalSeconds;
+            GameState.TeamFactory.Update(time);
         }
     }
 }

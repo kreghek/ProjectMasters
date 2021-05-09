@@ -1,9 +1,7 @@
-﻿using System.Linq;
-
-
-namespace Assets.BL
+﻿namespace Assets.BL
 {
     using System;
+    using System.Linq;
 
     public sealed class AddFeatureDecisionAftermath : DecisionAftermathBase
     {
@@ -15,7 +13,9 @@ namespace Assets.BL
             var lines = ProjectUnitFormation.Instance.Lines;
             var rollNewFeatureLineIndex = Random.Next(0, lines.Count);
 
-            var randomizedMasteries = new[] { SkillCatalog.MasterySids.BackendMastery, SkillCatalog.MasterySids.FrontendMastery }.OrderBy(x1 => Random.Next(1, 100));
+            var randomizedMasteries =
+                new[] { SkillCatalog.MasterySids.BackendMastery, SkillCatalog.MasterySids.FrontendMastery }.OrderBy(
+                    x1 => Random.Next(1, 100));
             var requiredMasteryCount = Random.Next(1, randomizedMasteries.Count() + 1);
             var requiredMasteries = randomizedMasteries.Take(requiredMasteryCount);
 

@@ -59,7 +59,7 @@
     <div style="width: 100%; height: 786px; position: relative" id="main">
         <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display: none">START</button>
 
-        <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 / 50%);">
+        <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 );">
             <div id="firstForm" class="person-panel">
                 <p class="name"></p>
                 <div class="mastery-items"></div>
@@ -290,7 +290,8 @@
                     let offset = 170;
 
                     if (personDtos[i].lineId === null) {
-                        movePersonOutOfWork(container);
+                        container.x = 0;
+                        container.y = 0;
                     }
                     else {
                         container.x = offset + (personDtos[i].lineId) * 30;
@@ -420,6 +421,7 @@
                 let personContainer = listPerson.get(personDto.id);
 
                 movePersonOutOfWork(personContainer);
+
             });
 
         connection.on("RestPersonAsync",
@@ -440,37 +442,8 @@
             });
 
         function movePersonOutOfWork(personContainer) {
-            personContainer.moveEngine = {
-                graphics: personContainer,
-                counter: null,
-                duration: 100,
-                targetPoint: null,
-                startPoint: null,
-                update: function (delta) {
-                    if (this.counter === null) {
-                        this.counter = this.duration;
-                        this.startPoint = new PIXI.Point(this.graphics.sourceX, this.graphics.sourceY);
-                        this.targetPoint = new PIXI.Point(-10 + this.getRandomInt(20) - 10, 350 + this.getRandomInt(150) - 50);
-                    }
-                    else {
-                        this.counter--;
-                        if (this.counter <= 0) {
-                            this.counter = this.duration;
-                            this.startPoint = new PIXI.Point(this.graphics.x, this.graphics.y);
-                            this.targetPoint = new PIXI.Point(-10 + this.getRandomInt(20) - 10, 350 + this.getRandomInt(150) - 50);
-                        }
-                        else {
-                            let t = (this.duration - this.counter) / this.duration;
-                            this.graphics.x = this.lerp(this.startPoint.x, this.targetPoint.x, t);
-                            this.graphics.y = this.lerp(this.startPoint.y, this.targetPoint.y, t);
-                        }
-                    }
-                },
-                getRandomInt: function (max) {
-                    return Math.floor(Math.random() * max);
-                },
-                lerp: (a, b, c) => a * (1 - c) + b * c
-            }
+            personContainer.x = 0;
+            personContainer.y = 0;
         }
 
 

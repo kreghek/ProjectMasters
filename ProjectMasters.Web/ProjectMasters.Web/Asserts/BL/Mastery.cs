@@ -2,7 +2,7 @@
 {
     public class Mastery
     {
-        public string Sid { get; set; }
         public float Level { get; set; }
+        public string Sid { get; set; }
     }
 }

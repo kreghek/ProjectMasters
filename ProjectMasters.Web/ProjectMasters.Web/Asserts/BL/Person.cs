@@ -64,14 +64,14 @@
         public int ErrorMadeCount { get; set; }
 
         public int EyesIndex { get; set; }
-        public int HairIndex { get; set; }
-        public int MouthIndex { get; set; }
         public int FaceDecorIndex { get; set; }
 
         public int FeatureCompleteCount { get; set; }
+        public int HairIndex { get; set; }
         public int Id { get; internal set; }
 
         public List<Mastery> MasteryLevels { get; set; } = new List<Mastery>();
+        public int MouthIndex { get; set; }
 
         public string Name { get; set; }
 
@@ -186,6 +186,7 @@
                     GameState.RemoveEffect(effect);
                 }
                 else
+                {
                     switch (effect.EffectType)
                     {
                         case EffectType.Procrastination:
@@ -212,6 +213,7 @@
                             CommitPower *= 0.1f;
                             break;
                     }
+                }
             }
         }
 
@@ -374,7 +376,7 @@
                         if (isCritical)
                             commitPower *= CritCommitMultiplicator;
 
-                        GameState.AttackPerson(unit,this);
+                        GameState.AttackPerson(unit, this);
                         unit.ProcessCommit(commitPower, isCritical, this);
                         actTouse.Reset();
 

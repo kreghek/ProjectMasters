@@ -1,6 +1,5 @@
 ﻿namespace ProjectMasters.Web.Hubs
 {
-    using System.Collections.Generic;
     using System.Linq;
 
     using Assets.BL;
@@ -14,9 +13,9 @@
     {
         public void AssignPerson(int lineId, int personId)
         {
-            var person = GameState._team.Persons.FirstOrDefault(p => p.Id == personId);
-            var sendLine = GameState._project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
-            var line = GameState._project.Lines.FirstOrDefault(l => l.Id == lineId);
+            var person = GameState.Team.Persons.FirstOrDefault(p => p.Id == personId);
+            var sendLine = GameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
+            var line = GameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
 
             if (sendLine == null || line == null)
                 return;
@@ -28,7 +27,7 @@
 
         public void ChangeUnitPositionsServer(int lineId)
         {
-            var lineToGetQueueIndecies = GameState._project.Lines.SingleOrDefault(x => x.Id == lineId);
+            var lineToGetQueueIndecies = GameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
                 // Не нашли линию проекта.
                 // Это значит, что убили последнего монстра и линия была удалена.
@@ -42,21 +41,14 @@
         {
             if (GameState.Started)
             {
-                var personDtos = GameState._team.Persons.Select(person => new PersonDto(person)
+                var personDtos = GameState.Team.Persons.Select(person => new PersonDto(person)
                 {
                     // Получаем линию, которая содержит персонажа.
-                    LineId = GameState._project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+                    LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
                 }).ToArray();
 
-                var unitDots = new List<UnitDto>();
-                foreach (var line in GameState._project.Lines)
-                {
-                    foreach (var unit in line.Units)
-                    {
-                        var dto = new UnitDto(unit);
-                        unitDots.Add(dto);
-                    }
-                }
+                var unitDots = (from line in GameState.Project.Lines from unit in line.Units select new UnitDto(unit))
+                    .ToList();
 
                 Clients.Caller.SetupClientStateAsync(personDtos, unitDots);
             }

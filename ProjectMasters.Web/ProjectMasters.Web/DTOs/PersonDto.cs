@@ -7,18 +7,6 @@
 
     public class PersonDto
     {
-        public int Id { get; set; }
-        public int? LineId { get; internal set; }
-        public int EyesIndex { get; set; }
-        public int HairIndex { get; set; }
-        public int MouthIndex { get; set; }
-        public List<Mastery> MasteryLevels { get; set; }
-
-        public Skill[] Skills { get; set; }
-
-        public string Name { get; set; }
-        public string[] Traits { get; set; }
-
         public PersonDto(Person person)
         {
             Id = person.Id;
@@ -30,5 +18,17 @@
             Name = person.Name;
             Traits = person.Traits.Select(x => x.ToString()).ToArray();
         }
+
+        public int EyesIndex { get; set; }
+        public int HairIndex { get; set; }
+        public int Id { get; set; }
+        public int? LineId { get; internal set; }
+        public List<Mastery> MasteryLevels { get; set; }
+        public int MouthIndex { get; set; }
+
+        public string Name { get; set; }
+
+        public Skill[] Skills { get; set; }
+        public string[] Traits { get; set; }
     }
 }

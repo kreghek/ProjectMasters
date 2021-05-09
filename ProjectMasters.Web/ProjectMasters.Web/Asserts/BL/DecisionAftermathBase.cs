@@ -2,10 +2,9 @@
 {
     public abstract class DecisionAftermathBase
     {
+        public abstract string Description { get; }
         public string Text { get; set; }
 
         public abstract void Apply();
-
-        public abstract string Description { get; }
     }
 }

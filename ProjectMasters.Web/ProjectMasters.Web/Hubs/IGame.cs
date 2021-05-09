@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace ProjectMasters.Web.Hubs
+﻿namespace ProjectMasters.Web.Hubs
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -11,19 +9,18 @@ namespace ProjectMasters.Web.Hubs
 
     public interface IGame
     {
+        Task AddEffectAsync(Effect effect);
         Task AssignPersonAsync(PersonDto person, LineDto line);
-        Task SetupClientStateAsync(IEnumerable<PersonDto> personDto, IEnumerable<UnitDto> units);
         Task AttackPersonAsync(PersonDto person, UnitDto unit);
-        Task KillUnitAsync(UnitDto unit);
         Task ChangeUnitPositionsAsync(IEnumerable<UnitDto> unit);
         Task CreateUnitAsync(UnitDto unit);
-        Task AddEffectAsync(Effect effect);
-        Task RemoveEffectAsync(Effect effect);
-        Task TirePersonAsync(PersonDto person);
-        Task RestPersonAsync(PersonDto person);
-        Task RemoveLineAsync(LineDto lineDto);
-
+        Task KillUnitAsync(UnitDto unit);
         Task PreSetupClientAsync(bool isGameStarted);
+        Task RemoveEffectAsync(Effect effect);
+        Task RemoveLineAsync(LineDto lineDto);
+        Task RestPersonAsync(PersonDto person);
+        Task SetupClientStateAsync(IEnumerable<PersonDto> personDto, IEnumerable<UnitDto> units);
         Task StartDecision(Decision decision);
+        Task TirePersonAsync(PersonDto person);
     }
 }
