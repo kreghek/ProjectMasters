@@ -33,9 +33,9 @@ function getPersonContainer(eyesIndex, hairIndex, mouthIndex, textures) {
     return container;
 }
 
-function getUnitContainer(type, textures, masteryItems) {
+function getUnitContainer(id, type, textures, masteryItems) {
 
-    let sprite = getSpriteByType(type, textures, masteryItems);
+    let sprite = getSpriteByType(id * 13, type, textures, masteryItems);
 
     sprite.pivot = new PIXI.Point(0.5, 1);
 
@@ -78,13 +78,18 @@ function getUnitContainer(type, textures, masteryItems) {
     return container;
 }
 
-function getSpriteByType(type, textures, masteryItems) {
+function getSpriteByType(rndNumber, type, textures, masteryItems) {
     if (type == "Feature") {
         return new PIXI.Sprite(textures.feature);
     }
 
     if (type == "Error") {
-        return new PIXI.Sprite(textures.bug2);
+        if (rndNumber % 2 === 0) {
+            return new PIXI.Sprite(textures.bug1);
+        }
+        else {
+            return new PIXI.Sprite(textures.bug2);
+        }
     }
     if (type == "SubTask") {
         if (masteryItems.includes("backend") && !masteryItems.includes("frontend")) {
