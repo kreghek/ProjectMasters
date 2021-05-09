@@ -5,6 +5,7 @@ namespace ProjectMasters.Games
     using Assets.BL;
 
     using ProjectMasters.Games.Asserts;
+    using ProjectMasters.Web.DTOs;
 
     public static class GameState
     {
@@ -28,6 +29,7 @@ namespace ProjectMasters.Games
         public static event EventHandler<PersonEventArgs> PersonIsTired;
         public static event EventHandler<LineEventArgs> LineIsRemoved;
         public static event EventHandler<DecisionEventArgs> DecisionIsStarted;
+        public static event EventHandler<UnitTakenDamageEventArgs> UnitTakenDamage;
 
 
         public static void RemoveEffect(Effect effect)
@@ -63,6 +65,14 @@ namespace ProjectMasters.Games
         public static void StartDecision(Decision decision)
         {
             DecisionIsStarted?.Invoke(null,new DecisionEventArgs(decision));
+        }
+
+        public static void DoUnitTakenDamage(ProjectUnitBase unit)
+        {
+            var dto = new UnitDto(unit);
+
+            var args = new UnitTakenDamageEventArgs(dto);
+            UnitTakenDamage?.Invoke(null, args);
         }
     }
 }

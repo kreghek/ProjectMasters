@@ -439,6 +439,33 @@
                 }
             });
 
+        connection.on("AnimateUnitDamageAsync", function (unitDto) {
+            var unitContainer = units.get(unitDto.id);
+            let oldAnimator = unitContainer.animator;
+            unitContainer.animator = {
+                counter: null,
+                duration: 30,
+                graphics: unitContainer,
+                sourceX: unitContainer.x,
+                update: function (delta) {
+                    if (this.counter == null) {
+                        this.counter = this.duration;
+                    }
+
+                    if (this.counter > 0) {
+                        this.counter -= delta;
+                        this.graphics.alpha = Math.sin((this.counter / this.duration) * Math.PI * 10) * 0.25 + 0.75;
+                        this.graphics.x = this.sourceX + Math.sin(this.counter) * 10;
+                    }
+                    else {
+                        this.graphics.animator = oldAnimator;
+                        this.graphics.x = this.sourceX;
+                        this.graphics.alpha = 1;
+                    }
+                }
+            };
+        });
+
         function movePersonOutOfWork(personContainer) {
             personContainer.moveEngine = {
                 graphics: personContainer,
