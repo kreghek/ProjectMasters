@@ -22,7 +22,7 @@ namespace ProjectMasters.Games
             var solved = units.Sum(x => x.TimeLog);
             var remaining = units.Sum(x => x.Cost);
             var percent = Math.Round(solved / remaining * 100, MidpointRounding.ToEven);
-            Percent = percent.ToString("0:00");
+            Percent = percent.ToString();
         }
     }
 }
