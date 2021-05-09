@@ -25,5 +25,6 @@ namespace ProjectMasters.Web.Hubs
 
         Task PreSetupClientAsync(bool isGameStarted);
         Task StartDecision(Decision decision);
+        Task AnimateUnitDamageAsync(UnitDto unitDto);
     }
 }
