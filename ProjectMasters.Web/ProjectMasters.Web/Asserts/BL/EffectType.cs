@@ -1,7 +1,7 @@
 ﻿namespace Assets.BL
 {
     public enum EffectType
-    { 
+    {
         /// <summary>
         /// Decrease commit speed twice.
         /// </summary>

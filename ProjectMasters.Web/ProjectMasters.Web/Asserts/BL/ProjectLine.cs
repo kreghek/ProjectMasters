@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Assets.BL
+﻿namespace Assets.BL
 {
+    using System.Collections.Generic;
+
     public sealed class ProjectLine
     {
         public ProjectLine()
@@ -11,8 +11,8 @@ namespace Assets.BL
         }
 
         public List<Person> AssignedPersons { get; set; }
+        public int Id { get; internal set; }
 
         public List<ProjectUnitBase> Units { get; set; }
-        public int Id { get; internal set; }
     }
 }

@@ -9,26 +9,27 @@ namespace ProjectMasters.Games
 
     public static class GameState
     {
-        public static bool _isLoaded;
-        public static ProjectUnitFormation _project;
-        public static Team _team;
-        public static TeamFactory _teamFactory;
+        public static bool Initialized { get; set; }
+        public static ProjectUnitFormation Project { get; set; }
 
         public static bool Started { get; internal set; }
+        public static Team Team { get; set; }
+        public static TeamFactory TeamFactory { get; set; }
+
         public static void AddEffect(Effect effect)
         {
             EffectIsAdded?.Invoke(null, new EffectEventArgs(effect));
         }
 
+        public static event EventHandler<DecisionEventArgs> DecisionIsStarted;
         public static event EventHandler<EffectEventArgs> EffectIsAdded;
         public static event EventHandler<EffectEventArgs> EffectIsRemoved;
-
+        public static event EventHandler<LineEventArgs> LineIsRemoved;
         public static event EventHandler<PersonAssignedEventArgs> PersonAssigned;
         public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
         public static event EventHandler<PersonEventArgs> PersonIsRested;
         public static event EventHandler<PersonEventArgs> PersonIsTired;
-        public static event EventHandler<LineEventArgs> LineIsRemoved;
-        public static event EventHandler<DecisionEventArgs> DecisionIsStarted;
+        public static event EventHandler<SkillEventArgs> SkillIsLearned;
         public static event EventHandler<UnitTakenDamageEventArgs> UnitTakenDamage;
 
 
@@ -40,6 +41,11 @@ namespace ProjectMasters.Games
         public static void RestPerson(Person person)
         {
             PersonIsRested?.Invoke(null, new PersonEventArgs(person));
+        }
+
+        public static void StartDecision(Decision decision)
+        {
+            DecisionIsStarted?.Invoke(null, new DecisionEventArgs(decision));
         }
 
         public static void TirePerson(Person person)
@@ -62,9 +68,9 @@ namespace ProjectMasters.Games
             LineIsRemoved?.Invoke(null, new LineEventArgs(line));
         }
 
-        public static void StartDecision(Decision decision)
+        public static void LearnSkill(Skill skill)
         {
-            DecisionIsStarted?.Invoke(null,new DecisionEventArgs(decision));
+            SkillIsLearned?.Invoke(null, new SkillEventArgs(skill));
         }
 
         public static void DoUnitTakenDamage(ProjectUnitBase unit)

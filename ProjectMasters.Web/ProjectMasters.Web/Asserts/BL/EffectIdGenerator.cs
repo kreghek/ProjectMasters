@@ -1,6 +1,6 @@
 ﻿namespace Assets.BL
 {
-    public static class UnitIdGenerator
+    public static class EffectIdGenerator
     {
         private static int _id = 1;
 

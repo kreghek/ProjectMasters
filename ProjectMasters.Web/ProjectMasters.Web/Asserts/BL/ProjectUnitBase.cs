@@ -1,50 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Assets.BL
+﻿namespace Assets.BL
 {
-    using ProjectMasters.Games;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
-    public abstract class ProjectUnitBase: ISpeechSource
+    public abstract class ProjectUnitBase : ISpeechSource
     {
-        public int Id
-        {
-            get => _id;
-            set
-            {
-                _id = value;
-            }
-        }
-
-        private Random Random => new Random(DateTime.Now.Millisecond);
-
         protected float _speechCounter;
-        private bool _isDead;
-        private int _id;
-        public abstract ProjectUnitType Type { get; }
         public float Cost { get; set; }
-        public float TimeLog { get; set; }
-        public string[] RequiredMasteryItems { get; set; }
 
-        public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
+        public int Id { get; set; }
 
-        public bool IsDead
-        {
-            get => _isDead;
-            set
-            {
-                _isDead = value;
-            }
-        }
+        public bool IsDead { get; set; }
+
+        public bool IsGoalItem { get; set; }
 
         public int LineIndex { get; set; }
 
         public int QueueIndex { get; set; }
 
-        public event EventHandler<UnitTakeDamageEventArgs> TakeDamage;
+        private Random Random => new Random(DateTime.Now.Millisecond);
+        public string[] RequiredMasteryItems { get; set; }
+        public float TimeLog { get; set; }
+        public abstract ProjectUnitType Type { get; }
 
-        public bool IsGoalItem { get; set; }
+        public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
+
+        public event EventHandler<UnitTakeDamageEventArgs> TakeDamage;
 
         protected void DoTakeDamage(float damage, bool isCritical)
         {
@@ -55,22 +37,8 @@ namespace Assets.BL
         {
             var usedSkills = personSkills.Where(x => RequiredMasteryItems.Contains(x.Sid)).ToArray();
             if (usedSkills.Any())
-            {
                 return usedSkills.Min(x => x.Level);
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        protected bool RollCommitSuccess(IEnumerable<Mastery> skills)
-        {
-            var effectiveCommitRoll = Random.Next(1, Person.MAX_SKILL_LEVEL);
-            var successCommitRoll = GetSuccessCommitRoll(skills);
-
-            var successfullCommit = effectiveCommitRoll <= successCommitRoll;
-            return successfullCommit;
+            return 0;
         }
 
         protected void HandleSpeechs(float commitDeltaTime)
@@ -96,6 +64,15 @@ namespace Assets.BL
                     SpeechPool.AddSpeech(speech);
                 }
             }
+        }
+
+        protected bool RollCommitSuccess(IEnumerable<Mastery> skills)
+        {
+            var effectiveCommitRoll = Random.Next(1, Person.MAX_SKILL_LEVEL);
+            var successCommitRoll = GetSuccessCommitRoll(skills);
+
+            var successfullCommit = effectiveCommitRoll <= successCommitRoll;
+            return successfullCommit;
         }
     }
 }

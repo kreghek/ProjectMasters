@@ -1,22 +1,20 @@
-﻿using System;
-using System.Linq;
-
-
-namespace Assets.BL
+﻿namespace Assets.BL
 {
+    using System;
+    using System.Linq;
+
     using ProjectMasters.Games;
 
     public sealed class SubTaskUnit : ProjectUnitBase
     {
-        private Random Random => new Random(DateTime.Now.Millisecond);
+        private const float DELTA_TIME = 1;
+        private const int MAX_ERROR_COST = 2;
 
         private const int MIN_ERROR_COST = 1;
-        private const int MAX_ERROR_COST = 2;
-        private const float DELTA_TIME = 1;
 
-        
         private const float PROGRESS_TO_SPAWN_ERROR = 0.5f;
-        private int _errorRoundeIndex = 0;
+        private int _errorRoundeIndex;
+        private Random Random => new Random(DateTime.Now.Millisecond);
 
         public override ProjectUnitType Type => ProjectUnitType.SubTask;
 
@@ -38,18 +36,14 @@ namespace Assets.BL
                 var formation = ProjectUnitFormation.Instance;
 
                 var errorCount = Random.Next(1, 5);
-                for (int errorIndex = 0; errorIndex < errorCount; errorIndex++)
+                for (var errorIndex = 0; errorIndex < errorCount; errorIndex++)
                 {
                     var errorUnit = CreateErrorUnit();
 
                     if (Random.Next(1, 100) > 50)
-                    {
                         formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
-                    }
                     else
-                    {
                         formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
-                    }
                 }
 
                 person.ErrorMadeCount += errorCount;
@@ -63,83 +57,78 @@ namespace Assets.BL
                 formation.ResolveUnit(LineIndex, this);
                 person.SubTasksCompleteCount++;
                 IsDead = true;
-                person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT + Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
+                person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT +
+                                              Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
 
                 CountTaskCompleteToActiveSkill(person);
             }
             else
             {
-                if ((Cost - TimeLog) > 8)
-                {
+                if (Cost - TimeLog > 8)
                     HandleSpeechs(DELTA_TIME);
-                }
             }
         }
 
         private void CountTaskCompleteToActiveSkill(Person person)
         {
             var skillToUp = person.ActiveSkill;
-            if (skillToUp != null)
+            if (skillToUp == null)
+                return;
+            // Add active skill to Skills collection
+            // If it is not there. Union checks duplicates.
+            person.Skills = person.Skills.Union(new[] { skillToUp }).ToArray();
+
+            skillToUp.Jobs ??= Array.Empty<Job>();
+
+            var affectedJobsFromSchemeList = skillToUp.Scheme.RequiredJobs.Where(x =>
+                RequiredMasteryItems.Contains(x.MasterySid) && x.CompleteSubTasksAmount > 0);
+
+            foreach (var affectedJobScheme in affectedJobsFromSchemeList)
             {
-                // Add active skill to Skills collection
-                // If it is not there. Union checks duplicates.
-                person.Skills = person.Skills.Union(new[] { skillToUp }).ToArray();
-
-                if (skillToUp.Jobs is null)
+                var affectedJobInSkillToUp = skillToUp.Jobs.SingleOrDefault(x => x.Scheme == affectedJobScheme);
+                if (affectedJobInSkillToUp is null)
                 {
-                    skillToUp.Jobs = Array.Empty<Job>();
+                    affectedJobInSkillToUp = new Job
+                    {
+                        Scheme = affectedJobScheme
+                    };
+
+                    skillToUp.Jobs = skillToUp.Jobs.Concat(new[] { affectedJobInSkillToUp }).ToArray();
                 }
 
-                var affectedJobsFromSchemeList = skillToUp.Scheme.RequiredJobs.Where(x => RequiredMasteryItems.Contains(x.MasterySid) && x.CompleteSubTasksAmount > 0);
+                affectedJobInSkillToUp.CompleteSubTasksAmount++;
+            }
 
-                foreach (var affectedJobScheme in affectedJobsFromSchemeList)
+            var isSkillArchieved = true;
+            var notStartedJobs = skillToUp.Scheme.RequiredJobs.Except(skillToUp.Jobs.Select(x => x.Scheme));
+            if (!notStartedJobs.Any())
+                foreach (var job in skillToUp.Jobs)
                 {
-                    var affectedJobInSkillToUp = skillToUp.Jobs.SingleOrDefault(x => x.Scheme == affectedJobScheme);
-                    if (affectedJobInSkillToUp is null)
+                    if (job.CompleteSubTasksAmount < job.Scheme.CompleteSubTasksAmount)
                     {
-                        affectedJobInSkillToUp = new Job
-                        {
-                            Scheme = affectedJobScheme
-                        };
-
-                        skillToUp.Jobs = skillToUp.Jobs.Concat(new[] { affectedJobInSkillToUp }).ToArray();
+                        isSkillArchieved = false;
+                        break;
                     }
 
-                    affectedJobInSkillToUp.CompleteSubTasksAmount++;
-                }
-
-                var isSkillArchieved = true;
-                var notStartedJobs = skillToUp.Scheme.RequiredJobs.Except(skillToUp.Jobs.Select(x => x.Scheme));
-                if (!notStartedJobs.Any())
-                {
-                    foreach (var job in skillToUp.Jobs)
+                    if (job.CompleteErrorsAmount < job.Scheme.CompleteErrorsAmount)
                     {
-                        if (job.CompleteSubTasksAmount < job.Scheme.CompleteSubTasksAmount)
-                        {
-                            isSkillArchieved = false;
-                            break;
-                        }
+                        isSkillArchieved = false;
+                        break;
+                    }
 
-                        if (job.CompleteErrorsAmount < job.Scheme.CompleteErrorsAmount)
-                        {
-                            isSkillArchieved = false;
-                            break;
-                        }
-
-                        if (job.FeatureDecomposesAmount < job.Scheme.FeatureDecomposesAmount)
-                        {
-                            isSkillArchieved = false;
-                            break;
-                        }
+                    if (job.FeatureDecomposesAmount < job.Scheme.FeatureDecomposesAmount)
+                    {
+                        isSkillArchieved = false;
+                        break;
                     }
                 }
 
-                if (isSkillArchieved)
-                {
-                    // Skill are in skills collection already.
-                    skillToUp.IsLearnt = true;
-                    person.ActiveSkill = null;
-                }
+            if (isSkillArchieved)
+            {
+                // Skill are in skills collection already.
+                skillToUp.IsLearnt = true;
+                GameState.LearnSkill(person.ActiveSkill);
+                person.ActiveSkill = null;
             }
         }
 
