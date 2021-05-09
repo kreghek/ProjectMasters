@@ -3,6 +3,8 @@
     using System;
     using System.Linq;
 
+    using ProjectMasters.Games;
+
     public sealed class SubTaskUnit : ProjectUnitBase
     {
         private const float DELTA_TIME = 1;
@@ -124,6 +126,7 @@
             {
                 // Skill are in skills collection already.
                 skillToUp.IsLearnt = true;
+                GameState.LearnSkill(person.ActiveSkill);
                 person.ActiveSkill = null;
             }
         }

@@ -132,6 +132,7 @@ namespace ProjectMasters.Games
             GameState.Project.Added += Project_UnitAdded;
             GameState.Project.Removed += Project_UnitRemoved;
             GameState.DecisionIsStarted += GameState_DecisionIsStarted;
+            GameState.SkillIsLearned += GameState_SkillIsLearned;
             Initialized();
         }
 
@@ -139,6 +140,12 @@ namespace ProjectMasters.Games
         {
             _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
+        }
+
+        private void GameState_SkillIsLearned(object sender, SkillEventArgs e)
+        {
+            _gameHub.Clients.All.SkillIsLearned(e.skill);
+            _logger.LogInformation($"{e.skill.Scheme.DisplayTitle} is learned");
         }
 
         private void Project_UnitRemoved(object sender, UnitEventArgs e)

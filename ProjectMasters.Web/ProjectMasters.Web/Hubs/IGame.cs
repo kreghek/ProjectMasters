@@ -22,5 +22,6 @@
         Task SetupClientStateAsync(IEnumerable<PersonDto> personDto, IEnumerable<UnitDto> units);
         Task StartDecision(Decision decision);
         Task TirePersonAsync(PersonDto person);
+        Task SkillIsLearned(Skill skill);
     }
 }
