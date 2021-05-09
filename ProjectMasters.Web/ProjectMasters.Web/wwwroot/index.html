@@ -13,6 +13,39 @@
             border-left-style: hidden;
             border-bottom-style: hidden;
         }
+
+        #startButton {
+            position: absolute;
+            bottom: 500px;
+            left: 500px;
+            display: block;
+            width: 200px;
+            height: 50px;
+            font-size: xx-large;
+            font-family: cursive;
+            background: linear-gradient( 0deg, #00aaff, #00bbbb);
+            border: 2px solid #fff;
+            border-radius: 3px;
+        }
+
+        #startButton:hover {
+            background: linear-gradient( 0deg, #00bbff, #00cccc);
+
+        }
+
+        #gameTitle {
+            position: absolute;
+            bottom: 600px;
+            left: 450px;
+            display: block;
+            width: 400px;
+            height: 50px;
+            font-size: xx-large;
+            font-family: cursive;
+            color: #00bbbb;
+            text-shadow: 20px 12px 2px #333;
+        }
+
         .person-panel {
             display: inline-block;
             width: 200px;
@@ -57,7 +90,8 @@
 </head>
 <body>
     <div style="width: 100%; height: 786px; position: relative" id="main">
-        <button id="startButton" onclick="startGame()" style="position: absolute; bottom: 500px; left: 500px; display: none">START</button>
+        <span id="gameTitle">PROJECT MASTERS</span>
+        <button id="startButton" onclick="startGame()" style="display: none">START</button>
 
         <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 );">
             <div id="firstForm" class="person-panel">
@@ -118,6 +152,9 @@
             app.stage.removeChild(titleBackground);
             var startButton = document.getElementById("startButton");
             startButton.remove();
+
+            var gameTitle = document.getElementById("gameTitle");
+            gameTitle.remove();
         }
     </script>
     <script type="text/javascript">
@@ -409,10 +446,12 @@
             if (isGameStarted) {
                 document.getElementById("startButton").remove();
                 app.stage.removeChild(titleBackground);
+
+                document.getElementById("gameTitle").remove();
                 connection.invoke("InitServerState");
             }
             else {
-                document.getElementById("startButton").setAttribute("style", "position: absolute; bottom: 500px; left: 500px; display:block");
+                document.getElementById("startButton").setAttribute("style", "display:block");
             }
         });
 
