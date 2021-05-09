@@ -1,26 +1,28 @@
 namespace ProjectMasters.Games
 {
+    using System;
     using System.Linq;
 
     using Assets.BL;
 
     public class PlayerDto
     {
-        public int Auhtority;
+        public int Authority { get; set; }
 
-        public int Money;
+        public int Money { get; set; }
 
-        public float Percent;
+        public string Percent { get; set; }
 
         public PlayerDto()
         {
             Money = Player.Money;
-            Auhtority = Player.Autority;
+            Authority = Player.Autority;
 
             var units = GameState.Project.Lines.SelectMany(x => x.Units);
             var solved = units.Sum(x => x.TimeLog);
             var remaining = units.Sum(x => x.Cost);
-            Percent = solved / remaining * 100;
+            var percent = Math.Round(solved / remaining * 100, MidpointRounding.ToEven);
+            Percent = percent.ToString("0:00");
         }
     }
 }
