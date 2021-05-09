@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using ProjectMasters.Games;
+
     public sealed class FeatureUnit : ProjectUnitBase
     {
         private const float _maxDecomposeCost = 2;

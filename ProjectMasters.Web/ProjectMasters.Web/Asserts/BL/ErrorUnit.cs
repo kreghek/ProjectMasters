@@ -1,4 +1,6 @@
-﻿namespace Assets.BL
+﻿using ProjectMasters.Games;
+
+namespace Assets.BL
 {
     public sealed class ErrorUnit : ProjectUnitBase
     {
