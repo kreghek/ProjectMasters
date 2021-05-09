@@ -1,6 +1,8 @@
 namespace ProjectMasters.Games
 {
     using System;
+    using System.Data.SqlTypes;
+    using System.Diagnostics.Tracing;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -20,6 +22,7 @@ namespace ProjectMasters.Games
         private readonly IHubContext<GameHub, IGame> _gameHub;
         private readonly ILogger<Worker> _logger;
         private DateTime _currentTime;
+        private int counter = 0;
 
         public Worker(ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
@@ -55,6 +58,7 @@ namespace ProjectMasters.Games
         {
             _gameHub.Clients.All.StartDecision(e.Decision);
             _logger.LogInformation($"{e.Decision.Text} is started");
+            _logger.LogInformation($"{Player.Money} - money, {Player.Autority} - authority");
         }
 
         private void GameState_EffectIsAdded(object sender, EffectEventArgs e)
@@ -158,6 +162,13 @@ namespace ProjectMasters.Games
         {
             var time = (float)deltaTime.TotalSeconds;
             GameState.TeamFactory.Update(time);
+            if (counter == 10)
+            {
+                _gameHub.Clients.All.SetStatus(new PlayerDto());
+                counter = 0;
+            }
+
+            counter++;
         }
     }
 }

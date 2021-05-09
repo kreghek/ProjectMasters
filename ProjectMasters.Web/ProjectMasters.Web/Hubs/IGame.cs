@@ -5,6 +5,7 @@
 
     using Assets.BL;
 
+    using ProjectMasters.Games;
     using ProjectMasters.Web.DTOs;
 
     public interface IGame
@@ -23,5 +24,6 @@
         Task StartDecision(Decision decision);
         Task TirePersonAsync(PersonDto person);
         Task SkillIsLearned(Skill skill);
+        Task SetStatus(PlayerDto player);
     }
 }
