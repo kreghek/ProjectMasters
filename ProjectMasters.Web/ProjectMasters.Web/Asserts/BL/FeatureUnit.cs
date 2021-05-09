@@ -42,6 +42,7 @@ namespace Assets.BL
                 CostToDecompose -= commitPower;
 
                 DoTakeDamage(commitPower, isCritical);
+                GameState.DoUnitTakenDamage(this);
 
                 if (CostToDecompose <= 0 || TimeLog >= Cost)
                 {

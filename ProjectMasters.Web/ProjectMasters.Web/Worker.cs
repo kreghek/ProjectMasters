@@ -153,7 +153,13 @@ namespace ProjectMasters.Games
             GameState._project.Added += Project_UnitAdded;
             GameState._project.Removed += Project_UnitRemoved;
             GameState.DecisionIsStarted += GameState_DecisionIsStarted;
+            GameState.UnitTakenDamage += GameState_UnitTakenDamage;
             Initialized();
+        }
+
+        private void GameState_UnitTakenDamage(object sender, UnitTakenDamageEventArgs e)
+        {
+            _gameHub.Clients.All.AnimateUnitDamageAsync(e.UnitDto);
         }
 
         private void Project_UnitRemoved(object sender, UnitEventArgs e)

@@ -12,6 +12,7 @@
             if (isSuccessfullCommit)
             {
                 TimeLog += commitPower;
+                GameState.DoUnitTakenDamage(this);
                 DoTakeDamage(commitPower, isCritical);
             }
 

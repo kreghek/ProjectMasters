@@ -27,6 +27,7 @@ namespace Assets.BL
             {
                 TimeLog += commitPower;
                 DoTakeDamage(commitPower, isCritical);
+                GameState.DoUnitTakenDamage(this);
             }
 
             // The sub-task starts to spawn errors only after some progress is done.

@@ -184,6 +184,7 @@
             .add("images/feature.png")
             .add("images/backendTask.png")
             .add("images/frontendTask.png")
+            .add("images/fullstack.png")
             .load(setup);
 
 
@@ -207,6 +208,7 @@
 
             textures.backendTask = PIXI.loader.resources["images/backendTask.png"].texture;
             textures.frontendTask = PIXI.loader.resources["images/frontendTask.png"].texture;
+            textures.fullStackTask = PIXI.loader.resources["images/fullstack.png"].texture;
 
             textures.eyes1 = PIXI.loader.resources["images/eyes.png"].texture;
             textures.eyes2 = PIXI.loader.resources["images/eyes2.png"].texture;
@@ -333,8 +335,7 @@
                     let offset = 170;
 
                     if (personDtos[i].lineId === null) {
-                        container.x = 0;
-                        container.y = 0;
+                        movePersonOutOfWork(container);
                     }
                     else {
                         container.x = offset + (personDto.lineId) * 30;
@@ -351,7 +352,7 @@
                 }
 
                 for (let i = 0; i < unitDtos.length; i++) {
-                    let container = getUnitContainer(unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
+                    let container = getUnitContainer(unitDtos[i].id, unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
                     container.id = unitDtos[i].id;
                     let offset = 90 + unitDtos[i].lineId * 50;
 
@@ -464,7 +465,6 @@
                 let personContainer = listPerson.get(personDto.id);
 
                 movePersonOutOfWork(personContainer);
-
             });
 
         connection.on("RestPersonAsync",
@@ -484,9 +484,65 @@
                 }
             });
 
+        connection.on("AnimateUnitDamageAsync", function (unitDto) {
+            var unitContainer = units.get(unitDto.id);
+            let oldAnimator = unitContainer.animator;
+            unitContainer.animator = {
+                counter: null,
+                duration: 30,
+                graphics: unitContainer,
+                sourceX: unitContainer.x,
+                update: function (delta) {
+                    if (this.counter == null) {
+                        this.counter = this.duration;
+                    }
+
+                    if (this.counter > 0) {
+                        this.counter -= delta;
+                        this.graphics.alpha = Math.sin((this.counter / this.duration) * Math.PI * 10) * 0.25 + 0.75;
+                        this.graphics.x = this.sourceX + Math.sin(this.counter) * 10;
+                    }
+                    else {
+                        this.graphics.animator = oldAnimator;
+                        this.graphics.x = this.sourceX;
+                        this.graphics.alpha = 1;
+                    }
+                }
+            };
+        });
+
         function movePersonOutOfWork(personContainer) {
-            personContainer.x = 0;
-            personContainer.y = 0;
+            personContainer.moveEngine = {
+                graphics: personContainer,
+                counter: null,
+                duration: 100,
+                targetPoint: null,
+                startPoint: null,
+                update: function (delta) {
+                    if (this.counter === null) {
+                        this.counter = this.duration;
+                        this.startPoint = new PIXI.Point(this.graphics.sourceX, this.graphics.sourceY);
+                        this.targetPoint = new PIXI.Point(-10 + this.getRandomInt(20) - 10, 350 + this.getRandomInt(150) - 50);
+                    }
+                    else {
+                        this.counter--;
+                        if (this.counter <= 0) {
+                            this.counter = this.duration;
+                            this.startPoint = new PIXI.Point(this.graphics.x, this.graphics.y);
+                            this.targetPoint = new PIXI.Point(-10 + this.getRandomInt(20) - 10, 350 + this.getRandomInt(150) - 50);
+                        }
+                        else {
+                            let t = (this.duration - this.counter) / this.duration;
+                            this.graphics.x = this.lerp(this.startPoint.x, this.targetPoint.x, t);
+                            this.graphics.y = this.lerp(this.startPoint.y, this.targetPoint.y, t);
+                        }
+                    }
+                },
+                getRandomInt: function (max) {
+                    return Math.floor(Math.random() * max);
+                },
+                lerp: (a, b, c) => a * (1 - c) + b * c
+            }
         }
 
 
