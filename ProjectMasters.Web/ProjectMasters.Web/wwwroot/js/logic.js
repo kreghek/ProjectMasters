@@ -94,8 +94,7 @@ function getSpriteByType(rndNumber, type, textures, masteryItems) {
     if (type == "SubTask") {
         if (masteryItems.includes("frontend") && masteryItems.includes("backend")) {
             return new PIXI.Sprite(textures.fullStackTask);
-        }
-        else if (masteryItems.includes("backend")) {
+        } else if (masteryItems.includes("backend")) {
             return new PIXI.Sprite(textures.backendTask);
         } else if (masteryItems.includes("frontend")) {
             return new PIXI.Sprite(textures.frontendTask);
