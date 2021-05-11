@@ -24,7 +24,7 @@
         Task StartDecision(Decision decision);
         Task TirePersonAsync(PersonDto person);
         Task SkillIsLearned(Skill skill);
-        Task SetStatus(PlayerDto player);
+        Task SetStatusAsync(PlayerDto player);
         Task AnimateUnitDamageAsync(UnitDto unitDto);
     }
 }
