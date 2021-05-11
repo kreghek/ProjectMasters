@@ -109,11 +109,12 @@
     <div style="width: 100%; height: 786px; position: relative" id="main">
         <span id="gameTitle">PROJECT MASTERS</span>
         <button id="startButton" onclick="startGame()" style="display: none">START</button>
-        <div id ="moneyPlacer"; style="position: absolute; bottom: 750px; left: 500px; color: aliceblue"></div>
+
+        <div id="moneyPlacer" ; style="position: absolute; bottom: 750px; left: 500px; color: aliceblue"></div>
         <div id="authorityPlacer" style="position: absolute; bottom: 750px; left: 650px; color: aliceblue"></div>
         <div id="progressPlacer" style="position: absolute; bottom: 750px; left: 800px; color: aliceblue"></div>
 
-        <div class="person-panels">
+        <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 );">
             <div id="firstForm" class="person-panel" onclick="showPersonDialog(listPerson.get(1));">
                 <p class="name"></p>
                 <div class="mastery-items"></div>
@@ -456,20 +457,7 @@
                 unitContainer.x = offset + personWidth + unitDto.queueIndex * 100;
             }
         });
-    connection.on("SetStatus",
-        function (data) {
 
-            let moneyArea = document.getElementById("moneyPlacer");
-            moneyArea.innerHTML = `Money: ${data.money}$`;
-
-            let authorityArea = document.getElementById("authorityPlacer");
-            authorityArea.innerHTML = `Authority: ${data.authority}`;
-
-            let progressArea = document.getElementById("progressPlacer");
-            progressArea.innerHTML = `Progress: ${data.percent} %`;
-    
-        });
-    
     connection.on("StartDecision",
         function(data) {
             let dialog = document.getElementById("decisionDialog");
@@ -568,6 +556,20 @@
                 }
             };
         });
+
+        connection.on("SetStatus",
+            function (data) {
+
+                let moneyArea = document.getElementById("moneyPlacer");
+                moneyArea.innerHTML = `Money: ${data.money}$`;
+
+                let authorityArea = document.getElementById("authorityPlacer");
+                authorityArea.innerHTML = `Authority: ${data.authority}`;
+
+                let progressArea = document.getElementById("progressPlacer");
+                progressArea.innerHTML = `Progress: ${data.percent} %`;
+
+            });
 
         function movePersonOutOfWork(personContainer) {
             personContainer.x = 0;

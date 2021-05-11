@@ -1,6 +1,7 @@
 namespace ProjectMasters.Games
 {
     using System;
+    using System.Globalization;
     using System.Linq;
 
     using Assets.BL;
@@ -19,10 +20,11 @@ namespace ProjectMasters.Games
             Authority = Player.Autority;
 
             var units = GameState.Project.Lines.SelectMany(x => x.Units);
-            var solved = units.Sum(x => x.TimeLog);
-            var remaining = units.Sum(x => x.Cost);
+            var bases = units as ProjectUnitBase[] ?? units.ToArray();
+            var solved = bases.Sum(x => x.TimeLog);
+            var remaining = bases.Sum(x => x.Cost);
             var percent = Math.Round(solved / remaining * 100, MidpointRounding.ToEven);
-            Percent = percent.ToString();
+            Percent = percent.ToString(CultureInfo.InvariantCulture);
         }
     }
 }
