@@ -492,7 +492,7 @@
 
     connection.on("CreateUnitAsync",
         function(unitDto) {
-            let container = getUnitContainer(unitDto.type, textures, unitDto.requiredMasteryItems);
+            let container = getUnitContainer(unitDto.id, unitDto.type, textures, unitDto.requiredMasteryItems);
             container.id = unitDto.id;
 
             //container.x = 200 + personWidth + unitDto.queueIndex * 100;

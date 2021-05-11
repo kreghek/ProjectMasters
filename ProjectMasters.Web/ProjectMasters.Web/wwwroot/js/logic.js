@@ -92,17 +92,15 @@ function getSpriteByType(rndNumber, type, textures, masteryItems) {
         }
     }
     if (type == "SubTask") {
-        if (masteryItems.includes("backend") && !masteryItems.includes("frontend")) {
-            return new PIXI.Sprite(textures.backendTask);
-        }
-        if (masteryItems.includes("frontend") && !masteryItems.includes("backend")) {
-            return new PIXI.Sprite(textures.frontendTask);
-        }
         if (masteryItems.includes("frontend") && masteryItems.includes("backend")) {
             return new PIXI.Sprite(textures.fullStackTask);
         }
+        else if (masteryItems.includes("backend")) {
+            return new PIXI.Sprite(textures.backendTask);
+        } else if (masteryItems.includes("frontend")) {
+            return new PIXI.Sprite(textures.frontendTask);
+        }
     }
-
 
     return new PIXI.Sprite(textures.bug1);
 }
