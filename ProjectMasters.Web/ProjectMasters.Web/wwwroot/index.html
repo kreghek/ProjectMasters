@@ -95,6 +95,7 @@
 
         <div id="moneyPlacer" ; style="position: absolute; bottom: 750px; left: 500px; color: aliceblue"></div>
         <div id="authorityPlacer" style="position: absolute; bottom: 750px; left: 650px; color: aliceblue"></div>
+        <div id="progressPlacer" style="position: absolute; bottom: 750px; left: 800px; color: aliceblue"></div>
 
         <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 );">
             <div id="firstForm" class="person-panel">
@@ -433,7 +434,7 @@
         });
 
         connection.on("CreateUnitAsync", function (unitDto) {
-            let container = getUnitContainer(unitDto.type, textures, unitDto.requiredMasteryItems);
+            let container = getUnitContainer(unitDto.id, unitDto.type, textures, unitDto.requiredMasteryItems);
             container.id = unitDto.id;
 
             //container.x = 200 + personWidth + unitDto.queueIndex * 100;
