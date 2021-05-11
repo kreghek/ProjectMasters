@@ -11,7 +11,7 @@
 
     public class GameHub : Hub<IGame>
     {
-        public void AssignPerson(int lineId, int personId)
+        public void AssignPersonToLineServer(int lineId, int personId)
         {
             var person = GameState.Team.Persons.FirstOrDefault(p => p.Id == personId);
             var sendLine = GameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
@@ -23,6 +23,7 @@
             sendLine.AssignedPersons.Remove(person);
             line.AssignedPersons.Add(person);
             GameState.AssignPerson(line, person);
+            Clients.Caller.ChangePersonLinePositionAsync(lineId, personId);
         }
 
         public void ChangeUnitPositionsServer(int lineId)

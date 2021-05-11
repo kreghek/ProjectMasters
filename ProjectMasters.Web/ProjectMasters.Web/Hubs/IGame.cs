@@ -26,5 +26,6 @@
         Task SkillIsLearned(Skill skill);
         Task SetStatusAsync(PlayerDto player);
         Task AnimateUnitDamageAsync(UnitDto unitDto);
+        Task ChangePersonLinePositionAsync(int lineId, int personId);
     }
 }
