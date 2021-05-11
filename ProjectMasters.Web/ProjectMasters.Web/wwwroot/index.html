@@ -180,6 +180,9 @@
         app.stage.removeChild(titleBackground);
         var startButton = document.getElementById("startButton");
         startButton.remove();
+
+        var gameTitle = document.getElementById("gameTitle");
+        gameTitle.remove();
     }
 </script>
 <script type="text/javascript">
@@ -195,9 +198,6 @@
             antialias: true,
             transparent: false,
             resolution: 1
-
-            var gameTitle = document.getElementById("gameTitle");
-            gameTitle.remove();
         }
     );
 
@@ -390,7 +390,7 @@
             }
 
             for (let i = 0; i < unitDtos.length; i++) {
-                let container = getUnitContainer(unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
+                let container = getUnitContainer(unitDtos[i].id, unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
                 container.id = unitDtos[i].id;
                 let offset = 90 + unitDtos[i].lineId * 50;
 
