@@ -1,9 +1,7 @@
+name: .NET Core Deploy
+
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
     branches:
       - master
 
