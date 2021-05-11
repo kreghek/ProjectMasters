@@ -93,6 +93,9 @@
         <span id="gameTitle">PROJECT MASTERS</span>
         <button id="startButton" onclick="startGame()" style="display: none">START</button>
 
+        <div id="moneyPlacer" ; style="position: absolute; bottom: 750px; left: 500px; color: aliceblue"></div>
+        <div id="authorityPlacer" style="position: absolute; bottom: 750px; left: 650px; color: aliceblue"></div>
+
         <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 );">
             <div id="firstForm" class="person-panel">
                 <p class="name"></p>
@@ -117,7 +120,7 @@
             </div>
             <div id="leftDecision" onclick="leftDecisionPicked()">
                 <p class="title">
-                    
+
                 </p>
                 <p class="description"></p>
             </div>
@@ -506,6 +509,20 @@
                 }
             };
         });
+
+        connection.on("SetStatus",
+            function (data) {
+
+                let moneyArea = document.getElementById("moneyPlacer");
+                moneyArea.innerHTML = `Money: ${data.money}$`;
+
+                let authorityArea = document.getElementById("authorityPlacer");
+                authorityArea.innerHTML = `Authority: ${data.authority}`;
+
+                let progressArea = document.getElementById("progressPlacer");
+                progressArea.innerHTML = `Progress: ${data.percent} %`;
+
+            });
 
         function movePersonOutOfWork(personContainer) {
             personContainer.x = 0;
