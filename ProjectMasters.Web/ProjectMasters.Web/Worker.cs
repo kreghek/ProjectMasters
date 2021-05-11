@@ -170,7 +170,7 @@ namespace ProjectMasters.Games
             GameState.TeamFactory.Update(time);
             if (counter == 10)
             {
-                _gameHub.Clients.All.SetStatus(new PlayerDto());
+                _gameHub.Clients.All.SetStatusAsync(new PlayerDto());
                 counter = 0;
             }
 
