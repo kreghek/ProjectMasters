@@ -350,7 +350,7 @@
 
         let personNameTextbox = document.getElementsByClassName("person-name")[0];
         personNameTextbox.innerHTML = personContainer.personName;
-
+        currentPersonId = personContainer.id;
         dialog.show();
     }
 
@@ -359,9 +359,16 @@
         dialog.close();
     }
 
-    function assignPersonToLine(personId) {
-        connection.invoke("assignPersonToLine", personId);
+    let currentPersonId;
+    function assignPersonToLine(lineId) {
+        connection.invoke("AssignPersonToLineServer", lineId, currentPersonId);
     }
+
+    connection.on("ChangePersonLinePositionAsync",
+        function(lineId, personId) {
+            let container = listPerson.get(personId);
+            container.y = (lineId) * 200 + 50;
+        });
 
     connection.on("SetupClientStateAsync",
         function(personDtos, unitDtos) {
