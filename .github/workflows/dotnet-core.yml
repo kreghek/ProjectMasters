@@ -9,7 +9,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: ProjectMastersWeb20210511213341
-  WORKING_DIRECTORY: ProjectMasters/ProjectMasters.Web
+  WORKING_DIRECTORY: ProjectMasters.Web
 
 jobs:
   build:
