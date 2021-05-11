@@ -9,17 +9,17 @@ using ProjectMasters.Games.Asserts;
 
 public class TeamFactory
 {
-    private readonly Random Random = new Random(DateTime.Now.Millisecond);
-    private readonly Team Team;
+    private readonly Random _random = new Random(DateTime.Now.Millisecond);
+    private readonly Team _team;
 
     public TeamFactory(Team team)
     {
-        Team = team;
+        _team = team;
     }
 
     public void Start()
     {
-        if (!(Team.Persons is null))
+        if (!(_team.Persons is null))
             return;
 
         var persons = CreateStartTeam();
@@ -30,7 +30,7 @@ public class TeamFactory
             skill.IsLearnt = true;
         }
 
-        Team.Persons = persons.ToArray();
+        _team.Persons = persons.ToArray();
     }
 
     public void Update(float deltaTime)
@@ -134,7 +134,6 @@ public class TeamFactory
                     },
                 },
 
-
                 EyesIndex = 2,
                 HairIndex = 2,
                 MouthIndex = 2,
@@ -183,11 +182,11 @@ public class TeamFactory
 
     private void HandleDecision()
     {
-        var decisionCount = Random.Next(2, 5);
+        var decisionCount = _random.Next(2, 5);
         Player.ActiveDecisions = new Decision[decisionCount];
         for (var i = 0; i < decisionCount; i++)
         {
-            var rolledDecisionIndex = Random.Next(0, DecisionCatalog.Decisions.Length);
+            var rolledDecisionIndex = _random.Next(0, DecisionCatalog.Decisions.Length);
             Player.ActiveDecisions[i] = DecisionCatalog.Decisions[rolledDecisionIndex];
         }
 
@@ -196,7 +195,7 @@ public class TeamFactory
 
     private void UpdateDayly()
     {
-        foreach (var person in Team.Persons)
+        foreach (var person in _team.Persons)
         {
             person.DaylyUpdate();
         }
@@ -213,9 +212,9 @@ public class TeamFactory
             if (line.Units.Any())
             {
                 var assignedPersons = line.AssignedPersons;
-                if (assignedPersons.Count() == 0)
+                if (!assignedPersons.Any())
                 {
-                    var freePersons = Team.Persons
+                    var freePersons = _team.Persons
                         .Except(ProjectUnitFormation.Instance.Lines.SelectMany(x => x.AssignedPersons).Distinct())
                         .ToArray();
                     var firstFreePerson = freePersons.FirstOrDefault();
@@ -256,7 +255,7 @@ public class TeamFactory
 
         // payment
         if (Player.Money > 0)
-            foreach (var person in Team.Persons)
+            foreach (var person in _team.Persons)
             {
                 Player.Money -= person.DaylyPayment;
             }
