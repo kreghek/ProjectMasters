@@ -1,0 +1,584 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        table, tr, td {
+            border: 1px solid black;
+        }
+        input {
+            border-top-style: hidden;
+            border-right-style: hidden;
+            border-left-style: hidden;
+            border-bottom-style: hidden;
+        }
+
+        .person-panels {
+            position: absolute;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgb(255, 255, 255, 50%);
+        }
+
+
+        #startButton {
+            position: absolute;
+            bottom: 500px;
+            left: 500px;
+            display: block;
+            width: 200px;
+            height: 50px;
+            font-size: xx-large;
+            font-family: cursive;
+            background: linear-gradient( 0deg, #00aaff, #00bbbb);
+            border: 2px solid #fff;
+            border-radius: 3px;
+        }
+
+        #startButton:hover {
+            background: linear-gradient( 0deg, #00bbff, #00cccc);
+
+        }
+
+        #gameTitle {
+            position: absolute;
+            bottom: 600px;
+            left: 450px;
+            display: block;
+            width: 400px;
+            height: 50px;
+            font-size: xx-large;
+            font-family: cursive;
+            color: #00bbbb;
+            text-shadow: 20px 12px 2px #333;
+        }
+
+        .person-panel {
+            display: inline-block;
+            width: 200px;
+            float: left;
+            padding-left: 15px;
+            margin: 5px;
+        }
+
+        .person-panel .name {
+            font-size: larger;
+            border-bottom: 1px solid #000000;
+        }
+        #decisionDialog {
+            width: 500px;
+            top: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            font-size: 17px;
+        }
+
+        #decisionDialog .description {
+            font-size: 13px;
+            text-align: right;
+            color: dimgray;
+        }
+
+        #decisionDialog #leftDecision, #decisionDialog #rightDecision {
+            border: 1px solid #000;
+            margin: 10px;
+            padding: 15px;
+        }
+
+        #decisionDialog #leftDecision:hover, #decisionDialog #rightDecision:hover {
+            background: rgba(255, 106, 0, 0.3);
+        }
+
+        #personDialog {
+            width: 500px;
+            top: 300px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            font-size: 17px;
+        }
+    </style>
+    <script src="js/pixi.min.js"></script>
+    <script src="js/signalr/dist/browser/signalr.min.js"></script>
+    <script src="js/logic.js"></script>
+
+</head>
+<body>
+    <div style="width: 100%; height: 786px; position: relative" id="main">
+        <span id="gameTitle">PROJECT MASTERS</span>
+        <button id="startButton" onclick="startGame()" style="display: none">START</button>
+
+        <div id="moneyPlacer" ; style="position: absolute; bottom: 750px; left: 500px; color: aliceblue"></div>
+        <div id="authorityPlacer" style="position: absolute; bottom: 750px; left: 650px; color: aliceblue"></div>
+        <div id="progressPlacer" style="position: absolute; bottom: 750px; left: 800px; color: aliceblue"></div>
+
+        <div class="person-panels" style="position: absolute;  bottom: 0;  background: rgba(255, 255, 255, 0.5); box-shadow: 0 0 15px rgb(255 255 255 );">
+            <div id="firstForm" class="person-panel" onclick="showPersonDialog(listPerson.get(1));">
+                <p class="name"></p>
+                <div class="mastery-items"></div>
+            </div>
+
+            <div id="secondForm" class="person-panel" onclick="showPersonDialog(listPerson.get(2));">
+                <p class="name"></p>
+                <div class="mastery-items"></div>
+            </div>
+
+            <div id="thirdForm" class="person-panel" onclick="showPersonDialog(listPerson.get(3));">
+                <p class="name"></p>
+                <div class="mastery-items"></div>
+            </div>
+        </div>
+
+        <dialog id="decisionDialog">
+            <div>
+                <p id="decisionTitle"></p>
+            </div>
+            <div id="leftDecision" onclick="leftDecisionPicked()">
+                <p class="title"></p>
+                <p class="description"></p>
+            </div>
+            <div id="rightDecision" onclick="rightDecisionPicked()">
+                <p class="title"></p>
+                <p class="description"></p>
+            </div>
+        </dialog>
+
+        <dialog id="personDialog">
+            <div>
+                <p class="person-name"></p>
+            </div>
+            <div class="person-skills">
+            </div>
+            <div class="controls">
+                <button onclick="assignPersonToLine(0)">Line 1</button>
+                <button onclick="assignPersonToLine(1)">Line 2</button>
+                <button onclick="assignPersonToLine(2)">Line 3</button>
+            </div>
+            <button onclick="closePersonDialog()">Close</button>
+        </dialog>
+    </div>
+
+<script type="text/javascript">
+
+    function leftDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(0);
+    }
+
+    function rightDecisionPicked() {
+        var dialog = document.getElementById("decisionDialog");
+        dialog.close();
+        sendDecision(1);
+    }
+
+</script>
+<script type="text/javascript">
+    function startGame() {
+        connection.invoke("InitServerState");
+        app.stage.removeChild(titleBackground);
+        var startButton = document.getElementById("startButton");
+        startButton.remove();
+
+        var gameTitle = document.getElementById("gameTitle");
+        gameTitle.remove();
+    }
+</script>
+<script type="text/javascript">
+    let type = "WebGL";
+    if (!PIXI.utils.isWebGLSupported()) {
+        type = "canvas";
+    }
+
+    //Create a Pixi Application
+    let app = new PIXI.Application({
+            width: 1024,
+            height: 768,
+            antialias: true,
+            transparent: false,
+            resolution: 1
+        }
+    );
+
+    //Add the canvas that Pixi automatically created for you to the HTML document
+    document.getElementById("main").appendChild(app.view);
+
+    //load an image and run the `setup` function when it's done
+    PIXI.loader
+        .add("images/Background.png")
+        .add("images/empty_body.png")
+        .add("images/shirt.png")
+        .add("images/bug1.png")
+        .add("images/bug2.png")
+        .add("images/eyes.png")
+        .add("images/eyes2.png")
+        .add("images/eyes3.png")
+        .add("images/hair1.png")
+        .add("images/hair2.png")
+        .add("images/hair3.png")
+        .add("images/mouth1.png")
+        .add("images/mouth2.png")
+        .add("images/mouth3.png")
+        .add("images/title.jpg")
+        .add("images/feature.png")
+        .add("images/backendTask.png")
+        .add("images/frontendTask.png")
+        .load(setup);
+
+
+    var titleBackground;
+
+    var textures = {};
+
+    //This `setup` function will run when the image has loaded
+    function setup() {
+        titleBackground = new PIXI.Sprite(PIXI.loader.resources["images/title.jpg"].texture);
+        titleBackground.scale = new PIXI.Point(2, 2);
+
+        let background = new PIXI.Sprite(PIXI.loader.resources["images/Background.png"].texture);
+        background.scale = new PIXI.Point(0.2, 0.2);
+
+        textures.empty_body = PIXI.loader.resources["images/empty_body.png"].texture;
+        textures.shirt = PIXI.loader.resources["images/shirt.png"].texture;
+        textures.bug1 = PIXI.loader.resources["images/bug1.png"].texture;
+        textures.bug2 = PIXI.loader.resources["images/bug2.png"].texture;
+        textures.feature = PIXI.loader.resources["images/feature.png"].texture;
+
+        textures.backendTask = PIXI.loader.resources["images/backendTask.png"].texture;
+        textures.frontendTask = PIXI.loader.resources["images/frontendTask.png"].texture;
+
+        textures.eyes1 = PIXI.loader.resources["images/eyes.png"].texture;
+        textures.eyes2 = PIXI.loader.resources["images/eyes2.png"].texture;
+        textures.eyes3 = PIXI.loader.resources["images/eyes3.png"].texture;
+
+        textures.hair1 = PIXI.loader.resources["images/hair1.png"].texture;
+        textures.hair2 = PIXI.loader.resources["images/hair2.png"].texture;
+        textures.hair3 = PIXI.loader.resources["images/hair3.png"].texture;
+
+        textures.mouth1 = PIXI.loader.resources["images/mouth1.png"].texture;
+        textures.mouth2 = PIXI.loader.resources["images/mouth2.png"].texture;
+        textures.mouth3 = PIXI.loader.resources["images/mouth3.png"].texture;
+
+        app.stage.addChild(background);
+        app.stage.addChild(titleBackground);
+
+        app.ticker.add(delta => gameLoop(delta));
+
+        startSignalRConnection();
+    }
+</script>
+
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/game")
+        .build();
+
+    function sendDecision(number) {
+        connection.invoke("SendDecision", number);
+    }
+
+    async function startSignalRConnection() {
+        try {
+            await connection.start();
+            console.log("SignalR Connected.");
+            connection.invoke("PreInitServerState");
+        } catch (err) {
+            console.log("err", err);
+            setTimeout(startSignalRConnection, 5000);
+        }
+    };
+
+    connection.onclose(startSignalRConnection);
+
+    let listPerson = new Map();
+    var units = new Map();
+
+    let personWidth = 200;
+
+    function gameLoop(delta) {
+        if (listPerson) {
+            listPerson.forEach((person) => {
+                if (person.moveEngine) {
+                    person.moveEngine.update(delta);
+                }
+            });
+        }
+
+        if (units) {
+            units.forEach((unit) => {
+                if (unit.animator) {
+                    unit.animator.update(delta);
+                }
+            });
+        }
+    }
+
+    function setPeopleInfo(personId, personName, skills) {
+        let formId;
+
+        switch (personId) {
+        case 1:
+            formId = "firstForm";
+            break;
+        case 2:
+            formId = "secondForm";
+            break;
+        case 3:
+            formId = "thirdForm";
+            break;
+        default:
+            return;
+        }
+
+        let formElement = document.getElementById(formId);
+        let nameTextbox = formElement.getElementsByClassName("name")[0];
+        nameTextbox.innerHTML = personName;
+
+        var masteryItems = formElement.getElementsByClassName("mastery-items")[0];
+        masteryItems.innerHTML = "";
+        for (let i = 0; i < skills.length; i++) {
+            let masteryItem = document.createElement("p");
+            masteryItem.innerHTML = `${skills[i].sid} : ${skills[i].level}`;
+            masteryItems.appendChild(masteryItem);
+        }
+    };
+
+    function showPersonDialog(personContainer) {
+        let dialog = document.getElementById("personDialog");
+
+        let personNameTextbox = document.getElementsByClassName("person-name")[0];
+        personNameTextbox.innerHTML = personContainer.personName;
+
+        dialog.show();
+    }
+
+    function closePersonDialog() {
+        let dialog = document.getElementById("personDialog");
+        dialog.close();
+    }
+
+    function assignPersonToLine(personId) {
+        connection.invoke("assignPersonToLine", personId);
+    }
+
+    connection.on("SetupClientStateAsync",
+        function(personDtos, unitDtos) {
+            for (let i = 0; i < personDtos.length; i++) {
+                let personDto = personDtos[i];
+                let container = getPersonContainer(personDto.eyesIndex, personDto.hairIndex, personDto.mouthIndex, textures);
+                container.id = personDto.id;
+                container.personName = personDto.name;
+
+                let offset = 170;
+
+                if (personDtos[i].lineId === null) {
+                    container.x = 0;
+                    container.y = 0;
+                } else {
+                    container.x = offset + (personDto.lineId) * 30;
+                    container.y = (personDto.lineId) * 200 + 50;
+                }
+
+                container.sourceX = container.x;
+                container.sourceY = container.y;
+
+                app.stage.addChild(container);
+                listPerson.set(personDto.id, container);
+
+                setPeopleInfo(personDto.id, personDto.name, personDto.masteryLevels);
+            }
+
+            for (let i = 0; i < unitDtos.length; i++) {
+                let container = getUnitContainer(unitDtos[i].id, unitDtos[i].type, textures, unitDtos[i].requiredMasteryItems);
+                container.id = unitDtos[i].id;
+                let offset = 90 + unitDtos[i].lineId * 50;
+
+                container.x = offset + personWidth + unitDtos[i].queueIndex * 100;
+                container.y = 100 + (unitDtos[i].lineId) * 200 - 25;
+                app.stage.addChild(container);
+
+                units.set(unitDtos[i].id, container);
+            }
+        });
+
+
+    connection.on("AssignPersonAsync",
+        function(personDto, lineDto) {
+            let personContainer = listPerson.get(personDto.id);
+
+            let offset = 170;
+            personContainer.x = offset + lineDto.id * 30;
+            personContainer.y = lineDto.id * 200 + 50;
+
+            personContainer.sourceX = personContainer.x;
+            personContainer.sourceY = personContainer.y;
+        });
+
+    connection.on("KillUnitAsync",
+        function(data) {
+            let unitContainer = units.get(data.id);
+            units.delete(data.unitId);
+            app.stage.removeChild(unitContainer);
+
+            connection.invoke("ChangeUnitPositionsServer", data.lineId);
+        });
+
+    connection.on("AttackPersonAsync",
+        function(data) {
+            setPeopleInfo(data.id, data.name, data.masteryLevels);
+            let personContainer = listPerson.get(data.id);
+            let attackMoveEngine = {
+                counter: 0.5,
+                graphics: personContainer,
+                update: function(delta) {
+                    this.counter -= 0.1;
+                    if (this.counter <= 0) {
+                        this.graphics.moveEngine = null;
+                        this.graphics.x = this.graphics.sourceX;
+                    } else {
+                        this.graphics.x += 10 * delta;
+                    }
+                },
+            };
+            personContainer.moveEngine = attackMoveEngine;
+        });
+
+    connection.on("ChangeUnitPositionsAsync",
+        function(data) {
+
+            for (let i = 0; i < data.length; i++) {
+                let unitDto = data[i];
+                let unitContainer = units.get(unitDto.id);
+
+                let offset = 90 + unitDto.lineId * 50;
+
+                unitContainer.x = offset + personWidth + unitDto.queueIndex * 100;
+            }
+        });
+
+    connection.on("StartDecision",
+        function(data) {
+            let dialog = document.getElementById("decisionDialog");
+            let title = document.getElementById("decisionTitle");
+            let leftDecision = document.getElementById("leftDecision");
+            title.innerHTML = data.text;
+            let leftTitle = leftDecision.getElementsByClassName("title")[0];
+            leftTitle.innerHTML = data.choises[0].text;
+            let leftDescription = leftDecision.getElementsByClassName("description")[0];
+            leftDescription.innerHTML = data.choises[0].description;
+
+            let rightDecision = document.getElementById("rightDecision");
+            let rightTitle = rightDecision.getElementsByClassName("title")[0];
+            rightTitle.innerHTML = data.choises[1].text;
+            let rightDescription = rightDecision.getElementsByClassName("description")[0];
+            rightDescription.innerHTML = data.choises[1].description;
+
+            dialog.show();
+        });
+
+    connection.on("CreateUnitAsync",
+        function(unitDto) {
+            let container = getUnitContainer(unitDto.id, unitDto.type, textures, unitDto.requiredMasteryItems);
+            container.id = unitDto.id;
+
+            //container.x = 200 + personWidth + unitDto.queueIndex * 100;
+            container.y = 100 + (unitDto.lineId) * 200 - 25;
+            app.stage.addChild(container);
+
+            units.set(unitDto.id, container);
+
+            connection.invoke("ChangeUnitPositionsServer", unitDto.lineId);
+        });
+
+    connection.on("PreSetupClientAsync",
+        function(isGameStarted) {
+            if (isGameStarted) {
+                document.getElementById("startButton").remove();
+                app.stage.removeChild(titleBackground);
+
+                document.getElementById("gameTitle").remove();
+                connection.invoke("InitServerState");
+            } else {
+                document.getElementById("startButton").setAttribute("style", "display:block");
+            }
+        });
+
+    connection.on("TirePersonAsync",
+        function(personDto) {
+            let personContainer = listPerson.get(personDto.id);
+
+            movePersonOutOfWork(personContainer);
+
+        });
+
+    connection.on("RestPersonAsync",
+        function(personDto) {
+            let personContainer = listPerson.get(personDto.id);
+
+            personContainer.x = personContainer.sourceX;
+            personContainer.y = personContainer.sourceY;
+        });
+
+    connection.on("RemoveLineAsync",
+        function(lineDto) {
+            for (let i = 0; i < lineDto.persons.length; i++) {
+                let personContainer = listPerson.get(lineDto.persons[i].id);
+
+                movePersonOutOfWork(personContainer);
+            }
+        });
+
+        connection.on("AnimateUnitDamageAsync", function (unitDto) {
+            var unitContainer = units.get(unitDto.id);
+            let oldAnimator = unitContainer.animator;
+            unitContainer.animator = {
+                counter: null,
+                duration: 30,
+                graphics: unitContainer,
+                sourceX: unitContainer.x,
+                update: function (delta) {
+                    if (this.counter == null) {
+                        this.counter = this.duration;
+                    }
+
+                    if (this.counter > 0) {
+                        this.counter -= delta;
+                        this.graphics.alpha = Math.sin((this.counter / this.duration) * Math.PI * 10) * 0.25 + 0.75;
+                        this.graphics.x = this.sourceX + Math.sin(this.counter) * 10;
+                    }
+                    else {
+                        this.graphics.animator = oldAnimator;
+                        this.graphics.x = this.sourceX;
+                        this.graphics.alpha = 1;
+                    }
+                }
+            };
+        });
+
+        connection.on("SetStatus",
+            function (data) {
+
+                let moneyArea = document.getElementById("moneyPlacer");
+                moneyArea.innerHTML = `Money: ${data.money}$`;
+
+                let authorityArea = document.getElementById("authorityPlacer");
+                authorityArea.innerHTML = `Authority: ${data.authority}`;
+
+                let progressArea = document.getElementById("progressPlacer");
+                progressArea.innerHTML = `Progress: ${data.percent} %`;
+
+            });
+
+        function movePersonOutOfWork(personContainer) {
+            personContainer.x = 0;
+            personContainer.y = 0;
+        }
+
+
+</script>
+
+
+</body>
+</html>
