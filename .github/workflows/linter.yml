@@ -57,6 +57,12 @@ jobs:
 
     needs: [dotnet-format-lint]
 
+    strategy:
+      matrix:
+        solution:
+        - ProjectMasters.Web
+      fail-fast: false
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
@@ -66,7 +72,7 @@ jobs:
       - name: Setup ReSharper Command Line Tools
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.3.3
       - name: Clean up codebase via ReSharper Command Line Tools
-        run: jb cleanupcode --profile="Full Cleanup" Zilon.Core.sln
+        run: jb cleanupcode --profile="Full Cleanup" ${{ matrix.solution }}.sln
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
