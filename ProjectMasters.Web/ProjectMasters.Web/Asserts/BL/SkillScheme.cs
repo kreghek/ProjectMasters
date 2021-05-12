@@ -1,7 +1,7 @@
 ﻿namespace Assets.BL
 {
     public class SkillScheme
-    { 
+    {
         public string Sid { get; set; }
         public string DisplayTitle { get; internal set; }
         public string Description { get; set; }

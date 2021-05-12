@@ -28,7 +28,7 @@ namespace Assets.BL
 
                 MasteryIncrenemt = 1f,
                 MasteryTags = new[]{ MasterySids.BackendMastery },
-                
+
                 RequiredJobs = new []{
                     new JobScheme{
                         MasterySid = MasterySids.BackendMastery,

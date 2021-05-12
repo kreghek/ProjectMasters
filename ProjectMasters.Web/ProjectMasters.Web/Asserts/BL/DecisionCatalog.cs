@@ -19,7 +19,7 @@
             },
 
             new Decision
-            { 
+            {
                 Text = "Some of your employees told bad about you",
                 Choises = new DecisionAftermathBase[]{
                     new PaymentDecisionAftermath{
@@ -33,7 +33,7 @@
             },
 
             new Decision
-            { 
+            {
                 Text = "The customer ask to add a new little feature.",
                 Choises = new DecisionAftermathBase[]{
                     new PaymentDecisionAftermath{
