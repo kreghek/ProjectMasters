@@ -12,22 +12,14 @@
 
     public class GameHub : Hub<IGame>
     {
+        private static readonly ConcurrentDictionary<string, string> _userIdDict =
+            new ConcurrentDictionary<string, string>();
+
         private readonly IGameStateService _gameStateService;
-        private static ConcurrentDictionary<string, string> _userIdDict = new ConcurrentDictionary<string, string>();
 
         public GameHub(IGameStateService gameStateService)
         {
             _gameStateService = gameStateService;
-        }
-
-        private GameState GetStateByUserId(string userId)
-        {
-            return _gameStateService.GetAllGameStates().Single(x => x.UserId == userId);
-        }
-
-        private GameState GetStateByUserIdSafe(string userId)
-        {
-            return _gameStateService.GetAllGameStates().SingleOrDefault(x => x.UserId == userId);
         }
 
         public void AssignPersonToLineServer(int lineId, int personId)
@@ -49,16 +41,6 @@
             gameState.AssignPerson(line, person);
         }
 
-        private static string GetUserIdFromDictionary(string connectionId)
-        {
-            if (!_userIdDict.TryGetValue(connectionId, out var userId))
-            {
-                throw new InvalidOperationException("There is no connection id to map it to user id.");
-            }
-
-            return userId;
-        }
-
         public void ChangeUnitPositionsServer(int lineId)
         {
             var userId = GetUserIdFromDictionary(Context.ConnectionId);
@@ -66,8 +48,8 @@
 
             var lineToGetQueueIndecies = gameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
-            // Не нашли линию проекта.
-            // Это значит, что убили последнего монстра и линия была удалена.
+                // Не нашли линию проекта.
+                // Это значит, что убили последнего монстра и линия была удалена.
             {
                 return;
             }
@@ -141,7 +123,28 @@
                 gameState.Player.ActiveDecisions = null;
             }
 
-            gameState.Player.WaitForDecision = gameState.Player.ActiveDecisions == null ? null : gameState.Player.ActiveDecisions[0];
+            gameState.Player.WaitForDecision =
+                gameState.Player.ActiveDecisions == null ? null : gameState.Player.ActiveDecisions[0];
+        }
+
+        private GameState GetStateByUserId(string userId)
+        {
+            return _gameStateService.GetAllGameStates().Single(x => x.UserId == userId);
+        }
+
+        private GameState GetStateByUserIdSafe(string userId)
+        {
+            return _gameStateService.GetAllGameStates().SingleOrDefault(x => x.UserId == userId);
+        }
+
+        private static string GetUserIdFromDictionary(string connectionId)
+        {
+            if (!_userIdDict.TryGetValue(connectionId, out var userId))
+            {
+                throw new InvalidOperationException("There is no connection id to map it to user id.");
+            }
+
+            return userId;
         }
     }
 }

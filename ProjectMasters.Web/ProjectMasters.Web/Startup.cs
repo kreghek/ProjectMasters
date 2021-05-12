@@ -6,7 +6,7 @@ namespace ProjectMasters.Web
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
 
-    using ProjectMasters.Games;
+    using Games;
 
     public class Startup
     {

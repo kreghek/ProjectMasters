@@ -15,14 +15,15 @@ namespace ProjectMasters.Games
             Player = new Player();
         }
 
-        public Player Player { get; set; }
-        public string UserId { get; set; }
         public bool Initialized { get; set; }
+
+        public Player Player { get; set; }
         public ProjectUnitFormation Project { get; set; }
 
         public bool Started { get; internal set; }
         public Team Team { get; set; }
         public TeamFactory TeamFactory { get; set; }
+        public string UserId { get; set; }
 
         public void AddEffect(Effect effect)
         {

@@ -98,7 +98,8 @@
             _changeLineCounter = CHANGE_LINE_COUNTER_MULTIPLICATOR_BASE * CommitSpeed;
         }
 
-        internal void Update(GameState gameState, List<ProjectUnitBase> units, List<Person> assignedPersons, float commitDeltaTime)
+        internal void Update(GameState gameState, List<ProjectUnitBase> units, List<Person> assignedPersons,
+            float commitDeltaTime)
         {
             HandleSpeechs(commitDeltaTime);
 

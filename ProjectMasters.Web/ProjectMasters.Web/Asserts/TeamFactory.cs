@@ -37,7 +37,8 @@ public class TeamFactory
 
     public void Update(float deltaTime, GameState gameState)
     {
-        if (gameState.Player.WaitForDecision != null || gameState.Player.WaitTutorial || gameState.Player.WaitKeyDayReport)
+        if (gameState.Player.WaitForDecision != null || gameState.Player.WaitTutorial ||
+            gameState.Player.WaitKeyDayReport)
         {
             gameState.StartDecision(gameState.Player.WaitForDecision);
             return;
