@@ -5,14 +5,17 @@
 
     using Assets.BL;
 
-    using ProjectMasters.Games;
-    using ProjectMasters.Web.DTOs;
+    using DTOs;
+
+    using Games;
 
     public interface IGame
     {
         Task AddEffectAsync(Effect effect);
+        Task AnimateUnitDamageAsync(UnitDto unitDto);
         Task AssignPersonAsync(PersonDto person, LineDto line);
         Task AttackPersonAsync(PersonDto person, UnitDto unit);
+        Task ChangePersonLinePositionAsync(int lineId, int personId);
         Task ChangeUnitPositionsAsync(IEnumerable<UnitDto> unit);
         Task CreateUnitAsync(UnitDto unit);
         Task KillUnitAsync(UnitDto unit);
@@ -20,12 +23,10 @@
         Task RemoveEffectAsync(Effect effect);
         Task RemoveLineAsync(LineDto lineDto);
         Task RestPersonAsync(PersonDto person);
+        Task SetStatusAsync(PlayerDto player);
         Task SetupClientStateAsync(IEnumerable<PersonDto> personDto, IEnumerable<UnitDto> units);
+        Task SkillIsLearned(Skill skill);
         Task StartDecision(Decision decision);
         Task TirePersonAsync(PersonDto person);
-        Task SkillIsLearned(Skill skill);
-        Task SetStatusAsync(PlayerDto player);
-        Task AnimateUnitDamageAsync(UnitDto unitDto);
-        Task ChangePersonLinePositionAsync(int lineId, int personId);
     }
 }

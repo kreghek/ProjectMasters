@@ -1,10 +1,10 @@
 namespace ProjectMasters.Web
 {
+    using Games;
+
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
-    using ProjectMasters.Games;
 
     public class Program
     {

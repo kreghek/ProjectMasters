@@ -2,10 +2,11 @@ namespace ProjectMasters.Games
 {
     using System;
 
+    using Asserts;
+
     using Assets.BL;
 
-    using ProjectMasters.Games.Asserts;
-    using ProjectMasters.Web.DTOs;
+    using Web.DTOs;
 
     public static class GameState
     {
@@ -21,16 +22,18 @@ namespace ProjectMasters.Games
             EffectIsAdded?.Invoke(null, new EffectEventArgs(effect));
         }
 
-        public static event EventHandler<DecisionEventArgs> DecisionIsStarted;
-        public static event EventHandler<EffectEventArgs> EffectIsAdded;
-        public static event EventHandler<EffectEventArgs> EffectIsRemoved;
-        public static event EventHandler<LineEventArgs> LineIsRemoved;
-        public static event EventHandler<PersonAssignedEventArgs> PersonAssigned;
-        public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
-        public static event EventHandler<PersonEventArgs> PersonIsRested;
-        public static event EventHandler<PersonEventArgs> PersonIsTired;
-        public static event EventHandler<SkillEventArgs> SkillIsLearned;
-        public static event EventHandler<UnitTakenDamageEventArgs> UnitTakenDamage;
+        public static void DoUnitTakenDamage(ProjectUnitBase unit)
+        {
+            var dto = new UnitDto(unit);
+
+            var args = new UnitTakenDamageEventArgs(dto);
+            UnitTakenDamage?.Invoke(null, args);
+        }
+
+        public static void LearnSkill(Skill skill)
+        {
+            SkillIsLearned?.Invoke(null, new SkillEventArgs(skill));
+        }
 
 
         public static void RemoveEffect(Effect effect)
@@ -68,17 +71,15 @@ namespace ProjectMasters.Games
             LineIsRemoved?.Invoke(null, new LineEventArgs(line));
         }
 
-        public static void LearnSkill(Skill skill)
-        {
-            SkillIsLearned?.Invoke(null, new SkillEventArgs(skill));
-        }
-
-        public static void DoUnitTakenDamage(ProjectUnitBase unit)
-        {
-            var dto = new UnitDto(unit);
-
-            var args = new UnitTakenDamageEventArgs(dto);
-            UnitTakenDamage?.Invoke(null, args);
-        }
+        public static event EventHandler<DecisionEventArgs> DecisionIsStarted;
+        public static event EventHandler<EffectEventArgs> EffectIsAdded;
+        public static event EventHandler<EffectEventArgs> EffectIsRemoved;
+        public static event EventHandler<LineEventArgs> LineIsRemoved;
+        public static event EventHandler<PersonAssignedEventArgs> PersonAssigned;
+        public static event EventHandler<PersonAttackedEventArgs> PersonAttacked;
+        public static event EventHandler<PersonEventArgs> PersonIsRested;
+        public static event EventHandler<PersonEventArgs> PersonIsTired;
+        public static event EventHandler<SkillEventArgs> SkillIsLearned;
+        public static event EventHandler<UnitTakenDamageEventArgs> UnitTakenDamage;
     }
 }

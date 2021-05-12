@@ -25,6 +25,7 @@
         private static Random Random => _random;
 
         public override ProjectUnitType Type => ProjectUnitType.Feature;
+        private static Random Random => new Random(DateTime.Now.Millisecond);
 
         public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {
@@ -48,9 +49,13 @@
                     foreach (var subTask in subTasks)
                     {
                         if (Random.Next(1, 100) > 50)
+                        {
                             formation.AddUnitIntoLine(LineIndex, 0, subTask);
+                        }
                         else
+                        {
                             formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, subTask);
+                        }
                     }
 
                     person.FeatureCompleteCount++;
@@ -70,7 +75,9 @@
                 else
                 {
                     if (Cost - TimeLog > 8)
+                    {
                         HandleSpeechs(DELTA_TIME);
+                    }
                 }
             }
         }

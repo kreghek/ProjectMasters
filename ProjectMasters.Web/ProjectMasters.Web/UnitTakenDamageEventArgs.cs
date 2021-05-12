@@ -2,7 +2,7 @@
 {
     using System;
 
-    using ProjectMasters.Web.DTOs;
+    using Web.DTOs;
 
     public class UnitTakenDamageEventArgs : EventArgs
     {

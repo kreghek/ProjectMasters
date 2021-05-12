@@ -20,16 +20,18 @@
         public List<ProjectLine> Lines { get; set; }
         public List<SolvedUnitInfo> SolvedUnits { get; } = new List<SolvedUnitInfo>();
 
-        public event EventHandler<UnitEventArgs> Added;
-
         public void AddUnitIntoLine(int lineIndex, int positionIndex, ProjectUnitBase unit)
         {
             unit.LineIndex = lineIndex;
 
             if (positionIndex >= Lines[lineIndex].Units.Count)
+            {
                 Lines[lineIndex].Units.Add(unit);
+            }
             else
+            {
                 Lines[lineIndex].Units.Insert(positionIndex, unit);
+            }
 
             // reindex
             for (var i = 0; i < Lines[lineIndex].Units.Count; i++)
@@ -40,8 +42,6 @@
 
             Added?.Invoke(this, new UnitEventArgs(unit));
         }
-
-        public event EventHandler<UnitEventArgs> Removed;
 
         public void ResolveUnit(int lineIndex, ProjectUnitBase unit)
         {
@@ -194,5 +194,9 @@
             //        break;
             //}
         }
+
+        public event EventHandler<UnitEventArgs> Added;
+
+        public event EventHandler<UnitEventArgs> Removed;
     }
 }

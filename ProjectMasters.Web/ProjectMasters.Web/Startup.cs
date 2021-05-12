@@ -1,10 +1,10 @@
 namespace ProjectMasters.Web
 {
+    using Hubs;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
-
-    using ProjectMasters.Web.Hubs;
 
     public class Startup
     {
@@ -12,7 +12,6 @@ namespace ProjectMasters.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();
-
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -22,7 +21,6 @@ namespace ProjectMasters.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<GameHub>("/game");
-
             });
         }
 

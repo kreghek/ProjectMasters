@@ -1,10 +1,10 @@
 ﻿namespace Assets.BL
 {
     public class Skill
-    { 
-        public SkillScheme Scheme { get; set; }
-        public Job[] Jobs { get; set; }
+    {
         public bool IsLearnt { get; set; }
+        public Job[] Jobs { get; set; }
+        public SkillScheme Scheme { get; set; }
 
         public float GetPercentage()
         {
