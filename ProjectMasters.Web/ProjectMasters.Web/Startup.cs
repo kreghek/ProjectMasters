@@ -1,12 +1,12 @@
 namespace ProjectMasters.Web
 {
+    using Games;
+
     using Hubs;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
-
-    using Games;
 
     public class Startup
     {
