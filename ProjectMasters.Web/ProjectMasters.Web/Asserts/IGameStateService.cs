@@ -4,7 +4,7 @@ namespace ProjectMasters.Games
 {
     public interface IGameStateService
     {
-        void AddGameState(string userId);
+        GameState AddGameState(string userId);
         IEnumerable<GameState> GetAllGameStates();
     }
 }

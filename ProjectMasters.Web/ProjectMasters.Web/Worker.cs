@@ -29,7 +29,6 @@ namespace ProjectMasters.Games
         public Worker(IGameStateService gameStateService, ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
             _gameStateService = gameStateService;
-            _gameStateService.AddGameState("test");
 
             _logger = logger;
             _gameHub = gameHub;

@@ -16,10 +16,12 @@
             return _gameStates;
         }
 
-        public void AddGameState(string userId)
+        public GameState AddGameState(string userId)
         {
             var gameState = new GameState { UserId = userId };
             _gameStates.Add(gameState);
+
+            return gameState;
         }
     }
 }
