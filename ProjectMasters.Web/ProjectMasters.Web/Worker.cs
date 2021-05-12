@@ -22,8 +22,8 @@ namespace ProjectMasters.Games
     {
         private readonly IHubContext<GameHub, IGame> _gameHub;
         private readonly ILogger<Worker> _logger;
+        private int _counter;
         private DateTime _currentTime;
-        private int counter;
 
         public Worker(ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
@@ -173,13 +173,13 @@ namespace ProjectMasters.Games
         {
             var time = (float)deltaTime.TotalSeconds;
             GameState.TeamFactory.Update(time);
-            if (counter == 10)
+            if (_counter == 10)
             {
                 _gameHub.Clients.All.SetStatusAsync(new PlayerDto());
-                counter = 0;
+                _counter = 0;
             }
 
-            counter++;
+            _counter++;
         }
     }
 }

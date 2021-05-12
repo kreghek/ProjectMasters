@@ -18,23 +18,22 @@
             var sendLine = GameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
             var line = GameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
 
-            if (sendLine == null || line == null)
+            if (line == null)
             {
                 return;
             }
 
-            sendLine.AssignedPersons.Remove(person);
+            sendLine?.AssignedPersons.Remove(person);
             line.AssignedPersons.Add(person);
             GameState.AssignPerson(line, person);
-            Clients.Caller.ChangePersonLinePositionAsync(lineId, personId);
         }
 
         public void ChangeUnitPositionsServer(int lineId)
         {
             var lineToGetQueueIndecies = GameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
-            // Не нашли линию проекта.
-            // Это значит, что убили последнего монстра и линия была удалена.
+                // Не нашли линию проекта.
+                // Это значит, что убили последнего монстра и линия была удалена.
             {
                 return;
             }

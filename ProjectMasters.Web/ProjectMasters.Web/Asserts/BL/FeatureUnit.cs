@@ -23,7 +23,7 @@
         public float CostToDecompose { get; private set; }
 
         public override ProjectUnitType Type => ProjectUnitType.Feature;
-        private static Random Random => new Random(DateTime.Now.Millisecond);
+        private static Random Random { get; } = new Random(DateTime.Now.Millisecond);
 
         public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {
