@@ -8,7 +8,6 @@
 
     public sealed class FeatureUnit : ProjectUnitBase
     {
-        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
         private const float _maxDecomposeCost = 2;
         private const int _maxSubTask = 5;
         private const float _minDecomposeCost = 1;
@@ -22,9 +21,9 @@
         }
 
         public float CostToDecompose { get; private set; }
-        private static Random Random => _random;
 
         public override ProjectUnitType Type => ProjectUnitType.Feature;
+        private static Random Random { get; } = new Random(DateTime.Now.Millisecond);
 
         public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {

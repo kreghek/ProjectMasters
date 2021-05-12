@@ -22,8 +22,8 @@ namespace ProjectMasters.Games
     {
         private readonly IHubContext<GameHub, IGame> _gameHub;
         private readonly ILogger<Worker> _logger;
-        private DateTime _currentTime;
         private int _counter;
+        private DateTime _currentTime;
 
         public Worker(ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
