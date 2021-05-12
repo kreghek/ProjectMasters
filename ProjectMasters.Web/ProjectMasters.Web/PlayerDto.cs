@@ -8,12 +8,6 @@ namespace ProjectMasters.Games
 
     public class PlayerDto
     {
-        public int Authority { get; set; }
-
-        public int Money { get; set; }
-
-        public string Percent { get; set; }
-
         public PlayerDto()
         {
             Money = Player.Money;
@@ -26,5 +20,11 @@ namespace ProjectMasters.Games
             var percent = Math.Round(solved / remaining * 100, MidpointRounding.ToEven);
             Percent = percent.ToString(CultureInfo.InvariantCulture);
         }
+
+        public int Authority { get; set; }
+
+        public int Money { get; set; }
+
+        public string Percent { get; set; }
     }
 }

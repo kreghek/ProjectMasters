@@ -13,16 +13,17 @@ namespace ProjectMasters.Games
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
-    using ProjectMasters.Games.Asserts;
-    using ProjectMasters.Web.DTOs;
-    using ProjectMasters.Web.Hubs;
+    using Asserts;
+
+    using Web.DTOs;
+    using Web.Hubs;
 
     public class Worker : BackgroundService
     {
         private readonly IHubContext<GameHub, IGame> _gameHub;
         private readonly ILogger<Worker> _logger;
         private DateTime _currentTime;
-        private int counter = 0;
+        private int counter;
 
         public Worker(ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
@@ -45,9 +46,13 @@ namespace ProjectMasters.Games
                 _currentTime = DateTime.Now;
 
                 if (!GameState.Initialized)
+                {
                     Initiate();
+                }
                 else
+                {
                     Update(deltaTime);
+                }
 
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 await Task.Delay(1000, stoppingToken);
@@ -103,12 +108,23 @@ namespace ProjectMasters.Games
             _logger.LogInformation($"{e.Person.Id} is tired");
         }
 
+        private void GameState_SkillIsLearned(object sender, SkillEventArgs e)
+        {
+            _gameHub.Clients.All.SkillIsLearned(e.skill);
+            _logger.LogInformation($"{e.skill.Scheme.DisplayTitle} is learned");
+        }
+
+        private void GameState_UnitTakenDamage(object sender, UnitTakenDamageEventArgs e)
+        {
+            _gameHub.Clients.All.AnimateUnitDamageAsync(e.UnitDto);
+        }
+
         private void Initialized()
         {
             var personDtos = GameState.Team.Persons.Select(person => new PersonDto(person)
             {
-                // Получаем линию, которая содержит персонажа.
-                LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+                // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+                LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
             }).ToArray();
 
             var unitDots = (from line in GameState.Project.Lines from unit in line.Units select new UnitDto(unit))
@@ -145,17 +161,6 @@ namespace ProjectMasters.Games
         {
             _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
-        }
-
-        private void GameState_SkillIsLearned(object sender, SkillEventArgs e)
-        {
-            _gameHub.Clients.All.SkillIsLearned(e.skill);
-            _logger.LogInformation($"{e.skill.Scheme.DisplayTitle} is learned");
-        }
-
-        private void GameState_UnitTakenDamage(object sender, UnitTakenDamageEventArgs e)
-        {
-            _gameHub.Clients.All.AnimateUnitDamageAsync(e.UnitDto);
         }
 
         private void Project_UnitRemoved(object sender, UnitEventArgs e)

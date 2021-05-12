@@ -6,8 +6,9 @@
 
     using Microsoft.AspNetCore.SignalR;
 
-    using ProjectMasters.Games;
-    using ProjectMasters.Web.DTOs;
+    using Games;
+
+    using DTOs;
 
     public class GameHub : Hub<IGame>
     {
@@ -18,7 +19,9 @@
             var line = GameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
 
             if (sendLine == null || line == null)
+            {
                 return;
+            }
 
             sendLine.AssignedPersons.Remove(person);
             line.AssignedPersons.Add(person);
@@ -32,7 +35,9 @@
             if (lineToGetQueueIndecies is null)
                 // Не нашли линию проекта.
                 // Это значит, что убили последнего монстра и линия была удалена.
+            {
                 return;
+            }
 
             var unitPositionInfos = lineToGetQueueIndecies.Units.Select(x => new UnitDto(x)).ToList();
             Clients.Caller.ChangeUnitPositionsAsync(unitPositionInfos);
@@ -45,7 +50,7 @@
                 var personDtos = GameState.Team.Persons.Select(person => new PersonDto(person)
                 {
                     // Получаем линию, которая содержит персонажа.
-                    LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id,
+                    LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
                 }).ToArray();
 
                 var unitDots = (from line in GameState.Project.Lines from unit in line.Units select new UnitDto(unit))
@@ -71,7 +76,9 @@
 
             Player.ActiveDecisions = Player.ActiveDecisions.Skip(1).ToArray();
             if (!Player.ActiveDecisions.Any())
+            {
                 Player.ActiveDecisions = null;
+            }
 
             Player.WaitForDecision = Player.ActiveDecisions == null ? null : Player.ActiveDecisions[0];
         }

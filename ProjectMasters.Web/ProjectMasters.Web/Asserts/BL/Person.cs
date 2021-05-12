@@ -40,7 +40,7 @@
             {
                 ActTargetPattern = ActTargetPattern.OneOfFirstHalf, Impact = ActImpact.Units,
                 Position = ActPosition.Second
-            },
+            }
         };
 
         public float CommitPower { get; set; } = COMMIT_POWER_BASE;
@@ -76,7 +76,6 @@
         public string Name { get; set; }
 
         public float ProjectKnowedgeCoef { get; set; } = 1;
-        private Random Random => new Random(DateTime.Now.Millisecond);
 
         public float? RecoveryCounter { get; set; }
         public float RecoverySpeed { get; } = RECOVERY_SPEED_BASE;
@@ -86,8 +85,7 @@
         public int SubTasksCompleteCount { get; set; }
 
         public TraitType[] Traits { get; set; }
-
-        public event EventHandler<EventArgs> Commited;
+        private Random Random => new Random(DateTime.Now.Millisecond);
 
         public void DaylyUpdate()
         {
@@ -111,7 +109,9 @@
 
             HandleEnergy(commitDeltaTime);
             if (RecoveryCounter != null)
+            {
                 return;
+            }
 
             if (_changeLineCounter > 0)
             {
@@ -155,7 +155,9 @@
         private void CheckForNewEffect()
         {
             if (Effects.Any())
+            {
                 return;
+            }
 
             var newEffectRoll = Random.Next(1, 100);
 
@@ -256,6 +258,7 @@
                 if (Effects.Any(x =>
                     x.EffectType == EffectType.Despondency || x.EffectType == EffectType.Toxic ||
                     x.EffectType == EffectType.Procrastination))
+                {
                     if (Random.Next(1, 100) <= 15)
                     {
                         var rolledBadSpeechIndex = Random.Next(0, SpeechCatalog.BadPersonSpeeches.Length);
@@ -268,6 +271,7 @@
 
                         SpeechPool.AddSpeech(speech);
                     }
+                }
             }
         }
 
@@ -309,23 +313,33 @@
                 var personIndex = assignedPersons.IndexOf(this);
                 var groupDebuff = 0.8f / assignedPersons.Count;
                 if (assignedPersons.Count == 1)
+                {
                     groupDebuff = 1;
+                }
 
                 switch (act.Position)
                 {
                     case ActPosition.First:
                         if (personIndex == 0)
+                        {
                             act.Update(commitDeltaTime * CommitSpeed * groupDebuff);
+                        }
+
                         break;
 
                     case ActPosition.Second:
                         if (personIndex == 1)
+                        {
                             act.Update(commitDeltaTime * CommitSpeed * groupDebuff);
+                        }
+
                         break;
                 }
 
                 if (actTouse == null && act.IsReadyToUse)
+                {
                     actTouse = act;
+                }
             }
 
             var unitsToAttack = new ProjectUnitBase[0];
@@ -371,17 +385,23 @@
                         var isCritical = false;
 
                         if (Random.Next(1, 100) < CritCommitChance)
+                        {
                             isCritical = true;
+                        }
 
                         if (isCritical)
+                        {
                             commitPower *= CritCommitMultiplicator;
+                        }
 
                         GameState.AttackPerson(unit, this);
                         unit.ProcessCommit(commitPower, isCritical, this);
                         actTouse.Reset();
 
                         if (ProjectKnowedgeCoef <= 2)
+                        {
                             ProjectKnowedgeCoef += SkillUpSpeed;
+                        }
                     }
 
                     Commited?.Invoke(this, EventArgs.Empty);
@@ -412,7 +432,9 @@
                     else
                     {
                         if (!knownSkill.IsLearnt)
+                        {
                             availableSkills.Add(knownSkill);
+                        }
                     }
                 }
                 else
@@ -433,7 +455,9 @@
                         else
                         {
                             if (!knownSkill.IsLearnt)
+                            {
                                 availableSkills.Add(knownSkill);
+                            }
                         }
 
                         // end dups
@@ -448,5 +472,7 @@
                 ActiveSkill = availableSkills[rolledSkillIndex];
             }
         }
+
+        public event EventHandler<EventArgs> Commited;
     }
 }
