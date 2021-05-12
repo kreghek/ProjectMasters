@@ -7,13 +7,13 @@ namespace ProjectMasters.Games
     using System.Threading;
     using System.Threading.Tasks;
 
+    using Asserts;
+
     using Assets.BL;
 
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
-
-    using Asserts;
 
     using Web.DTOs;
     using Web.Hubs;

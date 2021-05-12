@@ -4,11 +4,11 @@
 
     using Assets.BL;
 
-    using Microsoft.AspNetCore.SignalR;
+    using DTOs;
 
     using Games;
 
-    using DTOs;
+    using Microsoft.AspNetCore.SignalR;
 
     public class GameHub : Hub<IGame>
     {
@@ -33,8 +33,8 @@
         {
             var lineToGetQueueIndecies = GameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
-                // Не нашли линию проекта.
-                // Это значит, что убили последнего монстра и линия была удалена.
+            // Не нашли линию проекта.
+            // Это значит, что убили последнего монстра и линия была удалена.
             {
                 return;
             }

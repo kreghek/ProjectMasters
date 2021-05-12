@@ -2,9 +2,9 @@ namespace ProjectMasters.Games
 {
     using System;
 
-    using Assets.BL;
-
     using Asserts;
+
+    using Assets.BL;
 
     using Web.DTOs;
 

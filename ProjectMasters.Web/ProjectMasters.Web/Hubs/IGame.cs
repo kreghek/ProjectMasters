@@ -5,9 +5,9 @@
 
     using Assets.BL;
 
-    using Games;
-
     using DTOs;
+
+    using Games;
 
     public interface IGame
     {

@@ -1,10 +1,10 @@
 namespace ProjectMasters.Web
 {
+    using Hubs;
+
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
-
-    using Hubs;
 
     public class Startup
     {
