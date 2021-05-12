@@ -12,8 +12,23 @@
 
     public class GameHub : Hub<IGame>
     {
-        public void AssignPersonToLineServer(GameState gameState, int lineId, int personId)
+        private readonly IGameStateService _gameStateService;
+        private string userId = "test";
+
+        public GameHub(IGameStateService gameStateService)
         {
+            _gameStateService = gameStateService;
+        }
+
+        private GameState GetStateByUserId(string userId)
+        {
+            return _gameStateService.GetAllGameStates().Single(x=>x.UserId == userId);
+        }
+
+        public void AssignPersonToLineServer(int lineId, int personId)
+        {
+            var gameState = GetStateByUserId(userId);
+
             var person = gameState.Team.Persons.FirstOrDefault(p => p.Id == personId);
             var sendLine = gameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
             var line = gameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
@@ -28,8 +43,10 @@
             gameState.AssignPerson(line, person);
         }
 
-        public void ChangeUnitPositionsServer(GameState gameState, int lineId)
+        public void ChangeUnitPositionsServer(int lineId)
         {
+            var gameState = GetStateByUserId(userId);
+
             var lineToGetQueueIndecies = gameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
                 // Не нашли линию проекта.
@@ -42,8 +59,10 @@
             Clients.Caller.ChangeUnitPositionsAsync(unitPositionInfos);
         }
 
-        public void InitServerState(GameState gameState)
+        public void InitServerState()
         {
+            var gameState = GetStateByUserId(userId);
+
             if (gameState.Started)
             {
                 var personDtos = gameState.Team.Persons.Select(person => new PersonDto(person)
@@ -63,13 +82,17 @@
             }
         }
 
-        public void PreInitServerState(GameState gameState)
+        public void PreInitServerState()
         {
+            var gameState = GetStateByUserId(userId);
+
             Clients.Caller.PreSetupClientAsync(gameState.Started);
         }
 
-        public void SendDecision(GameState gameState, int number)
+        public void SendDecision(int number)
         {
+            var gameState = GetStateByUserId(userId);
+
             Player.WaitKeyDayReport = false;
             Player.WaitForDecision.Choises[number].Apply(gameState);
 
