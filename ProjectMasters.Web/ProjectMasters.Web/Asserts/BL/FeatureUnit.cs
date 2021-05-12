@@ -25,7 +25,6 @@
         private static Random Random => _random;
 
         public override ProjectUnitType Type => ProjectUnitType.Feature;
-        private static Random Random => new Random(DateTime.Now.Millisecond);
 
         public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {
