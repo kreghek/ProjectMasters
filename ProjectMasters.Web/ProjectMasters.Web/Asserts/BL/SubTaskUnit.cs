@@ -18,14 +18,14 @@
         public override ProjectUnitType Type => ProjectUnitType.SubTask;
         private Random Random => new Random(DateTime.Now.Millisecond);
 
-        public override void ProcessCommit(float commitPower, bool isCritical, Person person)
+        public override void ProcessCommit(float commitPower, bool isCritical, Person person, GameState gameState)
         {
             var isSuccessfullCommit = RollCommitSuccess(person.MasteryLevels);
             if (isSuccessfullCommit)
             {
                 TimeLog += commitPower;
                 DoTakeDamage(commitPower, isCritical);
-                GameState.DoUnitTakenDamage(this);
+                gameState.DoUnitTakenDamage(this);
             }
 
             // The sub-task starts to spawn errors only after some progress is done.
@@ -58,13 +58,13 @@
             if (TimeLog >= Cost)
             {
                 var formation = ProjectUnitFormation.Instance;
-                formation.ResolveUnit(LineIndex, this);
+                formation.ResolveUnit(gameState, LineIndex, this);
                 person.SubTasksCompleteCount++;
                 IsDead = true;
                 person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT +
                                               Person.PROJECT_KNOWEDGE_INCREMENT * person.SkillUpSpeed;
 
-                CountTaskCompleteToActiveSkill(person);
+                CountTaskCompleteToActiveSkill(gameState, person);
             }
             else
             {
@@ -75,7 +75,7 @@
             }
         }
 
-        private void CountTaskCompleteToActiveSkill(Person person)
+        private void CountTaskCompleteToActiveSkill(GameState gameState, Person person)
         {
             var skillToUp = person.ActiveSkill;
             if (skillToUp == null)
@@ -138,7 +138,7 @@
             {
                 // Skill are in skills collection already.
                 skillToUp.IsLearnt = true;
-                GameState.LearnSkill(person.ActiveSkill);
+                gameState.LearnSkill(person.ActiveSkill);
                 person.ActiveSkill = null;
             }
         }

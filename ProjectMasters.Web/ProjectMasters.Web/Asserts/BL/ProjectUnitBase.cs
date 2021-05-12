@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using ProjectMasters.Games;
+
     public abstract class ProjectUnitBase : ISpeechSource
     {
         protected float _speechCounter;
@@ -22,9 +24,9 @@
         public float TimeLog { get; set; }
         public abstract ProjectUnitType Type { get; }
 
-        private Random Random => new Random(DateTime.Now.Millisecond);
+        private static Random Random => new Random(DateTime.Now.Millisecond);
 
-        public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
+        public abstract void ProcessCommit(float commitPower, bool isCritical, Person person, GameState gameState);
 
         protected void DoTakeDamage(float damage, bool isCritical)
         {

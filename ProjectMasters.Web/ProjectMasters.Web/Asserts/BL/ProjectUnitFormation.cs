@@ -43,14 +43,14 @@
             Added?.Invoke(this, new UnitEventArgs(unit));
         }
 
-        public void ResolveUnit(int lineIndex, ProjectUnitBase unit)
+        public void ResolveUnit(GameState gameState, int lineIndex, ProjectUnitBase unit)
         {
             unit.LineIndex = lineIndex;
             Lines[lineIndex].Units.Remove(unit);
 
             if (!Lines[lineIndex].Units.Any())
             {
-                GameState.RemoveLine(Lines[lineIndex]);
+                gameState.RemoveLine(Lines[lineIndex]);
                 Lines.RemoveAt(lineIndex);
             }
 
@@ -64,7 +64,7 @@
                     unit1.LineIndex = lineIndex1;
                 }
 
-                SolvedUnits.Add(new SolvedUnitInfo { Cost = unit.Cost, TimeLog = unit.TimeLog });
+                SolvedUnits.Add(new SolvedUnitInfo(gameState) { Cost = unit.Cost, TimeLog = unit.TimeLog });
             }
 
             Removed?.Invoke(this, new UnitEventArgs(unit));

@@ -6,6 +6,8 @@ namespace ProjectMasters.Web
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
 
+    using Games;
+
     public class Startup
     {
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,6 +31,7 @@ namespace ProjectMasters.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
+            services.AddSingleton<IGameStateService, GameStateService>();
         }
     }
 }

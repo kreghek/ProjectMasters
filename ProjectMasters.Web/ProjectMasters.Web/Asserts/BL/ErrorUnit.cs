@@ -6,20 +6,20 @@ namespace Assets.BL
     {
         public override ProjectUnitType Type => ProjectUnitType.Error;
 
-        public override void ProcessCommit(float commitPower, bool isCritical, Person person)
+        public override void ProcessCommit(float commitPower, bool isCritical, Person person, GameState gameState)
         {
             var isSuccessfullCommit = RollCommitSuccess(person.MasteryLevels);
             if (isSuccessfullCommit)
             {
                 TimeLog += commitPower;
-                GameState.DoUnitTakenDamage(this);
+                gameState.DoUnitTakenDamage(this);
                 DoTakeDamage(commitPower, isCritical);
             }
 
             if (TimeLog >= Cost)
             {
                 var formation = ProjectUnitFormation.Instance;
-                formation.ResolveUnit(LineIndex, this);
+                formation.ResolveUnit(gameState, LineIndex, this);
                 person.ErrorCompleteCount++;
                 IsDead = true;
             }

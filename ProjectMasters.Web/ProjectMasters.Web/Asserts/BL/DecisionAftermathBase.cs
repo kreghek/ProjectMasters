@@ -1,10 +1,12 @@
-﻿namespace Assets.BL
+﻿using ProjectMasters.Games;
+
+namespace Assets.BL
 {
     public abstract class DecisionAftermathBase
     {
         public abstract string Description { get; }
         public string Text { get; set; }
 
-        public abstract void Apply();
+        public abstract void Apply(GameState gameState);
     }
 }

@@ -35,17 +35,18 @@ public class TeamFactory
         _team.Persons = persons.ToArray();
     }
 
-    public void Update(float deltaTime)
+    public void Update(float deltaTime, GameState gameState)
     {
-        if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
+        if (gameState.Player.WaitForDecision != null || gameState.Player.WaitTutorial ||
+            gameState.Player.WaitKeyDayReport)
         {
-            GameState.StartDecision(Player.WaitForDecision);
+            gameState.StartDecision(gameState.Player.WaitForDecision);
             return;
         }
 
-        UpdateProjectLineSolving(deltaTime);
+        UpdateProjectLineSolving(deltaTime, gameState);
 
-        UpdateProjectTime(deltaTime);
+        UpdateProjectTime(deltaTime, gameState);
     }
 
     private static IEnumerable<Person> CreateStartTeam()
@@ -182,32 +183,32 @@ public class TeamFactory
         };
     }
 
-    private void HandleDecision()
+    private void HandleDecision(GameState gameState)
     {
         var decisionCount = _random.Next(2, 5);
-        Player.ActiveDecisions = new Decision[decisionCount];
+        gameState.Player.ActiveDecisions = new Decision[decisionCount];
         for (var i = 0; i < decisionCount; i++)
         {
             var rolledDecisionIndex = _random.Next(0, DecisionCatalog.Decisions.Length);
-            Player.ActiveDecisions[i] = DecisionCatalog.Decisions[rolledDecisionIndex];
+            gameState.Player.ActiveDecisions[i] = DecisionCatalog.Decisions[rolledDecisionIndex];
         }
 
-        Player.WaitForDecision = Player.ActiveDecisions[0];
+        gameState.Player.WaitForDecision = gameState.Player.ActiveDecisions[0];
     }
 
-    private void UpdateDayly()
+    private void UpdateDayly(GameState gameState)
     {
         foreach (var person in _team.Persons)
         {
-            person.DaylyUpdate();
+            person.DaylyUpdate(gameState);
         }
 
-        HandleDecision();
+        HandleDecision(gameState);
 
-        Player.WaitKeyDayReport = true;
+        gameState.Player.WaitKeyDayReport = true;
     }
 
-    private void UpdateProjectLineSolving(float deltaTime)
+    private void UpdateProjectLineSolving(float deltaTime, GameState gameState)
     {
         foreach (var line in ProjectUnitFormation.Instance.Lines.ToArray())
         {
@@ -225,7 +226,7 @@ public class TeamFactory
                     {
                         line.AssignedPersons.Add(firstFreePerson);
 
-                        GameState.AssignPerson(line, firstFreePerson);
+                        gameState.AssignPerson(line, firstFreePerson);
 
                         assignedPersons = line.AssignedPersons;
                     }
@@ -233,7 +234,7 @@ public class TeamFactory
 
                 foreach (var assignedPerson in assignedPersons)
                 {
-                    assignedPerson.Update(line.Units, line.AssignedPersons, deltaTime);
+                    assignedPerson.Update(gameState, line.Units, line.AssignedPersons, deltaTime);
                 }
             }
             else
@@ -243,31 +244,31 @@ public class TeamFactory
         }
     }
 
-    private void UpdateProjectTime(float deltaTime)
+    private void UpdateProjectTime(float deltaTime, GameState gameState)
     {
-        Player.DayCounter -= deltaTime;
+        gameState.Player.DayCounter -= deltaTime;
 
-        if (Player.DayCounter > 0)
+        if (gameState.Player.DayCounter > 0)
         {
             return;
         }
 
-        Player.DayCounter = Player.DAY_COUNTER_BASE;
-        Player.DayNumber++;
+        gameState.Player.DayCounter = Player.DAY_COUNTER_BASE;
+        gameState.Player.DayNumber++;
 
-        UpdateDayly();
+        UpdateDayly(gameState);
 
         // payment
-        if (Player.Money > 0)
+        if (gameState.Player.Money > 0)
         {
             foreach (var person in _team.Persons)
             {
-                Player.Money -= person.DaylyPayment;
+                gameState.Player.Money -= person.DaylyPayment;
             }
         }
         else
         {
-            Player.FailureCount++;
+            gameState.Player.FailureCount++;
         }
     }
 }

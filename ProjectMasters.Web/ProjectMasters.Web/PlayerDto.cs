@@ -8,12 +8,12 @@ namespace ProjectMasters.Games
 
     public class PlayerDto
     {
-        public PlayerDto()
+        public PlayerDto(GameState gameState)
         {
-            Money = Player.Money;
-            Authority = Player.Autority;
+            Money = gameState.Player.Money;
+            Authority = gameState.Player.Autority;
 
-            var units = GameState.Project.Lines.SelectMany(x => x.Units);
+            var units = gameState.Project.Lines.SelectMany(x => x.Units);
             var bases = units as ProjectUnitBase[] ?? units.ToArray();
             var solved = bases.Sum(x => x.TimeLog);
             var remaining = bases.Sum(x => x.Cost);

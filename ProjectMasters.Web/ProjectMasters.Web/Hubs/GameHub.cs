@@ -1,8 +1,8 @@
 ﻿namespace ProjectMasters.Web.Hubs
 {
+    using System;
+    using System.Collections.Concurrent;
     using System.Linq;
-
-    using Assets.BL;
 
     using DTOs;
 
@@ -12,11 +12,24 @@
 
     public class GameHub : Hub<IGame>
     {
+        private static readonly ConcurrentDictionary<string, string> _userIdDict =
+            new ConcurrentDictionary<string, string>();
+
+        private readonly IGameStateService _gameStateService;
+
+        public GameHub(IGameStateService gameStateService)
+        {
+            _gameStateService = gameStateService;
+        }
+
         public void AssignPersonToLineServer(int lineId, int personId)
         {
-            var person = GameState.Team.Persons.FirstOrDefault(p => p.Id == personId);
-            var sendLine = GameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
-            var line = GameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
+            var userId = GetUserIdFromDictionary(Context.ConnectionId);
+            var gameState = GetStateByUserId(userId);
+
+            var person = gameState.Team.Persons.FirstOrDefault(p => p.Id == personId);
+            var sendLine = gameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
+            var line = gameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
 
             if (line == null)
             {
@@ -25,12 +38,15 @@
 
             sendLine?.AssignedPersons.Remove(person);
             line.AssignedPersons.Add(person);
-            GameState.AssignPerson(line, person);
+            gameState.AssignPerson(line, person);
         }
 
         public void ChangeUnitPositionsServer(int lineId)
         {
-            var lineToGetQueueIndecies = GameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
+            var userId = GetUserIdFromDictionary(Context.ConnectionId);
+            var gameState = GetStateByUserId(userId);
+
+            var lineToGetQueueIndecies = gameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
                 // Не нашли линию проекта.
                 // Это значит, что убили последнего монстра и линия была удалена.
@@ -42,44 +58,93 @@
             Clients.Caller.ChangeUnitPositionsAsync(unitPositionInfos);
         }
 
-        public void InitServerState()
+        public void InitServerState(string userId)
         {
-            if (GameState.Started)
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                var personDtos = GameState.Team.Persons.Select(person => new PersonDto(person)
+                throw new ArgumentException("User id can not be empty.");
+            }
+
+            // TODO Cleanup the dictionary to prevent overflow with dead connections.
+            if (!_userIdDict.TryAdd(Context.ConnectionId, userId))
+            {
+                throw new InvalidOperationException("Mapping of connection id and user id failed.");
+            }
+
+            var gameState = GetStateByUserIdSafe(userId);
+
+            if ((gameState?.Started).GetValueOrDefault())
+            {
+                var personDtos = gameState.Team.Persons.Select(person => new PersonDto(person)
                 {
                     // Получаем линию, которая содержит персонажа.
-                    LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
+                    LineId = gameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
                 }).ToArray();
 
-                var unitDots = (from line in GameState.Project.Lines from unit in line.Units select new UnitDto(unit))
+                var unitDots = (from line in gameState.Project.Lines from unit in line.Units select new UnitDto(unit))
                     .ToList();
 
                 Clients.Caller.SetupClientStateAsync(personDtos, unitDots);
             }
             else
             {
-                GameState.Started = true;
+                gameState = _gameStateService.AddGameState(userId);
+
+                gameState.Started = true;
             }
         }
 
-        public void PreInitServerState()
+        public void PreInitServerState(string userId)
         {
-            Clients.Caller.PreSetupClientAsync(GameState.Started);
+            var gameState = GetStateByUserIdSafe(userId);
+
+            if (gameState is null)
+            {
+                // We have a game state for the user just after he presses the start button.
+                // We send false to show start button on the client.
+                Clients.Caller.PreSetupClientAsync(false);
+                return;
+            }
+
+            Clients.Caller.PreSetupClientAsync(gameState.Started);
         }
 
         public void SendDecision(int number)
         {
-            Player.WaitKeyDayReport = false;
-            Player.WaitForDecision.Choises[number].Apply();
+            var userId = GetUserIdFromDictionary(Context.ConnectionId);
+            var gameState = GetStateByUserId(userId);
 
-            Player.ActiveDecisions = Player.ActiveDecisions.Skip(1).ToArray();
-            if (!Player.ActiveDecisions.Any())
+            gameState.Player.WaitKeyDayReport = false;
+            gameState.Player.WaitForDecision.Choises[number].Apply(gameState);
+
+            gameState.Player.ActiveDecisions = gameState.Player.ActiveDecisions.Skip(1).ToArray();
+            if (!gameState.Player.ActiveDecisions.Any())
             {
-                Player.ActiveDecisions = null;
+                gameState.Player.ActiveDecisions = null;
             }
 
-            Player.WaitForDecision = Player.ActiveDecisions == null ? null : Player.ActiveDecisions[0];
+            gameState.Player.WaitForDecision =
+                gameState.Player.ActiveDecisions == null ? null : gameState.Player.ActiveDecisions[0];
+        }
+
+        private GameState GetStateByUserId(string userId)
+        {
+            return _gameStateService.GetAllGameStates().Single(x => x.UserId == userId);
+        }
+
+        private GameState GetStateByUserIdSafe(string userId)
+        {
+            return _gameStateService.GetAllGameStates().SingleOrDefault(x => x.UserId == userId);
+        }
+
+        private static string GetUserIdFromDictionary(string connectionId)
+        {
+            if (!_userIdDict.TryGetValue(connectionId, out var userId))
+            {
+                throw new InvalidOperationException("There is no connection id to map it to user id.");
+            }
+
+            return userId;
         }
     }
 }

@@ -177,12 +177,23 @@
 </script>
 <script type="text/javascript">
     function startGame() {
-        connection.invoke("InitServerState");
+        // Generate pseudo-random user id,
+        // send it to init a game state on the server,
+        // store the user id into browser storage to continue game after F5.
+        let timeInMs = Date.now();
+        let userId = timeInMs.toString();
+
+        window.localStorage.setItem(userIdStorageKey, userId);
+
+        connection.invoke("InitServerState", userId);
+
+        // Remove the start button and title background overlaying game field.
+
         app.stage.removeChild(titleBackground);
-        var startButton = document.getElementById("startButton");
+        let startButton = document.getElementById("startButton");
         startButton.remove();
 
-        var gameTitle = document.getElementById("gameTitle");
+        let gameTitle = document.getElementById("gameTitle");
         gameTitle.remove();
     }
 </script>
@@ -271,6 +282,8 @@
 </script>
 
 <script>
+    const userIdStorageKey = "userid";
+
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/game")
         .build();
@@ -283,7 +296,12 @@
         try {
             await connection.start();
             console.log("SignalR Connected.");
-            connection.invoke("PreInitServerState");
+
+            // Check a user id in the storage. If storage has the value then we try to get game is started.
+            // If there is no the user id value then we send empty user id. The server will response with false in PreSetupClientAsync.
+            let userId = window.localStorage.getItem(userIdStorageKey);
+
+            connection.invoke("PreInitServerState", userId);
         } catch (err) {
             console.log("err", err);
             setTimeout(startSignalRConnection, 5000);
@@ -506,7 +524,15 @@
                 app.stage.removeChild(titleBackground);
 
                 document.getElementById("gameTitle").remove();
-                connection.invoke("InitServerState");
+
+                // Started game garanted what storage has the user id.
+                // Because the user started game manually and the user id has been saved in storage early.
+                let userId = window.localStorage.getItem(userIdStorageKey);
+                if (!userId) {
+                    throw new Error("Expect to the user id is saved in the storage.");
+                }
+
+                connection.invoke("InitServerState", userId);
             } else {
                 document.getElementById("startButton").setAttribute("style", "display:block");
             }
