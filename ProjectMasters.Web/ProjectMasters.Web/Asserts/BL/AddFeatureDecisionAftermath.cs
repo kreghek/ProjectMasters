@@ -3,12 +3,14 @@
     using System;
     using System.Linq;
 
+    using ProjectMasters.Games;
+
     public sealed class AddFeatureDecisionAftermath : DecisionAftermathBase
     {
         public override string Description => "New random feature will add to the project in random line.";
         private static Random Random => new Random(DateTime.Now.Millisecond);
 
-        public override void Apply()
+        public override void Apply(GameState gameState)
         {
             var lines = ProjectUnitFormation.Instance.Lines;
             var rollNewFeatureLineIndex = Random.Next(0, lines.Count);

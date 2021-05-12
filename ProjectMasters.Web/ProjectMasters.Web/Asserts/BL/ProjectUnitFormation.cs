@@ -43,14 +43,14 @@
             Added?.Invoke(this, new UnitEventArgs(unit));
         }
 
-        public void ResolveUnit(int lineIndex, ProjectUnitBase unit)
+        public void ResolveUnit(GameState gameState, int lineIndex, ProjectUnitBase unit)
         {
             unit.LineIndex = lineIndex;
             Lines[lineIndex].Units.Remove(unit);
 
             if (!Lines[lineIndex].Units.Any())
             {
-                GameState.RemoveLine(Lines[lineIndex]);
+                gameState.RemoveLine(Lines[lineIndex]);
                 Lines.RemoveAt(lineIndex);
             }
 

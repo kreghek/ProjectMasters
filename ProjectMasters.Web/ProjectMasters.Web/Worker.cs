@@ -21,12 +21,16 @@ namespace ProjectMasters.Games
     public class Worker : BackgroundService
     {
         private readonly IHubContext<GameHub, IGame> _gameHub;
+        private readonly IGameStateService _gameStateService;
         private readonly ILogger<Worker> _logger;
         private int _counter;
         private DateTime _currentTime;
 
-        public Worker(ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
+        public Worker(IGameStateService gameStateService, ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
         {
+            _gameStateService = gameStateService;
+            _gameStateService.AddGameState("test");
+
             _logger = logger;
             _gameHub = gameHub;
             _currentTime = DateTime.Now;
@@ -36,25 +40,29 @@ namespace ProjectMasters.Games
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (!GameState.Started)
+                var gameStates = _gameStateService.GetAllGameStates();
+                foreach (var gameState in gameStates)
                 {
-                    await Task.Yield();
-                    continue;
+                    if (!gameState.Started)
+                    {
+                        await Task.Yield();
+                        continue;
+                    }
+
+                    var deltaTime = DateTime.Now - _currentTime;
+                    _currentTime = DateTime.Now;
+
+                    if (!gameState.Initialized)
+                    {
+                        Initiate(gameState);
+                    }
+                    else
+                    {
+                        Update(gameState, deltaTime);
+                    }
                 }
 
-                var deltaTime = DateTime.Now - _currentTime;
-                _currentTime = DateTime.Now;
-
-                if (!GameState.Initialized)
-                {
-                    Initiate();
-                }
-                else
-                {
-                    Update(deltaTime);
-                }
-
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.UtcNow);
                 await Task.Delay(1000, stoppingToken);
             }
         }
@@ -119,42 +127,42 @@ namespace ProjectMasters.Games
             _gameHub.Clients.All.AnimateUnitDamageAsync(e.UnitDto);
         }
 
-        private void Initialized()
+        private void Initialized(GameState gameState)
         {
-            var personDtos = GameState.Team.Persons.Select(person => new PersonDto(person)
+            var personDtos = gameState.Team.Persons.Select(person => new PersonDto(person)
             {
-                // �������� �����, ������� �������� ���������.
-                LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
+                // Get a line with the person.
+                LineId = gameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
             }).ToArray();
 
-            var unitDots = (from line in GameState.Project.Lines from unit in line.Units select new UnitDto(unit))
+            var unitDots = (from line in gameState.Project.Lines from unit in line.Units select new UnitDto(unit))
                 .ToList();
 
             _gameHub.Clients.All.SetupClientStateAsync(personDtos, unitDots);
             _logger.LogInformation("Game is started");
         }
 
-        private void Initiate()
+        private void Initiate(GameState gameState)
         {
-            GameState.Team = new Team();
-            GameState.TeamFactory = new TeamFactory(GameState.Team);
-            GameState.TeamFactory.Start();
-            GameState.Project = ProjectUnitFormation.Instance;
-            GameState.Initialized = true;
+            gameState.Team = new Team();
+            gameState.TeamFactory = new TeamFactory(gameState.Team);
+            gameState.TeamFactory.Start();
+            gameState.Project = ProjectUnitFormation.Instance;
+            gameState.Initialized = true;
 
-            GameState.PersonAssigned += GameState_PersonAssigned;
-            GameState.PersonAttacked += GameState_PersonAttacked;
-            GameState.EffectIsAdded += GameState_EffectIsAdded;
-            GameState.EffectIsRemoved += GameState_EffectIsRemoved;
-            GameState.PersonIsTired += GameState_PersonIsTired;
-            GameState.PersonIsRested += GameState_PersonIsRested;
-            GameState.LineIsRemoved += GameState_LineIsRemoved;
-            GameState.Project.Added += Project_UnitAdded;
-            GameState.Project.Removed += Project_UnitRemoved;
-            GameState.DecisionIsStarted += GameState_DecisionIsStarted;
-            GameState.UnitTakenDamage += GameState_UnitTakenDamage;
-            GameState.SkillIsLearned += GameState_SkillIsLearned;
-            Initialized();
+            gameState.PersonAssigned += GameState_PersonAssigned;
+            gameState.PersonAttacked += GameState_PersonAttacked;
+            gameState.EffectIsAdded += GameState_EffectIsAdded;
+            gameState.EffectIsRemoved += GameState_EffectIsRemoved;
+            gameState.PersonIsTired += GameState_PersonIsTired;
+            gameState.PersonIsRested += GameState_PersonIsRested;
+            gameState.LineIsRemoved += GameState_LineIsRemoved;
+            gameState.Project.Added += Project_UnitAdded;
+            gameState.Project.Removed += Project_UnitRemoved;
+            gameState.DecisionIsStarted += GameState_DecisionIsStarted;
+            gameState.UnitTakenDamage += GameState_UnitTakenDamage;
+            gameState.SkillIsLearned += GameState_SkillIsLearned;
+            Initialized(gameState);
         }
 
         private void Project_UnitAdded(object sender, UnitEventArgs e)
@@ -169,13 +177,13 @@ namespace ProjectMasters.Games
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
         }
 
-        private void Update(TimeSpan deltaTime)
+        private void Update(GameState gameState, TimeSpan deltaTime)
         {
             var time = (float)deltaTime.TotalSeconds;
-            GameState.TeamFactory.Update(time);
+            gameState.TeamFactory.Update(time, gameState);
             if (_counter == 10)
             {
-                _gameHub.Clients.All.SetStatusAsync(new PlayerDto());
+                _gameHub.Clients.All.SetStatusAsync(new PlayerDto(gameState));
                 _counter = 0;
             }
 

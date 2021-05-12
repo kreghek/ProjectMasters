@@ -11,9 +11,9 @@
 
         private static Random Random => new Random(DateTime.Now.Millisecond);
 
-        public override void Apply()
+        public override void Apply(GameState gameState)
         {
-            var selectedPerson = GetRandomPerson();
+            var selectedPerson = GetRandomPerson(gameState);
 
             var dismoraleEffect = CreateEffect();
 
@@ -29,9 +29,9 @@
             };
         }
 
-        private static Person GetRandomPerson()
+        private static Person GetRandomPerson(GameState gameState)
         {
-            var persons = GameState.Team.Persons;
+            var persons = gameState.Team.Persons;
             var personIndex = Random.Next(0, persons.Length - 1);
             var selectedPerson = persons[personIndex];
             return selectedPerson;

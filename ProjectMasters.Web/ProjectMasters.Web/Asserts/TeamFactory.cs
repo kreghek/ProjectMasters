@@ -35,17 +35,17 @@ public class TeamFactory
         _team.Persons = persons.ToArray();
     }
 
-    public void Update(float deltaTime)
+    public void Update(float deltaTime, GameState gameState)
     {
         if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
         {
-            GameState.StartDecision(Player.WaitForDecision);
+            gameState.StartDecision(Player.WaitForDecision);
             return;
         }
 
-        UpdateProjectLineSolving(deltaTime);
+        UpdateProjectLineSolving(deltaTime, gameState);
 
-        UpdateProjectTime(deltaTime);
+        UpdateProjectTime(deltaTime, gameState);
     }
 
     private static IEnumerable<Person> CreateStartTeam()
@@ -195,11 +195,11 @@ public class TeamFactory
         Player.WaitForDecision = Player.ActiveDecisions[0];
     }
 
-    private void UpdateDayly()
+    private void UpdateDayly(GameState gameState)
     {
         foreach (var person in _team.Persons)
         {
-            person.DaylyUpdate();
+            person.DaylyUpdate(gameState);
         }
 
         HandleDecision();
@@ -207,7 +207,7 @@ public class TeamFactory
         Player.WaitKeyDayReport = true;
     }
 
-    private void UpdateProjectLineSolving(float deltaTime)
+    private void UpdateProjectLineSolving(float deltaTime, GameState gameState)
     {
         foreach (var line in ProjectUnitFormation.Instance.Lines.ToArray())
         {
@@ -225,7 +225,7 @@ public class TeamFactory
                     {
                         line.AssignedPersons.Add(firstFreePerson);
 
-                        GameState.AssignPerson(line, firstFreePerson);
+                        gameState.AssignPerson(line, firstFreePerson);
 
                         assignedPersons = line.AssignedPersons;
                     }
@@ -233,7 +233,7 @@ public class TeamFactory
 
                 foreach (var assignedPerson in assignedPersons)
                 {
-                    assignedPerson.Update(line.Units, line.AssignedPersons, deltaTime);
+                    assignedPerson.Update(gameState, line.Units, line.AssignedPersons, deltaTime);
                 }
             }
             else
@@ -243,7 +243,7 @@ public class TeamFactory
         }
     }
 
-    private void UpdateProjectTime(float deltaTime)
+    private void UpdateProjectTime(float deltaTime, GameState gameState)
     {
         Player.DayCounter -= deltaTime;
 
@@ -255,7 +255,7 @@ public class TeamFactory
         Player.DayCounter = Player.DAY_COUNTER_BASE;
         Player.DayNumber++;
 
-        UpdateDayly();
+        UpdateDayly(gameState);
 
         // payment
         if (Player.Money > 0)

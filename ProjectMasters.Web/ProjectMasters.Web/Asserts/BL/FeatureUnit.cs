@@ -25,7 +25,7 @@
         public override ProjectUnitType Type => ProjectUnitType.Feature;
         private static Random Random { get; } = new Random(DateTime.Now.Millisecond);
 
-        public override void ProcessCommit(float commitPower, bool isCritical, Person person)
+        public override void ProcessCommit(float commitPower, bool isCritical, Person person, GameState gameState)
         {
             var formation = ProjectUnitFormation.Instance;
             var successfullCommit = Random.Next(1, 16) <= 8;
@@ -35,7 +35,7 @@
                 CostToDecompose -= commitPower;
 
                 DoTakeDamage(commitPower, isCritical);
-                GameState.DoUnitTakenDamage(this);
+                gameState.DoUnitTakenDamage(this);
 
                 if (CostToDecompose <= 0 || TimeLog >= Cost)
                 {
@@ -64,7 +64,7 @@
 
                 if (TimeLog >= Cost)
                 {
-                    formation.ResolveUnit(LineIndex, this);
+                    formation.ResolveUnit(gameState, LineIndex, this);
                     IsDead = true;
 
                     person.ProjectKnowedgeCoef += Person.PROJECT_KNOWEDGE_INCREMENT +

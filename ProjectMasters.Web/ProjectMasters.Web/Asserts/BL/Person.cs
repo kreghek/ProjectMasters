@@ -87,9 +87,9 @@
         public TraitType[] Traits { get; set; }
         private Random Random => new Random(DateTime.Now.Millisecond);
 
-        public void DaylyUpdate()
+        public void DaylyUpdate(GameState gameState)
         {
-            CheckForNewEffect();
+            CheckForNewEffect(gameState);
             SelectRandomActiveSkill();
         }
 
@@ -98,16 +98,16 @@
             _changeLineCounter = CHANGE_LINE_COUNTER_MULTIPLICATOR_BASE * CommitSpeed;
         }
 
-        internal void Update(List<ProjectUnitBase> units, List<Person> assignedPersons, float commitDeltaTime)
+        internal void Update(GameState gameState, List<ProjectUnitBase> units, List<Person> assignedPersons, float commitDeltaTime)
         {
             HandleSpeechs(commitDeltaTime);
 
             ResetStats();
             HandleTraits();
 
-            HandleCurrentEffects(commitDeltaTime);
+            HandleCurrentEffects(gameState, commitDeltaTime);
 
-            HandleEnergy(commitDeltaTime);
+            HandleEnergy(gameState, commitDeltaTime);
             if (RecoveryCounter != null)
             {
                 return;
@@ -121,7 +121,7 @@
 
             CalcMasteryLevels();
 
-            ProgressUnitSolving(units, assignedPersons, commitDeltaTime);
+            ProgressUnitSolving(gameState, units, assignedPersons, commitDeltaTime);
         }
 
         private void CalcMasteryLevels()
@@ -152,7 +152,7 @@
             }
         }
 
-        private void CheckForNewEffect()
+        private void CheckForNewEffect(GameState gameState)
         {
             if (Effects.Any())
             {
@@ -173,11 +173,11 @@
                 };
 
                 Effects.Add(effect);
-                GameState.AddEffect(effect);
+                gameState.AddEffect(effect);
             }
         }
 
-        private void HandleCurrentEffects(float commitDeltaTime)
+        private void HandleCurrentEffects(GameState gameState, float commitDeltaTime)
         {
             foreach (var effect in Effects.ToArray())
             {
@@ -185,7 +185,7 @@
                 if (effect.Lifetime <= 0)
                 {
                     Effects.Remove(effect);
-                    GameState.RemoveEffect(effect);
+                    gameState.RemoveEffect(effect);
                 }
                 else
                 {
@@ -219,7 +219,7 @@
             }
         }
 
-        private void HandleEnergy(float commitDeltaTime)
+        private void HandleEnergy(GameState gameState, float commitDeltaTime)
         {
             if (EnergyCurrent > 0)
             {
@@ -230,7 +230,7 @@
                 if (RecoveryCounter == null)
                 {
                     RecoveryCounter = RECOVERY_TIME_BASE;
-                    GameState.TirePerson(this);
+                    gameState.TirePerson(this);
                 }
                 else
                 {
@@ -239,7 +239,7 @@
                     {
                         RecoveryCounter = null;
                         EnergyCurrent = Energy;
-                        GameState.RestPerson(this);
+                        gameState.RestPerson(this);
                     }
                 }
             }
@@ -304,7 +304,7 @@
             }
         }
 
-        private void ProgressUnitSolving(List<ProjectUnitBase> units, List<Person> assignedPersons,
+        private void ProgressUnitSolving(GameState gameState, List<ProjectUnitBase> units, List<Person> assignedPersons,
             float commitDeltaTime)
         {
             Act actTouse = null;
@@ -342,7 +342,7 @@
                 }
             }
 
-            var unitsToAttack = new ProjectUnitBase[0];
+            var unitsToAttack = Array.Empty<ProjectUnitBase>();
 
             if (actTouse != null)
             {
@@ -394,8 +394,8 @@
                             commitPower *= CritCommitMultiplicator;
                         }
 
-                        GameState.AttackPerson(unit, this);
-                        unit.ProcessCommit(commitPower, isCritical, this);
+                        gameState.AttackPerson(unit, this);
+                        unit.ProcessCommit(commitPower, isCritical, this, gameState);
                         actTouse.Reset();
 
                         if (ProjectKnowedgeCoef <= 2)

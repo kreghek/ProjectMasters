@@ -12,11 +12,11 @@
 
     public class GameHub : Hub<IGame>
     {
-        public void AssignPersonToLineServer(int lineId, int personId)
+        public void AssignPersonToLineServer(GameState gameState, int lineId, int personId)
         {
-            var person = GameState.Team.Persons.FirstOrDefault(p => p.Id == personId);
-            var sendLine = GameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
-            var line = GameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
+            var person = gameState.Team.Persons.FirstOrDefault(p => p.Id == personId);
+            var sendLine = gameState.Project.Lines.FirstOrDefault(p => p.AssignedPersons.Contains(person));
+            var line = gameState.Project.Lines.FirstOrDefault(l => l.Id == lineId);
 
             if (line == null)
             {
@@ -25,12 +25,12 @@
 
             sendLine?.AssignedPersons.Remove(person);
             line.AssignedPersons.Add(person);
-            GameState.AssignPerson(line, person);
+            gameState.AssignPerson(line, person);
         }
 
-        public void ChangeUnitPositionsServer(int lineId)
+        public void ChangeUnitPositionsServer(GameState gameState, int lineId)
         {
-            var lineToGetQueueIndecies = GameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
+            var lineToGetQueueIndecies = gameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
                 // Не нашли линию проекта.
                 // Это значит, что убили последнего монстра и линия была удалена.
@@ -42,36 +42,36 @@
             Clients.Caller.ChangeUnitPositionsAsync(unitPositionInfos);
         }
 
-        public void InitServerState()
+        public void InitServerState(GameState gameState)
         {
-            if (GameState.Started)
+            if (gameState.Started)
             {
-                var personDtos = GameState.Team.Persons.Select(person => new PersonDto(person)
+                var personDtos = gameState.Team.Persons.Select(person => new PersonDto(person)
                 {
                     // Получаем линию, которая содержит персонажа.
-                    LineId = GameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
+                    LineId = gameState.Project.Lines.SingleOrDefault(x => x.AssignedPersons.Contains(person))?.Id
                 }).ToArray();
 
-                var unitDots = (from line in GameState.Project.Lines from unit in line.Units select new UnitDto(unit))
+                var unitDots = (from line in gameState.Project.Lines from unit in line.Units select new UnitDto(unit))
                     .ToList();
 
                 Clients.Caller.SetupClientStateAsync(personDtos, unitDots);
             }
             else
             {
-                GameState.Started = true;
+                gameState.Started = true;
             }
         }
 
-        public void PreInitServerState()
+        public void PreInitServerState(GameState gameState)
         {
-            Clients.Caller.PreSetupClientAsync(GameState.Started);
+            Clients.Caller.PreSetupClientAsync(gameState.Started);
         }
 
-        public void SendDecision(int number)
+        public void SendDecision(GameState gameState, int number)
         {
             Player.WaitKeyDayReport = false;
-            Player.WaitForDecision.Choises[number].Apply();
+            Player.WaitForDecision.Choises[number].Apply(gameState);
 
             Player.ActiveDecisions = Player.ActiveDecisions.Skip(1).ToArray();
             if (!Player.ActiveDecisions.Any())
