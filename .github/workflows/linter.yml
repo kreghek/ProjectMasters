@@ -70,7 +70,7 @@ jobs:
         with:
           dotnet-version: '5.0.100'
       - name: Setup ReSharper Command Line Tools
-        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2020.3.3
+        run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
       - name: Clean up codebase via ReSharper Command Line Tools
         run: jb cleanupcode --profile="Full Cleanup" ${{ matrix.solution }}.sln
       - name: Commit changes
