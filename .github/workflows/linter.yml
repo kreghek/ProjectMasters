@@ -32,7 +32,6 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
-      - run: git pull
       - run: dotnet tool install --global dotnet-format --version 5.0.211103
       - name: Format codebase ${{ matrix.solution }}
         run: dotnet-format ${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed
@@ -61,7 +60,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: git pull
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
