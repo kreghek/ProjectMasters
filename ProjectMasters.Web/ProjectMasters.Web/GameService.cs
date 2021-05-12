@@ -22,12 +22,14 @@
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             while (true)
+            {
                 foreach (var game in _games.ToArray())
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
                     await game.UpdateAsync();
                 }
+            }
         }
     }
 

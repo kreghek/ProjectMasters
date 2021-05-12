@@ -14,9 +14,9 @@
 
         private const float PROGRESS_TO_SPAWN_ERROR = 0.5f;
         private int _errorRoundeIndex;
-        private Random Random => new Random(DateTime.Now.Millisecond);
 
         public override ProjectUnitType Type => ProjectUnitType.SubTask;
+        private Random Random => new Random(DateTime.Now.Millisecond);
 
         public override void ProcessCommit(float commitPower, bool isCritical, Person person)
         {
@@ -41,9 +41,13 @@
                     var errorUnit = CreateErrorUnit();
 
                     if (Random.Next(1, 100) > 50)
+                    {
                         formation.AddUnitIntoLine(LineIndex, 0, errorUnit);
+                    }
                     else
+                    {
                         formation.AddUnitIntoLine(LineIndex, QueueIndex + 1, errorUnit);
+                    }
                 }
 
                 person.ErrorMadeCount += errorCount;
@@ -65,7 +69,9 @@
             else
             {
                 if (Cost - TimeLog > 8)
+                {
                     HandleSpeechs(DELTA_TIME);
+                }
             }
         }
 
@@ -73,7 +79,10 @@
         {
             var skillToUp = person.ActiveSkill;
             if (skillToUp == null)
+            {
                 return;
+            }
+
             // Add active skill to Skills collection
             // If it is not there. Union checks duplicates.
             person.Skills = person.Skills.Union(new[] { skillToUp }).ToArray();
@@ -102,6 +111,7 @@
             var isSkillArchieved = true;
             var notStartedJobs = skillToUp.Scheme.RequiredJobs.Except(skillToUp.Jobs.Select(x => x.Scheme));
             if (!notStartedJobs.Any())
+            {
                 foreach (var job in skillToUp.Jobs)
                 {
                     if (job.CompleteSubTasksAmount < job.Scheme.CompleteSubTasksAmount)
@@ -122,6 +132,7 @@
                         break;
                     }
                 }
+            }
 
             if (isSkillArchieved)
             {

@@ -4,7 +4,7 @@ namespace ProjectMasters.Web
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
 
-    using ProjectMasters.Games;
+    using Games;
 
     public class Program
     {

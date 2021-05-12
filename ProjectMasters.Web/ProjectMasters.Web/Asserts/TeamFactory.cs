@@ -20,7 +20,9 @@ public class TeamFactory
     public void Start()
     {
         if (!(_team.Persons is null))
+        {
             return;
+        }
 
         var persons = CreateStartTeam();
 
@@ -81,12 +83,12 @@ public class TeamFactory
                     {
                         Scheme = SkillCatalog.AllSchemes.Single(x =>
                             x.Sid == SkillCatalog.Sids.AngularFoundations + "-1")
-                    },
+                    }
                 },
 
                 EyesIndex = 1,
                 HairIndex = 1,
-                MouthIndex = 1,
+                MouthIndex = 1
             },
 
             new Person
@@ -131,12 +133,12 @@ public class TeamFactory
                     {
                         Scheme = SkillCatalog.AllSchemes.Single(x =>
                             x.Sid == SkillCatalog.Sids.AngularFoundations + "-1")
-                    },
+                    }
                 },
 
                 EyesIndex = 2,
                 HairIndex = 2,
-                MouthIndex = 2,
+                MouthIndex = 2
             },
 
             new Person
@@ -170,13 +172,13 @@ public class TeamFactory
                     {
                         Scheme = SkillCatalog.AllSchemes.Single(x =>
                             x.Sid == SkillCatalog.Sids.AspNetCoreFoundations + "-2")
-                    },
+                    }
                 },
 
                 EyesIndex = 3,
                 HairIndex = 3,
-                MouthIndex = 3,
-            },
+                MouthIndex = 3
+            }
         };
     }
 
@@ -246,7 +248,9 @@ public class TeamFactory
         Player.DayCounter -= deltaTime;
 
         if (Player.DayCounter > 0)
+        {
             return;
+        }
 
         Player.DayCounter = Player.DAY_COUNTER_BASE;
         Player.DayNumber++;
@@ -255,11 +259,15 @@ public class TeamFactory
 
         // payment
         if (Player.Money > 0)
+        {
             foreach (var person in _team.Persons)
             {
                 Player.Money -= person.DaylyPayment;
             }
+        }
         else
+        {
             Player.FailureCount++;
+        }
     }
 }

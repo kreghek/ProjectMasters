@@ -18,15 +18,13 @@
         public int LineIndex { get; set; }
 
         public int QueueIndex { get; set; }
-
-        private Random Random => new Random(DateTime.Now.Millisecond);
         public string[] RequiredMasteryItems { get; set; }
         public float TimeLog { get; set; }
         public abstract ProjectUnitType Type { get; }
 
-        public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
+        private Random Random => new Random(DateTime.Now.Millisecond);
 
-        public event EventHandler<UnitTakeDamageEventArgs> TakeDamage;
+        public abstract void ProcessCommit(float commitPower, bool isCritical, Person person);
 
         protected void DoTakeDamage(float damage, bool isCritical)
         {
@@ -37,7 +35,10 @@
         {
             var usedSkills = personSkills.Where(x => RequiredMasteryItems.Contains(x.Sid)).ToArray();
             if (usedSkills.Any())
+            {
                 return usedSkills.Min(x => x.Level);
+            }
+
             return 0;
         }
 
@@ -74,5 +75,7 @@
             var successfullCommit = effectiveCommitRoll <= successCommitRoll;
             return successfullCommit;
         }
+
+        public event EventHandler<UnitTakeDamageEventArgs> TakeDamage;
     }
 }
