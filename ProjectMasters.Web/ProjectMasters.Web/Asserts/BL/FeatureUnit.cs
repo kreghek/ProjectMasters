@@ -8,6 +8,7 @@
 
     public sealed class FeatureUnit : ProjectUnitBase
     {
+        private static readonly Random _random = new Random(DateTime.Now.Millisecond);
         private const float _maxDecomposeCost = 2;
         private const int _maxSubTask = 5;
         private const float _minDecomposeCost = 1;
@@ -21,7 +22,7 @@
         }
 
         public float CostToDecompose { get; private set; }
-        private static Random Random => new Random(DateTime.Now.Millisecond);
+        private static Random Random => _random;
 
         public override ProjectUnitType Type => ProjectUnitType.Feature;
 
