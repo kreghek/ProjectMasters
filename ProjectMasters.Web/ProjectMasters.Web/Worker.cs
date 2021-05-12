@@ -71,7 +71,6 @@ namespace ProjectMasters.Games
         {
             _gameHub.Clients.All.StartDecision(e.Decision);
             _logger.LogInformation($"{e.Decision.Text} is started");
-            _logger.LogInformation($"{Player.Money} - money, {Player.Autority} - authority");
         }
 
         private void GameState_EffectIsAdded(object sender, EffectEventArgs e)

@@ -377,7 +377,7 @@
                         const float MIN_EFFECT = 0.9f;
 
                         var currentAuthorityPercentage =
-                            (Player.Autority - MIN_AUTHORITY) / (MIN_AUTHORITY - MAX_AUTHORITY);
+                            (gameState.Player.Autority - MIN_AUTHORITY) / (MIN_AUTHORITY - MAX_AUTHORITY);
 
                         var authorityCoef = MIN_EFFECT + (MAX_EFFECT - MIN_EFFECT) * currentAuthorityPercentage;
 

@@ -93,16 +93,16 @@
         {
             var gameState = GetStateByUserId(userId);
 
-            Player.WaitKeyDayReport = false;
-            Player.WaitForDecision.Choises[number].Apply(gameState);
+            gameState.Player.WaitKeyDayReport = false;
+            gameState.Player.WaitForDecision.Choises[number].Apply(gameState);
 
-            Player.ActiveDecisions = Player.ActiveDecisions.Skip(1).ToArray();
-            if (!Player.ActiveDecisions.Any())
+            gameState.Player.ActiveDecisions = gameState.Player.ActiveDecisions.Skip(1).ToArray();
+            if (!gameState.Player.ActiveDecisions.Any())
             {
-                Player.ActiveDecisions = null;
+                gameState.Player.ActiveDecisions = null;
             }
 
-            Player.WaitForDecision = Player.ActiveDecisions == null ? null : Player.ActiveDecisions[0];
+            gameState.Player.WaitForDecision = gameState.Player.ActiveDecisions == null ? null : gameState.Player.ActiveDecisions[0];
         }
     }
 }

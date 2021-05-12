@@ -10,8 +10,8 @@ namespace Assets.BL
 
         public override void Apply(GameState gameState)
         {
-            Player.Autority += AuthorityCost;
-            Player.Money += MoneyCost;
+            gameState.Player.Autority += AuthorityCost;
+            gameState.Player.Money += MoneyCost;
         }
     }
 }

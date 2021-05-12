@@ -64,7 +64,7 @@
                     unit1.LineIndex = lineIndex1;
                 }
 
-                SolvedUnits.Add(new SolvedUnitInfo { Cost = unit.Cost, TimeLog = unit.TimeLog });
+                SolvedUnits.Add(new SolvedUnitInfo(gameState) { Cost = unit.Cost, TimeLog = unit.TimeLog });
             }
 
             Removed?.Invoke(this, new UnitEventArgs(unit));

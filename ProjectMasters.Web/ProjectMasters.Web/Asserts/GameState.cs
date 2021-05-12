@@ -10,6 +10,12 @@ namespace ProjectMasters.Games
 
     public sealed class GameState
     {
+        public GameState()
+        {
+            Player = new Player();
+        }
+
+        public Player Player { get; set; }
         public string UserId { get; set; }
         public bool Initialized { get; set; }
         public ProjectUnitFormation Project { get; set; }

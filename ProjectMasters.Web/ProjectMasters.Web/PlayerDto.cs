@@ -10,8 +10,8 @@ namespace ProjectMasters.Games
     {
         public PlayerDto(GameState gameState)
         {
-            Money = Player.Money;
-            Authority = Player.Autority;
+            Money = gameState.Player.Money;
+            Authority = gameState.Player.Autority;
 
             var units = gameState.Project.Lines.SelectMany(x => x.Units);
             var bases = units as ProjectUnitBase[] ?? units.ToArray();

@@ -37,9 +37,9 @@ public class TeamFactory
 
     public void Update(float deltaTime, GameState gameState)
     {
-        if (Player.WaitForDecision != null || Player.WaitTutorial || Player.WaitKeyDayReport)
+        if (gameState.Player.WaitForDecision != null || gameState.Player.WaitTutorial || gameState.Player.WaitKeyDayReport)
         {
-            gameState.StartDecision(Player.WaitForDecision);
+            gameState.StartDecision(gameState.Player.WaitForDecision);
             return;
         }
 
@@ -182,17 +182,17 @@ public class TeamFactory
         };
     }
 
-    private void HandleDecision()
+    private void HandleDecision(GameState gameState)
     {
         var decisionCount = _random.Next(2, 5);
-        Player.ActiveDecisions = new Decision[decisionCount];
+        gameState.Player.ActiveDecisions = new Decision[decisionCount];
         for (var i = 0; i < decisionCount; i++)
         {
             var rolledDecisionIndex = _random.Next(0, DecisionCatalog.Decisions.Length);
-            Player.ActiveDecisions[i] = DecisionCatalog.Decisions[rolledDecisionIndex];
+            gameState.Player.ActiveDecisions[i] = DecisionCatalog.Decisions[rolledDecisionIndex];
         }
 
-        Player.WaitForDecision = Player.ActiveDecisions[0];
+        gameState.Player.WaitForDecision = gameState.Player.ActiveDecisions[0];
     }
 
     private void UpdateDayly(GameState gameState)
@@ -202,9 +202,9 @@ public class TeamFactory
             person.DaylyUpdate(gameState);
         }
 
-        HandleDecision();
+        HandleDecision(gameState);
 
-        Player.WaitKeyDayReport = true;
+        gameState.Player.WaitKeyDayReport = true;
     }
 
     private void UpdateProjectLineSolving(float deltaTime, GameState gameState)
@@ -245,29 +245,29 @@ public class TeamFactory
 
     private void UpdateProjectTime(float deltaTime, GameState gameState)
     {
-        Player.DayCounter -= deltaTime;
+        gameState.Player.DayCounter -= deltaTime;
 
-        if (Player.DayCounter > 0)
+        if (gameState.Player.DayCounter > 0)
         {
             return;
         }
 
-        Player.DayCounter = Player.DAY_COUNTER_BASE;
-        Player.DayNumber++;
+        gameState.Player.DayCounter = Player.DAY_COUNTER_BASE;
+        gameState.Player.DayNumber++;
 
         UpdateDayly(gameState);
 
         // payment
-        if (Player.Money > 0)
+        if (gameState.Player.Money > 0)
         {
             foreach (var person in _team.Persons)
             {
-                Player.Money -= person.DaylyPayment;
+                gameState.Player.Money -= person.DaylyPayment;
             }
         }
         else
         {
-            Player.FailureCount++;
+            gameState.Player.FailureCount++;
         }
     }
 }

@@ -1,10 +1,12 @@
-﻿namespace Assets.BL
+﻿using ProjectMasters.Games;
+
+namespace Assets.BL
 {
     public class SolvedUnitInfo
     {
-        public SolvedUnitInfo()
+        public SolvedUnitInfo(GameState gameState)
         {
-            Day = Player.DayNumber;
+            Day = gameState.Player.DayNumber;
         }
 
         public float Cost { get; set; }
