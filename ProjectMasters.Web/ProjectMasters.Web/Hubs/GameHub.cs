@@ -23,10 +23,11 @@
             _userManager = userManager;
         }
 
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
+            await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
+
             _userManager.RemoveUserConnection(Context.ConnectionId);
-            return base.OnDisconnectedAsync(exception);
         }
 
         public void AssignPersonToLineServer(int lineId, int personId)

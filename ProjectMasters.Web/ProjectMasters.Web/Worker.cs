@@ -228,7 +228,8 @@ namespace ProjectMasters.Games
             gameState.TeamFactory.Update(time, gameState);
             if (_counter == 10)
             {
-                _gameHub.Clients.All.SetStatusAsync(new PlayerDto(gameState));
+                var connectionId = _userManager.GetConnectionIdByUserId(gameState.UserId);
+                _gameHub.Clients.Client(connectionId).SetStatusAsync(new PlayerDto(gameState));
                 _counter = 0;
             }
 
