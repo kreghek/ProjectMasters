@@ -1,8 +1,8 @@
 ﻿namespace ProjectMasters.Web.Hubs
 {
     using System;
-    using System.Collections.Concurrent;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using DTOs;
 
@@ -10,16 +10,23 @@
 
     using Microsoft.AspNetCore.SignalR;
 
+    using ProjectMasters.Web.Services;
+
     public class GameHub : Hub<IGame>
     {
-        private static readonly ConcurrentDictionary<string, string> _userIdDict =
-            new ConcurrentDictionary<string, string>();
-
         private readonly IGameStateService _gameStateService;
+        private readonly IUserManager _userManager;
 
-        public GameHub(IGameStateService gameStateService)
+        public GameHub(IGameStateService gameStateService, IUserManager userManager)
         {
             _gameStateService = gameStateService;
+            _userManager = userManager;
+        }
+
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            _userManager.RemoveUserConnection(Context.ConnectionId);
+            return base.OnDisconnectedAsync(exception);
         }
 
         public void AssignPersonToLineServer(int lineId, int personId)
@@ -65,11 +72,7 @@
                 throw new ArgumentException("User id can not be empty.");
             }
 
-            // TODO Cleanup the dictionary to prevent overflow with dead connections.
-            if (!_userIdDict.TryAdd(Context.ConnectionId, userId))
-            {
-                throw new InvalidOperationException("Mapping of connection id and user id failed.");
-            }
+            _userManager.AddUserConnection(Context.ConnectionId, userId);
 
             var gameState = GetStateByUserIdSafe(userId);
 
@@ -137,12 +140,9 @@
             return _gameStateService.GetAllGameStates().SingleOrDefault(x => x.UserId == userId);
         }
 
-        private static string GetUserIdFromDictionary(string connectionId)
+        private string GetUserIdFromDictionary(string connectionId)
         {
-            if (!_userIdDict.TryGetValue(connectionId, out var userId))
-            {
-                throw new InvalidOperationException("There is no connection id to map it to user id.");
-            }
+            var userId = _userManager.GetUserIdByConnectionId(connectionId);
 
             return userId;
         }

@@ -5,13 +5,14 @@ namespace ProjectMasters.Web
     using Hubs;
 
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.DependencyInjection;
+
+    using ProjectMasters.Web.Services;
 
     public class Startup
     {
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
 
@@ -32,6 +33,7 @@ namespace ProjectMasters.Web
         {
             services.AddSignalR();
             services.AddSingleton<IGameStateService, GameStateService>();
+            services.AddSingleton<IUserManager, UserManager>();
         }
     }
 }
