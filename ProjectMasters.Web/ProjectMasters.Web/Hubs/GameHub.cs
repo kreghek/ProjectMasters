@@ -127,8 +127,7 @@
                 gameState.Player.ActiveDecisions = null;
             }
 
-            gameState.Player.WaitForDecision =
-                gameState.Player.ActiveDecisions == null ? null : gameState.Player.ActiveDecisions[0];
+            gameState.Player.WaitForDecision = gameState.Player.ActiveDecisions?[0];
         }
 
         private GameState GetStateByUserId(string userId)
