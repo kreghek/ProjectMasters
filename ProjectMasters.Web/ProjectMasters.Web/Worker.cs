@@ -13,8 +13,7 @@ namespace ProjectMasters.Games
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
-    using ProjectMasters.Web.Services;
-
+    using Web.Services;
     using Web.DTOs;
     using Web.Hubs;
 
@@ -22,12 +21,13 @@ namespace ProjectMasters.Games
     {
         private readonly IHubContext<GameHub, IGame> _gameHub;
         private readonly IGameStateService _gameStateService;
-        private readonly IUserManager _userManager;
         private readonly ILogger<Worker> _logger;
+        private readonly IUserManager _userManager;
         private int _counter;
         private DateTime _currentTime;
 
-        public Worker(IGameStateService gameStateService, IUserManager userManager, ILogger<Worker> logger, IHubContext<GameHub, IGame> gameHub)
+        public Worker(IGameStateService gameStateService, IUserManager userManager, ILogger<Worker> logger,
+            IHubContext<GameHub, IGame> gameHub)
         {
             _gameStateService = gameStateService;
             _userManager = userManager;
@@ -62,7 +62,6 @@ namespace ProjectMasters.Games
                         {
                             Update(gameState, deltaTime);
                         }
-
                     }
                     catch (Exception exception)
                     {
@@ -82,26 +81,6 @@ namespace ProjectMasters.Games
 
             gameHub.StartDecision(e.Decision);
             _logger.LogInformation($"{e.Decision.Text} is started");
-        }
-
-        private IGame GetHubByGameState(GameState gameState)
-        {
-            var connectionId = GetConnectionId(gameState);
-            var clientHub = _gameHub.Clients.Client(connectionId);
-            if (clientHub is null)
-            {
-                throw new InvalidOperationException("Client with specified id was not found.");
-            }
-
-            return clientHub;
-        }
-
-        private string GetConnectionId(GameState gameState)
-        {
-            var userId = gameState.UserId;
-
-            var connectionId = _userManager.GetConnectionIdByUserId(userId);
-            return connectionId;
         }
 
         private void GameState_EffectIsAdded(object sender, EffectEventArgs e)
@@ -182,6 +161,26 @@ namespace ProjectMasters.Games
             var gameHub = GetHubByGameState(gameState);
 
             gameHub.AnimateUnitDamageAsync(e.UnitDto);
+        }
+
+        private string GetConnectionId(GameState gameState)
+        {
+            var userId = gameState.UserId;
+
+            var connectionId = _userManager.GetConnectionIdByUserId(userId);
+            return connectionId;
+        }
+
+        private IGame GetHubByGameState(GameState gameState)
+        {
+            var connectionId = GetConnectionId(gameState);
+            var clientHub = _gameHub.Clients.Client(connectionId);
+            if (clientHub is null)
+            {
+                throw new InvalidOperationException("Client with specified id was not found.");
+            }
+
+            return clientHub;
         }
 
         private void Initialized(GameState gameState)

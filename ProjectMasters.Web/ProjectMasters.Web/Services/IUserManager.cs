@@ -2,9 +2,9 @@
 {
     public interface IUserManager
     {
+        void AddUserConnection(string connectionId, string userId);
         string GetConnectionIdByUserId(string userId);
         string GetUserIdByConnectionId(string connectionId);
-        void AddUserConnection(string connectionId, string userId);
         void RemoveUserConnection(string connectionId);
     }
 }

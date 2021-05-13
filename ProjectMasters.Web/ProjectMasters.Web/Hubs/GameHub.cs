@@ -10,7 +10,7 @@
 
     using Microsoft.AspNetCore.SignalR;
 
-    using ProjectMasters.Web.Services;
+    using Services;
 
     public class GameHub : Hub<IGame>
     {
@@ -21,13 +21,6 @@
         {
             _gameStateService = gameStateService;
             _userManager = userManager;
-        }
-
-        public override async Task OnDisconnectedAsync(Exception exception)
-        {
-            await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
-
-            _userManager.RemoveUserConnection(Context.ConnectionId);
         }
 
         public void AssignPersonToLineServer(int lineId, int personId)
@@ -56,8 +49,8 @@
 
             var lineToGetQueueIndecies = gameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
-            // Не нашли линию проекта.
-            // Это значит, что убили последнего монстра и линия была удалена.
+                // Не нашли линию проекта.
+                // Это значит, что убили последнего монстра и линия была удалена.
             {
                 return;
             }
@@ -96,6 +89,13 @@
 
                 gameState.Started = true;
             }
+        }
+
+        public override async Task OnDisconnectedAsync(Exception exception)
+        {
+            await base.OnDisconnectedAsync(exception).ConfigureAwait(false);
+
+            _userManager.RemoveUserConnection(Context.ConnectionId);
         }
 
         public void PreInitServerState(string userId)

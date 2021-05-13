@@ -32,6 +32,7 @@ namespace ProjectMasters.Web.Services
                 // after real signalR connection was lost.
                 throw new InvalidOperationException("There are more that 1 user connection.");
             }
+
             return connectionIds.SingleOrDefault();
         }
 
