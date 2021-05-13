@@ -40,25 +40,33 @@ namespace ProjectMasters.Games
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                var deltaTime = DateTime.Now - _currentTime;
+                _currentTime = DateTime.Now;
+
                 var gameStates = _gameStateService.GetAllGameStates();
                 foreach (var gameState in gameStates)
                 {
-                    if (!gameState.Started)
+                    try
                     {
-                        await Task.Yield();
-                        continue;
-                    }
+                        if (!gameState.Started)
+                        {
+                            await Task.Yield();
+                            continue;
+                        }        
 
-                    var deltaTime = DateTime.Now - _currentTime;
-                    _currentTime = DateTime.Now;
+                        if (!gameState.Initialized)
+                        {
+                            Initiate(gameState);
+                        }
+                        else
+                        {
+                            Update(gameState, deltaTime);
+                        }
 
-                    if (!gameState.Initialized)
-                    {
-                        Initiate(gameState);
                     }
-                    else
+                    catch (Exception exception)
                     {
-                        Update(gameState, deltaTime);
+                        _logger.LogError(exception, $"Error in worker loop in state of UserId:{gameState.UserId}.");
                     }
                 }
 
@@ -79,7 +87,13 @@ namespace ProjectMasters.Games
         private IGame GetHubByGameState(GameState gameState)
         {
             var connectionId = GetConnectionId(gameState);
-            return _gameHub.Clients.Client(connectionId);
+            var clientHub = _gameHub.Clients.Client(connectionId);
+            if (clientHub is null)
+            {
+                throw new InvalidOperationException("Client with specified id was not found.");
+            }
+
+            return clientHub;
         }
 
         private string GetConnectionId(GameState gameState)
@@ -212,12 +226,18 @@ namespace ProjectMasters.Games
 
         private void Project_UnitAdded(object sender, UnitEventArgs e)
         {
-            _gameHub.Clients.All.CreateUnitAsync(new UnitDto(e.Unit));
+            var gameState = _gameStateService.GetAllGameStates().Single(x=>x.Project == sender);
+            var connectionId = _userManager.GetConnectionIdByUserId(gameState.UserId);
+
+            _gameHub.Clients.Client(connectionId).CreateUnitAsync(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is created");
         }
 
         private void Project_UnitRemoved(object sender, UnitEventArgs e)
         {
+            var gameState = _gameStateService.GetAllGameStates().Single(x => x.Project == sender);
+            var connectionId = _userManager.GetConnectionIdByUserId(gameState.UserId);
+
             _gameHub.Clients.All.KillUnitAsync(new UnitDto(e.Unit));
             _logger.LogInformation($"{e.Unit.Type} {e.Unit.Id} is dead");
         }
