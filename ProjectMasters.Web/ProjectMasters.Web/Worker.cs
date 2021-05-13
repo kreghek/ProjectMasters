@@ -52,7 +52,7 @@ namespace ProjectMasters.Games
                         {
                             await Task.Yield();
                             continue;
-                        }        
+                        }
 
                         if (!gameState.Initialized)
                         {
@@ -226,7 +226,7 @@ namespace ProjectMasters.Games
 
         private void Project_UnitAdded(object sender, UnitEventArgs e)
         {
-            var gameState = _gameStateService.GetAllGameStates().Single(x=>x.Project == sender);
+            var gameState = _gameStateService.GetAllGameStates().Single(x => x.Project == sender);
             var connectionId = _userManager.GetConnectionIdByUserId(gameState.UserId);
 
             _gameHub.Clients.Client(connectionId).CreateUnitAsync(new UnitDto(e.Unit));
