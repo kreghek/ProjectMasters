@@ -9,9 +9,6 @@ on:
     branches:
       - master
 
-env:
-  WORKING_DIRECTORY: ProjectMasters.Web
-
 jobs:
   # Set the job key. The key is displayed as the job name
   # when a job name is not provided
@@ -20,10 +17,6 @@ jobs:
     name: Clean up C# code base via dotnet-format
     # Set the type of machine to run on
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ${{ env.WORKING_DIRECTORY }}
 
     strategy:
       matrix:
@@ -32,9 +25,10 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
+      - run: git pull
       - run: dotnet tool install --global dotnet-format --version 5.0.211103
       - name: Format codebase ${{ matrix.solution }}
-        run: dotnet-format ${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed
+        run: dotnet-format ProjectMasters.Web/${{ matrix.solution }}.sln --fix-whitespace --fix-style --verbosity detailed
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
@@ -50,10 +44,6 @@ jobs:
     name: Clean up C# code base via R# CLT
     # Set the type of machine to run on
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: ${{ env.WORKING_DIRECTORY }}
 
     needs: [dotnet-format-lint]
 
@@ -65,6 +55,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - run: git pull
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -73,6 +64,7 @@ jobs:
         run: dotnet tool install --global JetBrains.ReSharper.GlobalTools --version 2021.1.2
       - name: Clean up codebase via ReSharper Command Line Tools
         run: jb cleanupcode --profile="Full Cleanup" ${{ matrix.solution }}.sln
+        working-directory: ./ProjectMasters.Web/
       - name: Commit changes
         uses: EndBug/add-and-commit@v5
         with:
