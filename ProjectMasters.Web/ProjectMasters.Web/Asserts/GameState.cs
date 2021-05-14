@@ -27,7 +27,7 @@ namespace ProjectMasters.Games
 
         public void AddEffect(Effect effect)
         {
-            EffectIsAdded?.Invoke(null, new EffectEventArgs(effect));
+            EffectIsAdded?.Invoke(this, new EffectEventArgs(effect));
         }
 
         public void DoUnitTakenDamage(ProjectUnitBase unit)
@@ -35,48 +35,48 @@ namespace ProjectMasters.Games
             var dto = new UnitDto(unit);
 
             var args = new UnitTakenDamageEventArgs(dto);
-            UnitTakenDamage?.Invoke(null, args);
+            UnitTakenDamage?.Invoke(this, args);
         }
 
         public void LearnSkill(Skill skill)
         {
-            SkillIsLearned?.Invoke(null, new SkillEventArgs(skill));
+            SkillIsLearned?.Invoke(this, new SkillEventArgs(skill));
         }
 
 
         public void RemoveEffect(Effect effect)
         {
-            EffectIsRemoved?.Invoke(null, new EffectEventArgs(effect));
+            EffectIsRemoved?.Invoke(this, new EffectEventArgs(effect));
         }
 
         public void RestPerson(Person person)
         {
-            PersonIsRested?.Invoke(null, new PersonEventArgs(person));
+            PersonIsRested?.Invoke(this, new PersonEventArgs(person));
         }
 
         public void StartDecision(Decision decision)
         {
-            DecisionIsStarted?.Invoke(null, new DecisionEventArgs(decision));
+            DecisionIsStarted?.Invoke(this, new DecisionEventArgs(decision));
         }
 
         public void TirePerson(Person person)
         {
-            PersonIsTired?.Invoke(null, new PersonEventArgs(person));
+            PersonIsTired?.Invoke(this, new PersonEventArgs(person));
         }
 
         internal void AssignPerson(ProjectLine line, Person person)
         {
-            PersonAssigned?.Invoke(null, new PersonAssignedEventArgs(line, person));
+            PersonAssigned?.Invoke(this, new PersonAssignedEventArgs(line, person));
         }
 
         internal void AttackPerson(ProjectUnitBase unit, Person person)
         {
-            PersonAttacked?.Invoke(null, new PersonAttackedEventArgs(unit, person));
+            PersonAttacked?.Invoke(this, new PersonAttackedEventArgs(unit, person));
         }
 
         internal void RemoveLine(ProjectLine line)
         {
-            LineIsRemoved?.Invoke(null, new LineEventArgs(line));
+            LineIsRemoved?.Invoke(this, new LineEventArgs(line));
         }
 
         public event EventHandler<DecisionEventArgs> DecisionIsStarted;

@@ -1,7 +1,12 @@
-﻿namespace ProjectMasters.Games
+﻿using ProjectMasters.Games;
+
+namespace ProjectMasters.Web.Services
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Base implemenetation of <see cref="IGameStateService" />.
+    /// </summary>
     public sealed class GameStateService : IGameStateService
     {
         private readonly List<GameState> _gameStates;
@@ -11,11 +16,13 @@
             _gameStates = new List<GameState>();
         }
 
+        /// <inheritdoc />
         public IEnumerable<GameState> GetAllGameStates()
         {
             return _gameStates;
         }
 
+        /// <inheritdoc />
         public GameState AddGameState(string userId)
         {
             var gameState = new GameState { UserId = userId };
