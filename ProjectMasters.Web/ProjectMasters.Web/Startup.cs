@@ -7,6 +7,8 @@ namespace ProjectMasters.Web
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.DependencyInjection;
 
+    using ProjectMasters.Web.Services;
+
     using Services;
 
     public class Startup

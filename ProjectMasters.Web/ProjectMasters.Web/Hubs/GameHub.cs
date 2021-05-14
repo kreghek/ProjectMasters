@@ -10,6 +10,8 @@
 
     using Microsoft.AspNetCore.SignalR;
 
+    using ProjectMasters.Web.Services;
+
     using Services;
 
     public class GameHub : Hub<IGame>
