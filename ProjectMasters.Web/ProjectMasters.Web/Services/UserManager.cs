@@ -5,7 +5,7 @@ using System.Linq;
 namespace ProjectMasters.Web.Services
 {
     /// <summary>
-    /// Base implemenetation of <see cref="IUserManager"/>.
+    /// Base implemenetation of <see cref="IUserManager" />.
     /// </summary>
     public class UserManager : IUserManager
     {
@@ -16,7 +16,7 @@ namespace ProjectMasters.Web.Services
             _userIdDict = new ConcurrentDictionary<string, string>();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string GetUserIdByConnectionId(string connectionId)
         {
             if (!_userIdDict.TryGetValue(connectionId, out var userId))
@@ -27,7 +27,7 @@ namespace ProjectMasters.Web.Services
             return userId;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string GetConnectionIdByUserId(string userId)
         {
             var connectionIds = _userIdDict.Where(x => x.Value == userId).Select(x => x.Key);
@@ -41,7 +41,7 @@ namespace ProjectMasters.Web.Services
             return connectionIds.SingleOrDefault();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void AddUserConnection(string connectionId, string userId)
         {
             if (!_userIdDict.TryAdd(connectionId, userId))
@@ -50,7 +50,7 @@ namespace ProjectMasters.Web.Services
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public void RemoveUserConnection(string connectionId)
         {
             if (!_userIdDict.TryRemove(connectionId, out var _))

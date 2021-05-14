@@ -10,8 +10,7 @@
 
     using Microsoft.AspNetCore.SignalR;
 
-    using ProjectMasters.Web.Services;
-
+    using Services;
     using Services;
 
     public class GameHub : Hub<IGame>
@@ -51,8 +50,8 @@
 
             var lineToGetQueueIndecies = gameState.Project.Lines.SingleOrDefault(x => x.Id == lineId);
             if (lineToGetQueueIndecies is null)
-            // Не нашли линию проекта.
-            // Это значит, что убили последнего монстра и линия была удалена.
+                // Не нашли линию проекта.
+                // Это значит, что убили последнего монстра и линия была удалена.
             {
                 return;
             }

@@ -5,7 +5,7 @@ namespace ProjectMasters.Web.Services
     using System.Collections.Generic;
 
     /// <summary>
-    /// Base implemenetation of <see cref="IGameStateService"/>.
+    /// Base implemenetation of <see cref="IGameStateService" />.
     /// </summary>
     public sealed class GameStateService : IGameStateService
     {
@@ -16,13 +16,13 @@ namespace ProjectMasters.Web.Services
             _gameStates = new List<GameState>();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IEnumerable<GameState> GetAllGameStates()
         {
             return _gameStates;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public GameState AddGameState(string userId)
         {
             var gameState = new GameState { UserId = userId };
