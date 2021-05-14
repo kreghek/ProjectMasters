@@ -13,9 +13,9 @@ namespace ProjectMasters.Games
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
-    using Web.Services;
     using Web.DTOs;
     using Web.Hubs;
+    using Web.Services;
 
     public class Worker : BackgroundService
     {
